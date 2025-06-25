@@ -1,35 +1,38 @@
 .App {
-    background-color: #ffffff;
-    min-height: 100vh;
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
-  
-  a {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.Main {
+  padding-top: 81px;
+}
+* {
+  box-sizing: border-box;
+}
+
+a {
     color: #000000;
-    transition: color ease-in-out 0.3s;
-  }
-  
-  a:hover {
-    text-decoration: none;
-  }
-  
-  a:hover i {
+  transition: color ease-in-out 0.3s;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:hover i {
     color: #1486fe;
-    transition: color ease-in-out 0.3s;
-  }
-  
-  i {
-    color: #cfced3;
+  transition: color ease-in-out 0.3s;
+}
+
+i {
+  color: #cfced3;
     font-size: 1.2rem;
-    padding: 7px;
-    vertical-align: middle;
-  }
-  
-  i:hover {
-    cursor: pointer;
-    transition: color ease-in-out 0.3s;
+  padding: 7px;
+  vertical-align: middle;
+}
+
+i:hover {
+  cursor: pointer;
+  transition: color ease-in-out 0.3s;
     color: #1486fe;
-  }
+}
