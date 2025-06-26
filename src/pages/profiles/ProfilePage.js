@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-
 import Asset from "../../components/Asset";
-
 import styles from "../../styles/ProfilePage.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-
 import PopularProfiles from "./PopularProfiles";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { useParams } from "react-router";
@@ -18,7 +14,7 @@ import {
   useProfileData,
   useSetProfileData,
 } from "../../contexts/ProfileDataContext";
-import { Button, Image } from "react-bootstrap";
+import { Button, Image, Form } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Post from "../posts/Post";
 import { fetchMoreData } from "../../utils/utils";
@@ -28,14 +24,14 @@ import { ProfileEditDropdown } from "../../components/MoreDropdown";
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [profilePosts, setProfilePosts] = useState({ results: [] });
+  const [uploading, setUploading] = useState(false);
 
   const currentUser = useCurrentUser();
   const { id } = useParams();
-
   const { setProfileData, handleFollow, handleUnfollow } = useSetProfileData();
   const { pageProfile } = useProfileData();
 
-  const [profile] = pageProfile.results;
+  const [profile] = pageProfile.results || [];
   const is_owner = currentUser?.username === profile?.owner;
 
   useEffect(() => {
@@ -59,6 +55,56 @@ function ProfilePage() {
     fetchData();
   }, [id, setProfileData]);
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "profile_pictures"); // dein unsigned preset
+
+    try {
+      setUploading(true);
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+      const secureUrl = data.secure_url;
+
+      await axiosReq.put(`/profiles/${id}/`, {
+        image: secureUrl,
+      });
+
+      setProfileData((prevState) => ({
+        ...prevState,
+        pageProfile: {
+          ...prevState.pageProfile,
+          results: [
+            {
+              ...profile,
+              image: secureUrl,
+            },
+          ],
+        },
+      }));
+    } catch (err) {
+      console.error("Upload failed:", err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const profileImageSrc =
+    !profile?.image ||
+    profile.image.includes("default_profile_rxsxdv") ||
+    profile.image.startsWith("../")
+      ? "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg"
+      : profile.image;
+
   const mainProfile = (
     <>
       {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
@@ -67,8 +113,21 @@ function ProfilePage() {
           <Image
             className={styles.ProfileImage}
             roundedCircle
-            src={profile?.image}
+            src={profileImageSrc}
           />
+          {is_owner && (
+            <Form.Group controlId="image-upload" className="mt-3">
+              <Form.Label className="btn btn-secondary btn-sm">
+                {uploading ? "Uploading..." : "Change Profile Image"}
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                />
+              </Form.Label>
+            </Form.Group>
+          )}
         </Col>
         <Col lg={6}>
           <h3 className="m-2">{profile?.owner}</h3>
