@@ -17,10 +17,12 @@ export const axiosRes = axios.create({
   withCredentials: true,
 });
 
+const methodsRequiringCSRF = ["post", "put", "patch", "delete"];
+
 axiosReq.interceptors.request.use(
   (config) => {
     const csrfToken = Cookies.get("csrftoken");
-    if (csrfToken) {
+    if (csrfToken && methodsRequiringCSRF.includes(config.method)) {
       config.headers["X-CSRFToken"] = csrfToken;
     }
     return config;
