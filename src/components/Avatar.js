@@ -1,6 +1,5 @@
 import React from "react";
 import { Image } from "react-bootstrap";
-import styles from "../styles/Avatar.module.css"; // falls vorhanden
 
 const fallbackImage =
   "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg";
