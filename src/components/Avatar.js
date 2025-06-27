@@ -11,7 +11,7 @@ const Avatar = ({ src, alt = "avatar", height = 40, text = "", className = "" })
   const imageSrc = isFallback ? fallbackImage : src;
 
   return (
-    <span className="d-inline-flex align-items-center">
+    <span className="align-items-center">
       <Image
         src={imageSrc}
         alt={alt}
