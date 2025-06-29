@@ -29,22 +29,29 @@ function SignInForm() {
   const [errors, setErrors] = useState({});
 
   const history = useHistory();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("/dj-rest-auth/login/", signInData);
+      const { data } = await axios.post(
+        "https://loopin-8006788e0f02.herokuapp.com/dj-rest-auth/login/",
+        signInData,
+        { withCredentials: true }
+      );
       setCurrentUser(data.user);
       history.goBack();
     } catch (err) {
       setErrors(err.response?.data);
     }
   };
+
   const handleChange = (event) => {
     setSignInData({
       ...signInData,
       [event.target.name]: event.target.value,
     });
   };
+
   return (
     <Row className={styles.Row}>
       <Col className="my-auto p-0 p-md-2" md={10}>
@@ -106,8 +113,7 @@ function SignInForm() {
       <Col
         md={6}
         className={`my-auto d-none d-md-block p-2 ${styles.SignInCol}`}
-      >
-      </Col>
+      ></Col>
     </Row>
   );
 }
