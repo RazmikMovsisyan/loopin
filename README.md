@@ -1,8 +1,14 @@
 # **Loopin**
 
-[Live Project on Heroku](https://github.com/RazmikMovsisyan/loopin/)
+[Click here to go to the Live Project](https://github.com/RazmikMovsisyan/loopin/)
 
-![Responsive Mockup](/assets/images/am-i-responsive.jpg)
+
+
+![Responsive Mockup](src/assets/am-i-responsive.png)
+
+[Backend Github](https://github.com/RazmikMovsisyan/drf-api)
+
+[Backend Heroku](https://loopin-8006788e0f02.herokuapp.com/)
 
 Welcome to **Loopin** – a community platform to share photos and stay in the loop!
 
@@ -19,7 +25,7 @@ The goal is to promote authentic user interactions and community discussions thr
 ---
 
 ## **Table of Contents**
-- [Loopin](#Loopin)
+- [Loopin](#loopin)
   - [Planning](#planning)
     - [Features](#features)
     - [Used Technologies](#used-technologies)
@@ -55,7 +61,6 @@ The goal is to promote authentic user interactions and community discussions thr
 - Cloudinary (image hosting)
 - Heroku (deployment)
 - Git & GitHub (version control)
-- Draw.io / Figma (wireframes and design)
 - Markdown (documentation)
 
 ---
@@ -166,7 +171,7 @@ Both the frontend and backend should be deployed to the same URL to streamline t
 2. Notice the difficulty in managing both environments separately.
 
 **Suggested Fix:**  
-You can combine the projects into one repository by following the guide at the end of the walkthrough, or you can manually configure the two parts to be deployed together on the same URL.
+I could combine the projects into one repository by following the guide at the end of the walkthrough, if I had enough time for this project.
 
 ---
 
@@ -186,7 +191,7 @@ Live link: [Loopin](https://github.com/RazmikMovsisyan/loopin/)
 ---
 
 ## **Version Control**
-- Git used throughout, hosted on [GitHub Repo](https://github.com/RazmikMovsisyan/loopin/).
+- Git used throughout, hosted on [GitHub Repository](https://github.com/RazmikMovsisyan/loopin/).
 - Clear commit history per feature/bugfix.
 - No sensitive info committed.
 
@@ -256,21 +261,25 @@ The repository has a single branch with a clear commit history. To clone the rep
 
 ## Custom 404 Page
 
-![error404](assets/images/error404.png)
+![404 Error](src/assets/404Page.png)
 
 A custom **404 error page** has been implemented to handle non-existent routes or broken links. Instead of a generic browser message, users are shown a friendly, styled error page that helps guide them back to the main site — improving overall user experience and navigation.
 
 
 ## Credits
 
-All images featured in this project were sourced from **Stockimages**, ensuring high-quality visuals that enhance the overall design and user experience. These images were selected to complement the content and provide a clean, engaging aesthetic throughout the site.
+All images featured in this project were sourced from **Stockimages/Pexel-Images**, ensuring high-quality visuals that enhance the overall design and user experience. These images were selected to complement the content and provide a clean, engaging aesthetic throughout the site.
 
-The favicon used in this project was obtained from **Icons8**. Icons8 offers a wide variety of free and premium icons that are perfect for web development projects, and their favicon collection provided just the right visual touch for this site's branding.
+The favicon I have created using Adobe Photoshop.
 
 Proper credit is given to all resources used in accordance with fair use and licensing guidelines.
 
-Thank you. 
+[⬆ Back to Top](#loopin)
 
 ## Finished Product
 
-![finished prodcut](assets/images/finished-product.png)![footer](assets/images/footer.png)![signup](assets/images/signup.png)![login](assets/images/login.png)![post-comment-screenshot](assets/images/post-and-comment-screenshot.png)![profile](assets/images/profile.png)
+![screen-nr.4](src/assets/loopin-4.png)
+![screen-nr.1](src/assets/loopin-1.png)
+![screen-nr.3](src/assets/loopin-3.png)
+![screen-nr.5](src/assets/loopin-5.png)
+![screen-nr.2](src/assets/loopin-2.png)

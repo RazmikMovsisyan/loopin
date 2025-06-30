@@ -1,5 +1,5 @@
 import React from "react";
-import NoResults from "../assets/no-results.png";
+import NoResults from "../assets/404.jpg";
 import styles from "../styles/NotFound.module.css";
 import Asset from "./Asset";
 
