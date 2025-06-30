@@ -1,6 +1,6 @@
 # **Loopin**
 
-[Click here to go to the Live Project](https://github.com/RazmikMovsisyan/loopin/)
+[Click here to go to the Live Project](https://loopinapp-d364a1b22906.herokuapp.com/)
 
 
 
@@ -186,7 +186,7 @@ Steps:
 4. Added `Procfile`, `requirements.txt`, `runtime.txt`.
 5. Disabled Django debug, ensured `.env` file excluded via `.gitignore`.
 
-Live link: [Loopin](https://github.com/RazmikMovsisyan/loopin/)
+Live link: [Loopin](https://loopinapp-d364a1b22906.herokuapp.com/)
 
 ---
 
