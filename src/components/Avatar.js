@@ -1,26 +1,17 @@
 import React from "react";
-import { Image } from "react-bootstrap";
+import styles from "../styles/Avatar.module.css";
 
-const fallbackImage =
-  "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg";
-
-const Avatar = ({ src, alt = "avatar", height = 40, text = "", className = "" }) => {
-  const isFallback =
-    !src || src.includes("default_profile_rxsxdv") || src.startsWith("../");
-
-  const imageSrc = isFallback ? fallbackImage : src;
-
+const Avatar = ({ src, height = 45, text }) => {
   return (
-    <span className="align-items-center">
-      <Image
-        src={imageSrc}
-        alt={alt}
+    <span>
+      <img
+        className={styles.Avatar}
+        src={src}
         height={height}
         width={height}
-        roundedCircle
-        className={`me-1 ${className}`}
+        alt="avatar"
       />
-      {text && <strong>{text}</strong>}
+      {text}
     </span>
   );
 };

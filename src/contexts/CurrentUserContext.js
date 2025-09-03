@@ -16,10 +16,31 @@ export const CurrentUserProvider = ({ children }) => {
 
   const handleMount = async () => {
     try {
-      const { data } = await axiosRes.get("dj-rest-auth/user/");
-      setCurrentUser(data);
+      const { data: userData } = await axiosRes.get("dj-rest-auth/user/");
+      
+      try {
+        const { data: profileData } = await axiosReq.get(
+          `/profiles/${userData.pk}/`
+        );
+        
+        setCurrentUser({
+          ...userData,
+          profile: profileData,    
+          profile_image: profileData.image,
+          image: profileData.image
+        });
+      } catch (profileErr) {
+        console.log("Profile loading failed, using basic user data:", profileErr);
+        setCurrentUser({
+          ...userData,
+          profile: null,
+          profile_image: null,
+          image: null
+        });
+      }
     } catch (err) {
-      // console.log(err);
+      console.log("User data loading failed:", err);
+      setCurrentUser(null);
     }
   };
 
