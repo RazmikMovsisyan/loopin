@@ -20,6 +20,13 @@ const NavBar = () => {
 
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
+  const profileImageSrc =
+    !currentUser?.profile_image ||
+    currentUser?.profile_image.includes("default_profile_rxsxdv") ||
+    currentUser?.profile_image.startsWith("../")
+      ? "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg"
+      : currentUser?.profile_image;
+
   const handleSignOut = async () => {
     try {
       await axios.post("dj-rest-auth/logout/");
@@ -62,7 +69,7 @@ const NavBar = () => {
         className={styles.NavLink}
         to={`/profiles/${currentUser?.profile_id}`}
       >
-        <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
+        <Avatar src={profileImageSrc} text="Profile" height={40} />
       </NavLink>
     </>
   );

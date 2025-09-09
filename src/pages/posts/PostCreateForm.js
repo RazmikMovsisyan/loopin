@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -7,15 +6,11 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
-
 import Asset from "../../components/Asset";
-
 import Upload from "../../assets/upload.png";
-
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-
 import { useHistory } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useRedirect } from "../../hooks/useRedirect";
@@ -23,6 +18,7 @@ import { useRedirect } from "../../hooks/useRedirect";
 function PostCreateForm() {
   useRedirect("loggedOut");
   const [errors, setErrors] = useState({});
+  const [uploading, setUploading] = useState(false);
 
   const [postData, setPostData] = useState({
     title: "",
@@ -53,20 +49,47 @@ function PostCreateForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("image", imageInput.current.files[0]);
+    setUploading(true);
 
     try {
-      const { data } = await axiosReq.post("/posts/", formData);
+      let imageUrl = "";
+      
+      if (imageInput.current.files.length) {
+        const formData = new FormData();
+        formData.append("file", imageInput.current.files[0]);
+        formData.append("upload_preset", "unsigned_profile_upload");
+
+        const cloudinaryRes = await fetch(
+          "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        
+        if (!cloudinaryRes.ok) {
+          throw new Error("Cloudinary upload failed");
+        }
+        
+        const cloudinaryData = await cloudinaryRes.json();
+        imageUrl = cloudinaryData.secure_url;
+      }
+
+      // Post mit der Bild-URL erstellen
+      const { data } = await axiosReq.post("/posts/", {
+        title,
+        content,
+        image: imageUrl
+      });
+      
       history.push(`/posts/${data.id}`);
     } catch (err) {
-      // console.log(err);
+      console.log("Upload error:", err);
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);
       }
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -106,11 +129,16 @@ function PostCreateForm() {
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
+        disabled={uploading}
       >
         cancel
       </Button>
-      <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
-        create
+      <Button 
+        className={`${btnStyles.Button} ${btnStyles.Blue}`} 
+        type="submit"
+        disabled={uploading}
+      >
+        {uploading ? "Uploading..." : "create"}
       </Button>
     </div>
   );

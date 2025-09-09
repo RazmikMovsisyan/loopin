@@ -61,7 +61,7 @@ function ProfilePage() {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "profile_pictures"); // dein unsigned preset
+    formData.append("upload_preset", "unsigned_profile_upload");
 
     try {
       setUploading(true);
