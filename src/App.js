@@ -8,16 +8,19 @@ import SignInForm from "./pages/auth/SignInForm";
 import PostCreateForm from "./pages/posts/PostCreateForm";
 import PostPage from "./pages/posts/PostPage";
 import PostsPage from "./pages/posts/PostsPage";
-import { useCurrentUser } from "./contexts/CurrentUserContext";
+import { CurrentUserProvider, useCurrentUser } from "./contexts/CurrentUserContext";
 import PostEditForm from "./pages/posts/PostEditForm";
 import ProfilePage from "./pages/profiles/ProfilePage";
 import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
 import NotFound from "./components/NotFound";
+import { DraftsProvider } from "./contexts/DraftsContext";
+import DraftsPage from "./pages/drafts/DraftsPage";
+import DraftCreateForm from "./pages/drafts/DraftCreateForm";
+import DraftEditForm from "./pages/drafts/DraftEditForm";
 
-
-function App() {
+const AppContent = () => {
   const currentUser = useCurrentUser();
   const profile_id = currentUser?.profile_id || "";
 
@@ -74,11 +77,23 @@ function App() {
             path="/profiles/:id/edit"
             render={() => <ProfileEditForm />}
           />
-
+          <Route exact path="/drafts" render={() => <DraftsPage />} />
+          <Route exact path="/drafts/create" render={() => <DraftCreateForm />} />
+          <Route exact path="/drafts/:id/edit" render={() => <DraftEditForm />} />
           <Route render={() => <NotFound />} />
         </Switch>
       </Container>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <CurrentUserProvider>
+      <DraftsProvider>
+        <AppContent />
+      </DraftsProvider>
+    </CurrentUserProvider>
   );
 }
 

@@ -26,7 +26,7 @@ const NavBar = () => {
     currentUser?.profile_image.startsWith("../")
       ? "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg"
       : currentUser?.profile_image;
-
+      
   const handleSignOut = async () => {
     try {
       await axios.post("dj-rest-auth/logout/");
@@ -37,17 +37,24 @@ const NavBar = () => {
     }
   };
 
-  const addPostIcon = (
+  const addPostIcon = (    
     <NavLink
-      className={styles.NavLink}
-      activeClassName={styles.Active}
-      to="/posts/create"
+    className={styles.NavLink}
+    activeClassName={styles.Active}
+    to="/posts/create"
     >
       <i className="far fa-plus-square"></i>Add post
     </NavLink>
   );
   const loggedInIcons = (
     <>
+      <NavLink
+        className={styles.NavLink}
+        activeClassName={styles.Active}
+        to="/drafts/create"
+      >
+        <i className="far fa-plus-square"></i>Add draft
+      </NavLink>
       <NavLink
         className={styles.NavLink}
         activeClassName={styles.Active}

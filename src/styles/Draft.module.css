@@ -1,0 +1,15 @@
+.Draft {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #f9f9f9;
+  }
+  
+  .DraftMeta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #666;
+  }
