@@ -24,8 +24,10 @@ function DraftEditForm() {
   const [draftData, setDraftData] = useState({
     content: "",
     image: "",
+    status: "draft",
+    scheduled_time: "",
   });
-  const { content, image } = draftData;
+  const { content, status, scheduled_time } = draftData;
 
   const imageInput = useRef(null);
   const history = useHistory();
@@ -35,11 +37,24 @@ function DraftEditForm() {
     const handleMount = async () => {
       try {
         const { data } = await axiosReq.get(`/drafts/${id}/`);
-        const { content, image, is_owner } = data;
+        const { content, image, status, scheduled_time, is_owner } = data;
 
-        is_owner ? setDraftData({ content, image }) : history.push("/");
+        let formattedScheduledTime = "";
+        if (scheduled_time) {
+          const date = new Date(scheduled_time);
+          formattedScheduledTime = date.toISOString().slice(0, 16);
+        }
+
+        is_owner 
+          ? setDraftData({ 
+              content, 
+              image, 
+              status, 
+              scheduled_time: formattedScheduledTime 
+            }) 
+          : history.push("/");
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     };
 
@@ -55,7 +70,7 @@ function DraftEditForm() {
 
   const handleChangeImage = (event) => {
     if (event.target.files.length) {
-      URL.revokeObjectURL(image);
+      URL.revokeObjectURL(draftData.image);
       setDraftData({
         ...draftData,
         image: URL.createObjectURL(event.target.files[0]),
@@ -68,36 +83,19 @@ function DraftEditForm() {
     setUploading(true);
 
     try {
-      let imageUrl = image;
+      const formData = new FormData();
+      formData.append("content", content);
+      formData.append("status", status);
       
-      // Wenn ein neues Bild ausgewählt wurde, zu Cloudinary hochladen
+      if (status === "scheduled" && scheduled_time) {
+        formData.append("scheduled_time", new Date(scheduled_time).toISOString());
+      }
+      
       if (imageInput.current.files.length) {
-        const formData = new FormData();
-        formData.append("file", imageInput.current.files[0]);
-        formData.append("upload_preset", "unsigned_profile_upload");
-
-        const cloudinaryRes = await fetch(
-          "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        
-        if (!cloudinaryRes.ok) {
-          throw new Error("Cloudinary upload failed");
-        }
-        
-        const cloudinaryData = await cloudinaryRes.json();
-        imageUrl = cloudinaryData.secure_url;
+        formData.append("image", imageInput.current.files[0]);
       }
 
-      // Draft mit den aktualisierten Daten updaten
-      await updateDraft(id, {
-        content,
-        image: imageUrl
-      });
-      
+      await updateDraft(id, formData);
       history.push(`/drafts`);
     } catch (err) {
       console.log("Upload error:", err);
@@ -112,7 +110,7 @@ function DraftEditForm() {
   const textFields = (
     <div className="text-center">
       <Form.Group>
-        <Form.Label>Inhalt</Form.Label>
+        <Form.Label>Content</Form.Label>
         <Form.Control
           as="textarea"
           rows={6}
@@ -127,19 +125,57 @@ function DraftEditForm() {
         </Alert>
       ))}
 
+      <Form.Group>
+        <Form.Label>Status</Form.Label>
+        <Form.Control
+          as="select"
+          name="status"
+          value={status}
+          onChange={handleChange}
+        >
+          <option value="draft">Draft</option>
+          <option value="scheduled">Scheduled</option>
+        </Form.Control>
+      </Form.Group>
+      {errors?.status?.map((message, idx) => (
+        <Alert variant="warning" key={idx}>
+          {message}
+        </Alert>
+      ))}
+
+      {status === "scheduled" && (
+        <Form.Group>
+          <Form.Label>Scheduled Time</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="scheduled_time"
+            value={scheduled_time}
+            onChange={handleChange}
+          />
+          <Form.Text className="text-muted">
+            The draft will be automatically published at the specified time.
+          </Form.Text>
+        </Form.Group>
+      )}
+      {errors?.scheduled_time?.map((message, idx) => (
+        <Alert variant="warning" key={idx}>
+          {message}
+        </Alert>
+      ))}
+
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
         disabled={uploading}
       >
-        Abbrechen
+        Cancel
       </Button>
       <Button 
         className={`${btnStyles.Button} ${btnStyles.Blue}`} 
         type="submit"
         disabled={uploading}
       >
-        {uploading ? "Wird gespeichert..." : "Speichern"}
+        {uploading ? "Saving..." : "Save"}
       </Button>
     </div>
   );
@@ -152,17 +188,17 @@ function DraftEditForm() {
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
             <Form.Group className="text-center">
-              {image ? (
+              {draftData.image ? (
                 <>
                   <figure>
-                    <Image className={appStyles.Image} src={image} rounded />
+                    <Image className={appStyles.Image} src={draftData.image} rounded />
                   </figure>
                   <div>
                     <Form.Label
                       className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
                       htmlFor="image-upload"
                     >
-                      Bild ändern
+                      Change Image
                     </Form.Label>
                   </div>
                 </>
@@ -173,7 +209,7 @@ function DraftEditForm() {
                 >
                   <Asset
                     src={Upload}
-                    message="Klicken oder tippen um ein Bild hochzuladen"
+                    message="Click or tap to upload an image"
                   />
                 </Form.Label>
               )}
