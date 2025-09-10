@@ -44,9 +44,10 @@ const Draft = ({ draft, setDrafts }) => {
       }, 1000);
     } catch (err) {
       console.error("Error publishing draft:", err);
+      alert("Failed to publish draft. Please try again.");
     }
   };
-
+  
   return (
     <Card className={styles.Draft}>
       <Card.Body>
@@ -57,7 +58,7 @@ const Draft = ({ draft, setDrafts }) => {
           </Link>
           <div className="d-flex align-items-center">
             <span>{new Date(draft.updated_at).toLocaleDateString()}</span>
-            {is_owner && (
+            {is_owner && draft.status !== 'published' && (
               <MoreDropdown
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
@@ -83,6 +84,18 @@ const Draft = ({ draft, setDrafts }) => {
           )}
           <span>Created: {new Date(draft.created_at).toLocaleDateString()}</span>
         </div>
+        
+        {/* Publish Button für nicht veröffentlichte Drafts */}
+        {is_owner && draft.status !== 'published' && (
+          <div className="text-center mt-3">
+            <button 
+              className={`btn ${styles.PublishButton}`}
+              onClick={handlePublish}
+            >
+              Publish Now
+            </button>
+          </div>
+        )}
       </Card.Body>
     </Card>
   );

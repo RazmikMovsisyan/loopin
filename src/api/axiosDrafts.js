@@ -53,6 +53,9 @@ export const publishDraft = async (id) => {
     return data;
   } catch (err) {
     console.error("Error publishing draft:", err);
+    if (err.response?.data?.error) {
+      throw new Error(err.response.data.error);
+    }
     throw err;
   }
 };
