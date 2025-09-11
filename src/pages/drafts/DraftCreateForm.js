@@ -17,12 +17,13 @@ const DraftCreateForm = () => {
   const imageInput = useRef(null);
 
   const [draftData, setDraftData] = useState({
+    title: "",
     content: "",
     image: "",
     status: "draft",
     scheduled_time: "",
   });
-  const { content, status, scheduled_time } = draftData;
+  const { title, content, status, scheduled_time } = draftData;
   const history = useHistory();
   const { setDrafts } = useDrafts();
 
@@ -49,6 +50,7 @@ const DraftCreateForm = () => {
 
     try {
       const formData = new FormData();
+      formData.append("title", title);
       formData.append("content", content);
       formData.append("status", status);
       
@@ -80,6 +82,23 @@ const DraftCreateForm = () => {
 
   const textFields = (
     <div className="text-center">
+      {/* Titel-Feld hinzufügen */}
+      <Form.Group>
+        <Form.Label>Title</Form.Label>
+        <Form.Control
+          type="text"
+          name="title"
+          value={title}
+          onChange={handleChange}
+          placeholder="Enter a title for your draft"
+        />
+      </Form.Group>
+      {errors?.title?.map((message, idx) => (
+        <Alert variant="warning" key={idx}>
+          {message}
+        </Alert>
+      ))}
+
       <Form.Group>
         <Form.Label>Content</Form.Label>
         <Form.Control
@@ -88,6 +107,7 @@ const DraftCreateForm = () => {
           name="content"
           value={content}
           onChange={handleChange}
+          placeholder="Write your content here..."
         />
       </Form.Group>
       {errors?.content?.map((message, idx) => (
