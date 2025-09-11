@@ -34,6 +34,7 @@ The goal is to promote authentic user interactions and community discussions thr
   - [Design](#design)
     - [Typography](#typography)
     - [Color Scheme](#color-scheme)
+  - [User Stories (prioritized using MoSCoW method)](#user-stories-prioritized-using-moscow-method)
   - [Testing](#testing)
     - [Manual Testing](#manual-testing)
     - [Bugs](#bugs)
@@ -142,6 +143,146 @@ The main body font for the app was chosen to use the native font of the user's o
 
 The core color scheme consists of three main colors: a light blue (#1486fe) for hover states, a neutral gray (#cfced3) for non-hover states, and black for certain buttons. I also included some minor exceptions for special elements, such as the sign-in and sign-up buttons, which use a brighter blue (#2ed9ff) and a dark blue (#2142b2) to help them stand out from the rest of the design.
 
+
+## **User Stories (prioritized using MoSCoW method)**
+
+# Social Media Platform Project
+
+## Project Overview
+A responsive web application allowing users to sign up, create posts, interact with content, and follow other users. Built with modern frontend and backend technologies to ensure a seamless user experience.
+
+## User Stories (prioritized using MoSCoW method)
+
+I consistently choose to follow the MoSCoW prioritization method in [my projects](https://github.com/users/RazmikMovsisyan/projects/6) because it brings unparalleled clarity, focus, and direction to the development process. 
+By categorizing features into Must-haves, Should-haves, Could-haves, and Won't-haves, 
+I’m able to clearly distinguish between what’s absolutely essential for the project’s success and what can wait for future iterations. 
+This approach helps me manage scope effectively, avoid feature creep, and ensure that the core functionality the Minimum Viable Product is delivered on time and meets user expectations. 
+It also facilitates better communication with stakeholders, as everyone has a shared understanding of what will be built and why. 
+Most importantly, [MoSCoW](https://github.com/users/RazmikMovsisyan/projects/6) allows me to stay agile, adapt to changes, and continuously deliver value without getting lost in unnecessary complexity. 
+That’s why I rely on it as it turns vision into actionable, prioritized progress.
+
+![moscow](src/assets/moscow-project.png)
+
+### Must Have
+
+#### User Registration
+**As a** new visitor, **I can** register for an account **so that** I can access exclusive features.
+- **AC1:** When I provide valid registration details, I am successfully registered
+- **AC2:** I am automatically logged in after registration
+- **AC3:** I receive visual confirmation of successful registration
+
+#### User Login/Logout
+**As a** registered user, **I can** log in and log out **so that** I can access my account securely.
+- **AC1:** I can log in with correct credentials
+- **AC2:** I can log out with one click
+- **AC3:** My login state is visibly indicated throughout the application
+
+#### Create Post
+**As a** logged-in user, **I can** create posts **so that** I can share my images with others.
+- **AC1:** I can submit a post with image and description
+- **AC2:** After submission, the new post appears in the feed
+- **AC3:** The post is also visible on my profile
+
+#### View Posts
+**As a** user, **I can** view individual posts **so that** I can learn more about them.
+- **AC1:** I can click on any post to view its details
+- **AC2:** Each post displays the image, description, and engagement metrics
+- **AC3:** Comments are visible on the post detail page
+
+#### Like Posts
+**As a** logged-in user, **I can** like posts **so that** I can show my support.
+- **AC1:** I can like/unlike posts with a single action
+- **AC2:** The like count updates immediately after my action
+- **AC3:** My liked state is visually indicated
+
+#### Add Comments
+**As a** logged-in user, **I can** comment on posts **so that** I can join conversations.
+- **AC1:** I can submit comments on any post
+- **AC2:** My comment appears immediately under the post
+- **AC3:** Comments display my username and avatar
+
+#### Basic Navigation
+**As a** user, **I want** a visible navbar across all pages **so that** I can easily navigate the application.
+- **AC1:** The navbar is consistently present on all pages
+- **AC2:** Navigation occurs without full page refresh
+- **AC3:** The navbar adapts based on login state
+
+### Should Have
+
+#### Infinite Scroll
+**As a** user, **I want** to scroll through posts continuously **so that** I can browse content seamlessly.
+- **AC1:** New content loads automatically when I reach bottom of page
+- **AC2:** Loading indicators appear when new content is being fetched
+
+#### Edit Profile
+**As a** logged-in user, **I can** update my profile picture and bio **so that** I can personalize my presence.
+- **AC1:** I can access profile editing from my profile page
+- **AC2:** Changes are saved and immediately visible
+- **AC3:** I receive confirmation of successful update
+
+#### Follow/Unfollow Users
+**As a** logged-in user, **I can** follow or unfollow users **so that** I can customize my feed.
+- **AC1:** I can follow/unfollow with a single action
+- **AC2:** My follower/following counts update immediately
+- **AC3:** The button state changes to reflect my follow status
+
+#### View User Profiles
+**As a** user, **I can** view other users' profiles **so that** I can see their posts and statistics.
+- **AC1:** I can click on usernames to view profiles
+- **AC2:** Profiles display user information and post history
+- **AC3:** Stats (posts, followers, following) are visible
+
+#### Edit/Delete Own Content
+**As a** content owner, **I can** edit or delete my posts and comments **so that** I can manage my content.
+- **AC1:** Edit/delete options are only visible on my own content
+- **AC2:** Editing opens a form with existing content pre-filled
+- **AC3:** Deletion requires confirmation before proceeding
+
+### Could Have
+
+#### Token Refresh
+**As a** user, **I want** my login session to stay active **so that** I don't get logged out unexpectedly.
+- **AC1:** My session persists during active use
+- **AC2:** I remain logged in until I explicitly log out
+
+#### Top Profiles Section
+**As a** user, **I can** see the most followed profiles **so that** I can discover popular accounts.
+- **AC1:** A "Top Profiles" section is visible somewhere in the application
+- **AC2:** Profiles are ordered by follower count
+
+#### Comment Timestamps
+**As a** user, **I can** see when a comment was made **so that** I can understand conversation context.
+- **AC1:** Each comment displays its creation time
+- **AC2:** Timestamps use a relative format (e.g., "2 hours ago")
+
+### Won't Have (for now)
+
+#### Post Categories or Hashtags
+**As a** user, **I cannot** categorize posts or use hashtags **because** this feature is out of scope for the initial release.
+- **AC1:** No UI elements exist for adding categories or hashtags to posts
+- **AC2:** The post creation form does not include hashtag input fields
+- **AC3:** Search or filtering by categories/hashtags is not available
+
+#### Direct Messaging Between Users
+**As a** user, **I cannot** send direct messages to other users **because** private messaging functionality is not implemented.
+- **AC1:** No messaging interface or inbox is available in the navigation
+- **AC2:** User profiles do not contain "Send Message" buttons
+- **AC3:** Real-time chat functionality is completely absent from the application
+
+## Technology Stack
+- Frontend: React.js with React Router
+- Backend: Node.js/Express or Django
+- Authentication: JWT Tokens
+- Database: PostgreSQL or MongoDB
+
+## Installation & Setup
+*(To be completed based on your specific implementation)*
+
+## Contributing
+*(To be completed based on your project guidelines)*
+
+## License
+*(To be completed based on your chosen license)*
 
 ## **Testing**
 
