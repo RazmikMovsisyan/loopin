@@ -37,7 +37,7 @@ The goal is to promote authentic user interactions and community discussions thr
   - [Testing](#testing)
     - [Manual Testing](#manual-testing)
     - [Bugs](#bugs)
-  - [Validation](#validation)
+  - [Code Validation](#code-validation)
   - [Deployment](#deployment)
     - [Heroku](#heroku)
   - [Version Control](#version-control)
@@ -147,20 +147,40 @@ The core color scheme consists of three main colors: a light blue (#1486fe) for 
 
 ### **Manual Testing**
 
-| **Test Case**                  | **Action**                                           | **Expected Result**                                     | **Result** |
-|-------------------------------|------------------------------------------------------|---------------------------------------------------------|------------|
-| Register new user             | Fill and submit the signup form                      | User is registered and redirected                       | ✅          |
-| Login/Logout                  | Provide credentials, log in and out                  | Login state changes are reflected                       | ✅          |
-| Create post                   | Fill post form and submit                            | Post is created and displayed                           | ✅          |
-| Edit/Delete own post          | Use edit/delete options on own post                  | Post is updated/removed from UI and database            | ✅          |
-| Add comment                   | Submit comment on a post                             | Comment is displayed under the post                     | ✅          |
-| Admin deletes comment         | Admin deletes comment from dashboard                 | Comment is removed                                      | ✅          |
-| Access control                | Unauthenticated user tries to create a post          | Redirected to login page                                | ✅          |
-
+| Category                     | Test Case ID | User Story                                                                 | Action                                                                 | Expected Result                                                                                             | Result |
+|------------------------------|--------------|----------------------------------------------------------------------------|------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|--------|
+| **Authentication & Account Management** | | | | |
+|                              | AUTH-01      | Sign Up                                                                    | Fill and submit sign-up form with valid data                           | Account is created; user receives confirmation and gains access to exclusive features                      | ✅      |
+|                              | AUTH-02      | Sign In                                                                    | Enter valid credentials and submit login form                          | User is authenticated and redirected to their account dashboard                                            | ✅      |
+|                              | AUTH-03      | Login Status                                                               | Check UI after login/logout                                            | Login state is visibly indicated (e.g., profile icon changes)                                               | ✅      |
+|                              | AUTH-04      | Token Refresh                                                              | Stay idle until token expires, then perform an action                  | Session persists; token refreshes automatically without forcing re-login                                   | ✅      |
+|                              | AUTH-05      | Login Options for Guests                                                   | Visit site while logged out                                            | Buttons for "Sign In" and "Create Account" are prominently displayed                                        | ✅      |
+|                              | AUTH-06      | Edit Profile                                                                | Navigate to profile settings, upload image/edit bio, and save          | Profile picture and bio update immediately                                                                  | ✅      |
+|                              | AUTH-07      | Change Username & Password                                                 | Update credentials in account settings and save                        | Changes are applied; user can log in with new credentials                                                   | ✅      |
+| **Navigation & User Experience** | | | | |
+|                              | NAV-01       | Navbar                                                                     | Navigate across multiple pages                                         | Consistent navbar is visible on all pages                                                                   | ✅      |
+|                              | NAV-02       | Routing                                                                    | Click links/buttons to switch pages                                    | Transitions occur without full page refresh                                                                 | ✅      |
+|                              | NAV-03       | Infinite Scroll                                                            | Scroll down on a page with content (e.g., posts)                       | New content loads automatically when reaching the bottom                                                    | ✅      |
+| **Posts & Interactions**     | | | | |
+|                              | POST-01      | Create Post                                                                | Submit a post with an image and description                            | Post appears in the feed and on the user’s profile                                                          | ✅      |
+|                              | POST-02      | View Post                                                                  | Click on a post                                                        | Post details (image, description, comments) are displayed                                                   | ✅      |
+|                              | POST-03      | Like Post                                                                  | Click "Like" on a post                                                 | Like count increases; post is marked as liked                                                               | ✅      |
+|                              | POST-04      | Add Comment                                                                | Submit a comment on a post                                             | Comment appears below the post                                                                              | ✅      |
+|                              | POST-05      | View Comments                                                              | Open a post with comments                                              | All comments are displayed in chronological order                                                           | ✅      |
+|                              | POST-06      | Comment Timestamp                                                          | Check comment section                                                  | Each comment shows a timestamp (e.g., "2 hours ago")                                                        | ✅      |
+|                              | POST-07      | Edit Post                                                                  | Edit title/description of own post and save                            | Changes are reflected immediately in the post                                                               | ✅      |
+|                              | POST-08      | Edit Comment                                                               | Edit own comment and save                                              | Updated comment is displayed                                                                                | ✅      |
+|                              | POST-09      | Delete Comment                                                             | Delete own comment                                                     | Comment is removed from the post                                                                            | ✅      |
+| **Profiles & Social Interaction** | | | | |
+|                              | PROF-01      | User Profile                                                               | Click on a username                                                    | User’s profile page displays their posts and stats                                                          | ✅      |
+|                              | PROF-02      | User Stats                                                                 | View another user’s profile                                            | Stats (posts, followers, following, bio) are visible                                                        | ✅      |
+|                              | PROF-03      | Follow/Unfollow Users                                                      | Click "Follow" on another user’s profile                               | User is added to followed list; button changes to "Unfollow"                                                | ✅      |
+|                              | PROF-04      | View Posts of Followed Users                                               | Navigate to the home feed                                              | Only posts from followed users are displayed                                                                | ✅      |
+|                              | PROF-05      | Top Profiles                                                               | Check the "Top Profiles" section                                       | List of most followed users is displayed                                                                    | ✅      |
 ---
 
 ### **Bugs**
-## Bug 1: env.py Pushed to GitHub
+## env.py Pushed to GitHub
 **Description:**  
 The `env.py` file was pushed to GitHub due to an incorrect value in the `.gitignore`. This resulted in the Heroku app having a DEV environment variable, which affects various settings, leading to potential issues in production.
 
@@ -176,23 +196,7 @@ Update the `.gitignore` file to properly ignore `env.py` and remove any sensitiv
 
 ---
 
-## Bug 2: Frontend and Backend Deployment Issue
-**Description:**  
-Currently, the frontend and backend are deployed on separate URLs, which may lead to issues during testing and usage.
-
-**Expected Behavior:**  
-Both the frontend and backend should be deployed to the same URL to streamline the development process.
-
-**Steps to Reproduce:**  
-1. Deploy the frontend and backend to separate URLs.
-2. Notice the difficulty in managing both environments separately.
-
-**Suggested Fix:**  
-I could combine the projects into one repository by following the guide at the end of the walkthrough, if I had enough time for this project.
-
----
-
-## **Validation**
+## **Code Validation**
  
 ## Comprehensive Debugging and ESLint Setup Guide
 
