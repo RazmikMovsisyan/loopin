@@ -146,8 +146,6 @@ The core color scheme consists of three main colors: a light blue (#1486fe) for 
 
 ## **User Stories (prioritized using MoSCoW method)**
 
-# Social Media Platform Project
-
 ## Project Overview
 A responsive web application allowing users to sign up, create posts, interact with content, and follow other users. Built with modern frontend and backend technologies to ensure a seamless user experience.
 
@@ -268,21 +266,6 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 - **AC1:** No messaging interface or inbox is available in the navigation
 - **AC2:** User profiles do not contain "Send Message" buttons
 - **AC3:** Real-time chat functionality is completely absent from the application
-
-## Technology Stack
-- Frontend: React.js with React Router
-- Backend: Node.js/Express or Django
-- Authentication: JWT Tokens
-- Database: PostgreSQL or MongoDB
-
-## Installation & Setup
-*(To be completed based on your specific implementation)*
-
-## Contributing
-*(To be completed based on your project guidelines)*
-
-## License
-*(To be completed based on your chosen license)*
 
 ## **Testing**
 
