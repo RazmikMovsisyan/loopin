@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "../../styles/Draft.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { MoreDropdown } from "../../components/MoreDropdown";
@@ -99,6 +100,22 @@ const Draft = ({ draft, setDrafts }) => {
       </Card.Body>
     </Card>
   );
+};
+
+Draft.propTypes = {
+  draft: PropTypes.shape({
+    id: PropTypes.number,
+    author: PropTypes.string,
+    author_profile_id: PropTypes.number,
+    author_profile_image: PropTypes.string,
+    updated_at: PropTypes.string,
+    status: PropTypes.string,
+    scheduled_time: PropTypes.string,
+    created_at: PropTypes.string,
+    image: PropTypes.string,
+    content: PropTypes.string,
+  }).isRequired,
+  setDrafts: PropTypes.func.isRequired,
 };
 
 export default Draft;

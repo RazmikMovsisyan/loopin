@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
@@ -107,7 +108,7 @@ const Post = (props) => {
           {is_owner ? (
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>You can't like your own post!</Tooltip>}
+              overlay={<Tooltip>You can&apos;t like your own post!</Tooltip>}
             >
               <i className="far fa-heart" />
             </OverlayTrigger>
@@ -136,6 +137,22 @@ const Post = (props) => {
       </Card.Body>
     </Card>
   );
+};
+
+Post.propTypes = {
+  id: PropTypes.number.isRequired,
+  owner: PropTypes.string.isRequired,
+  profile_id: PropTypes.number.isRequired,
+  profile_image: PropTypes.string.isRequired,
+  comments_count: PropTypes.number.isRequired,
+  likes_count: PropTypes.number.isRequired,
+  like_id: PropTypes.number,
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  updated_at: PropTypes.string.isRequired,
+  postPage: PropTypes.bool,
+  setPosts: PropTypes.func.isRequired,
 };
 
 export default Post;

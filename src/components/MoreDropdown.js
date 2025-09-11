@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Dropdown from "react-bootstrap/Dropdown";
 import styles from "../styles/MoreDropdown.module.css";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 // The forwardRef is important!!
 // Dropdown needs access to the DOM node in order to position the Menu
@@ -15,6 +16,11 @@ const ThreeDots = React.forwardRef(({ onClick }, ref) => (
     }}
   />
 ));
+
+ThreeDots.displayName = "ThreeDots";
+ThreeDots.propTypes = {
+  onClick: PropTypes.func
+};
 
 export const MoreDropdown = ({ handleEdit, handleDelete, handlePublish }) => {
   return (
@@ -55,6 +61,12 @@ export const MoreDropdown = ({ handleEdit, handleDelete, handlePublish }) => {
   );
 };
 
+MoreDropdown.propTypes = {
+  handleEdit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  handlePublish: PropTypes.func
+};
+
 export const ProfileEditDropdown = ({ id }) => {
   const history = useHistory();
   return (
@@ -84,4 +96,8 @@ export const ProfileEditDropdown = ({ id }) => {
       </Dropdown.Menu>
     </Dropdown>
   );
+};
+
+ProfileEditDropdown.propTypes = {
+  id: PropTypes.number.isRequired
 };

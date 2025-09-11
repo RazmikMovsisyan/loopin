@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Container } from "react-bootstrap";
 import appStyles from "../../App.module.css";
 import Asset from "../../components/Asset";
@@ -34,6 +35,10 @@ const PopularProfiles = ({ mobile }) => {
       )}
     </Container>
   );
+};
+
+PopularProfiles.propTypes = {
+  mobile: PropTypes.bool,
 };
 
 export default PopularProfiles;

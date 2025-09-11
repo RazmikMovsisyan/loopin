@@ -53,7 +53,7 @@ const NavBar = () => {
         activeClassName={styles.Active}
         to="/drafts/create"
       >
-        <i class="fa-solid fa-clock"></i>Add draft
+        <i className="fa-solid fa-clock"></i>Add draft
       </NavLink>
       <NavLink
         className={styles.NavLink}

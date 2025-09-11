@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import PropTypes from "prop-types";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { fetchDrafts } from "../api/axiosDrafts";
 
@@ -40,4 +41,8 @@ export const DraftsProvider = ({ children }) => {
       {children}
     </DraftsContext.Provider>
   );
+};
+
+DraftsProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

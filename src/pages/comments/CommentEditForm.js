@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import Form from "react-bootstrap/Form";
 import { axiosRes } from "../../api/axiosDefaults";
@@ -59,7 +60,7 @@ function CommentEditForm(props) {
         </button>
         <button
           className={styles.Button}
-          disabled={!content.trim()}
+          disabled={!formContent.trim()}
           type="submit"
         >
           save
@@ -68,5 +69,12 @@ function CommentEditForm(props) {
     </Form>
   );
 }
+
+CommentEditForm.propTypes = {
+  id: PropTypes.number.isRequired,
+  content: PropTypes.string.isRequired,
+  setShowEditForm: PropTypes.func.isRequired,
+  setComments: PropTypes.func.isRequired,
+};
 
 export default CommentEditForm;
