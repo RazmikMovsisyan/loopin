@@ -31,10 +31,15 @@ The goal is to promote authentic user interactions and community discussions thr
     - [Used Technologies](#used-technologies)
     - [App Owner Goals](#app-owner-goals)
     - [User Stories](#user-stories)
+  - [Design](#design)
+    - [Typography](#typography)
+    - [Color Scheme](#color-scheme)
   - [Testing](#testing)
     - [Manual Testing](#manual-testing)
     - [Bugs](#bugs)
+  - [Validation](#validation)
   - [Deployment](#deployment)
+    - [Heroku](#heroku)
   - [Version Control](#version-control)
   - [Development Process and Git Commands](#development-process-and-git-commands)
   - [Clone and Fork](#clone-and-fork)
@@ -126,6 +131,18 @@ The goal is to promote authentic user interactions and community discussions thr
 
 ---
 
+# **Design**
+
+### Typography
+The main body font for the app was chosen to use the native font of the user's operating system, ensuring a seamless and familiar user experience. This is achieved through a fallback list that includes common system fonts like -apple-system (for macOS) and Segoe UI (for Windows). For code blocks and source text, the font source-code-pro is used, also secured with a fallback list.
+
+### Color Scheme
+
+![color-scheme](src/assets/color-scheme.png)
+
+The core color scheme consists of three main colors: a light blue (#1486fe) for hover states, a neutral gray (#cfced3) for non-hover states, and black for certain buttons. I also included some minor exceptions for special elements, such as the sign-in and sign-up buttons, which use a brighter blue (#2ed9ff) and a dark blue (#2142b2) to help them stand out from the rest of the design.
+
+
 ## **Testing**
 
 ### **Manual Testing**
@@ -175,9 +192,182 @@ I could combine the projects into one repository by following the guide at the e
 
 ---
 
+## **Validation**
+ 
+## Comprehensive Debugging and ESLint Setup Guide
+
+### ESLint Setup in Visual Studio Code
+### Installation and Configuration Process
+
+**Mentor Recommendation**: Following the advice of my mentor Marcel, I implemented ESLint to maintain code quality and catch errors early in the development process. Marcel emphasized that consistent linting is crucial for professional React development and team collaboration.
+
+**VS Code ESLint Setup Steps**:
+
+1. **ESLint Extension Installation**:
+   - Opened VS Code Extensions marketplace
+   - Searched for "ESLint" by Microsoft
+   - Installed the extension
+   - Reloaded VS Code to activate the extension
+
+2. **Project ESLint Dependencies**:
+   ```bash
+   npm install eslint --save-dev
+   npm install eslint-plugin-react --save-dev
+
+   ```
+
+3. **VS Code Settings Configuration**:
+   Added to `settings.json`:
+   ```json
+   {
+     "eslint.validate": [
+       "javascript",
+       "javascriptreact",
+     ],
+     "editor.codeActionsOnSave": {
+       "source.fixAll.eslint": true
+     },
+     "eslint.format.enable": true
+   }
+   ```
+
+4. **ESLint Configuration File** (`.eslintrc.js`):
+   ```javascript
+   module.exports = {
+    env: {
+      browser: true,
+      es2021: true
+    },
+    extends: [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "react-app",
+      "react-app/jest"
+    ],
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true
+      },
+      ecmaVersion: 12,
+      sourceType: "module"
+    },
+    plugins: [
+      "react"
+    ],
+    rules: {
+    },
+    settings: {
+      react: {
+        version: "17.0.2"
+      }
+    }
+
+## Systematic Debugging Process
+
+### Phase 1: Initial Assessment
+**Command**: Ran `npm run lint` to identify all existing issues
+**Result**: 64 errors across 15 files categorized into several types
+
+### Phase 2: Error Categorization and Resolution
+
+#### Category 1: Missing React Imports
+**Problem**: Components using JSX without importing React
+**Files**: Context files (`CurrentUserContext.js`, `DraftsContext.js`, `ProfileDataContext.js`)
+**Solution**: Added `import React from 'react'` to all affected files
+
+#### Category 2: PropTypes Validation
+**Problem**: Missing prop validation throughout components
+**Approach**: Systematically added PropTypes to each component:
+- Basic type validation for primitive props
+- `PropTypes.shape()` for object structures
+- `isRequired` for mandatory props
+- Default values where appropriate
+
+#### Category 3: HTML Attribute Corrections
+**Problem**: Using HTML `class` instead of JSX `className`
+**File**: `NavBar.js` line 56
+**Solution**: Global search and replace from `class` to `className`
+
+#### Category 4: JSX Special Character Handling
+**Problem**: Unescaped apostrophes in JSX content
+**Files**: `SignInForm.js`, `Post.js`, `ProfilePage.js`
+**Solution**: Replaced `'` with `&apos;` HTML entity
+
+#### Category 5: React Router Modernization
+**Problem**: Using deprecated import paths
+**Solution**: Updated all imports from `react-router` to `react-router-dom`
+
+#### Category 6: Children Props Pattern
+**Problem**: Passing children as props instead of nesting
+**Components**: All `InfiniteScroll` implementations
+**Solution**: Restructured to use proper children nesting pattern
+
+#### Category 7: React 18 Migration
+**Problem**: Using deprecated `ReactDOM.render()`
+**File**: `index.js`
+**Solution**: 
+```javascript
+// Before
+import ReactDOM from 'react-dom';
+ReactDOM.render(<App />, document.getElementById('root'));
+
+// After  
+import ReactDOM from 'react-dom/client';
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+
+### Phase 3: Validation and Testing
+1. **Iterative Linting**: Ran `npm run lint` after each category fix
+2. **Functional Testing**: Verified components worked correctly after changes
+3. **PropTypes Verification**: Confirmed all props were properly validated
+4. **Cross-browser Testing**: Ensured compatibility maintained
+
+## Mentor-Recommended Best Practices Implemented
+
+### Marcel's Code Quality Recommendations:
+1. **Proactive Error Prevention**: Use ESLint to catch errors before runtime
+2. **Type Safety**: Implement comprehensive PropTypes for all components
+3. **Consistent Code Style**: Enforce uniform coding patterns across the project
+4. **Modern React Patterns**: Use latest React features and best practices
+5. **Documentation**: Maintain clear comments and documentation for complex logic
+
+### ESLint Benefits Realized:
+- **Early Error Detection**: 64 potential bugs caught before execution
+- **Code Consistency**: Uniform code style across entire codebase
+- **Maintainability**: Clear prop interfaces and component contracts
+- **Team Collaboration**: Standardized patterns for easier code reviews
+- **Performance**: Identified potential optimization opportunities
+
+## Results and Metrics
+
+**Before ESLint Implementation**:
+- 64 linting errors
+- Inconsistent code patterns
+- Potential runtime errors
+- Difficult code maintenance
+
+￼![eslint-before](src/assets/eslint-before.png)
+
+
+**After ESLint Implementation**:
+- 0 linting errors
+- Consistent code style throughout
+- PropTypes validation for all components
+- Modern React 18 compliance
+- Professional-grade code quality
+
+![eslint-after](src/assets/eslint-after.png)
+
+
+The systematic approach to debugging transformed the codebase from having multiple quality issues to meeting industry standards for production-ready React applications. The process not only fixed existing errors but also established preventive measures to maintain code quality throughout future development.
+
 ## **Deployment**
 
+### **Heroku**
+
 Deployed via **Heroku**.
+Live link: [Loopin](https://loopinapp-d364a1b22906.herokuapp.com/)
 
 Steps:
 1. Created Heroku app and linked GitHub repo.
@@ -186,8 +376,61 @@ Steps:
 4. Added `Procfile`, `requirements.txt`, `runtime.txt`.
 5. Disabled Django debug, ensured `.env` file excluded via `.gitignore`.
 
-Live link: [Loopin](https://loopinapp-d364a1b22906.herokuapp.com/)
 
+---
+
+
+> [!IMPORTANT]
+> You would replace the values with your own if cloning/forking my repository.
+
+
+Heroku needs some additional files in order to deploy properly.
+- [requirements.txt](requirements.txt)
+- [Procfile](Procfile)
+
+You can install this project's **[requirements.txt](requirements.txt)** (*where applicable*) using:
+
+- `pip3 install -r requirements.txt`
+
+If you have your own packages that have been installed, then the requirements file needs updated using:
+
+- `pip3 freeze --local > requirements.txt`
+
+The **[Procfile](Procfile)** can be created with the following command:
+
+- `echo web: gunicorn app_name.wsgi > Procfile`
+- *replace `app_name` with the name of your primary Django app name; the folder where `settings.py` is located*
+
+For Heroku deployment, follow these steps to connect your own GitHub repository to the newly created app:
+
+Either (*recommended*):
+
+- Select **Automatic Deployment** from the Heroku app.
+
+Or:
+
+- In the Terminal/CLI, connect to Heroku using this command: `heroku login -i`
+- Set the remote for Heroku: `heroku git:remote -a app_name` (*replace `app_name` with your app name*)
+- After performing the standard Git `add`, `commit`, and `push` to GitHub, you can now type:
+	- `git push heroku main`
+
+Or:
+
+Deploy manually:
+To deploy your app manually via the Heroku Dashboard:
+
+- Go to your app on the Heroku website.
+![Deploy0](src/assets/heroku-loopin.png)
+- In the top menu, click on **“Deploy.”**
+- Scroll down to the Manual Deploy section and click on **Deploy Branch**
+![Deploy2](src/assets/deployheroku-.png)
+
+- After a successful deployment, click the **“View”** button to open your live app.
+![Deploy3](src/assets/deployed.png)
+
+The project should now be connected and deployed to Heroku!
+
+![react-landing-page](src/assets/react-landing-page.png)
 ---
 
 ## **Version Control**
