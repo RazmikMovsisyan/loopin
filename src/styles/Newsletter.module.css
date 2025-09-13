@@ -31,6 +31,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-bottom: 10px;
   }
   
   .Newsletter button:hover {
@@ -39,10 +40,24 @@
   
   .Success {
     color: green;
-    margin: 0;
+    margin: 0 0 10px 0;
   }
   
   .Error {
     color: red;
     margin: 0;
+  }
+  
+  .UnsubscribeSection {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  
+  .UnsubscribeButton {
+    background-color: #ff4d4f !important;
+  }
+  
+  .UnsubscribeButton:hover {
+    background-color: #d9363e !important;
   }
