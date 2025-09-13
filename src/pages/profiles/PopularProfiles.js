@@ -5,6 +5,7 @@ import appStyles from "../../App.module.css";
 import Asset from "../../components/Asset";
 import { useProfileData } from "../../contexts/ProfileDataContext";
 import Profile from "./Profile";
+import Newsletter from "../../components/Newsletter";
 
 const PopularProfiles = ({ mobile }) => {
   const { popularProfiles } = useProfileData();
@@ -15,6 +16,9 @@ const PopularProfiles = ({ mobile }) => {
         mobile && "d-lg-none text-center mb-3"
       }`}
     >
+      {/* Newsletter Component - only show on desktop (non-mobile) */}
+      {!mobile && <Newsletter />}
+      
       {popularProfiles.results.length ? (
         <>
           <p>Most followed profiles.</p>

@@ -20,6 +20,8 @@ import { DraftsProvider } from "./contexts/DraftsContext";
 import DraftsPage from "./pages/drafts/DraftsPage";
 import DraftCreateForm from "./pages/drafts/DraftCreateForm";
 import DraftEditForm from "./pages/drafts/DraftEditForm";
+import Unsubscribe from "./pages/Unsubscribe";
+
 
 const AppContent = () => {
   const currentUser = useCurrentUser();
@@ -82,7 +84,8 @@ const AppContent = () => {
           <Route exact path="/drafts/create" render={() => <DraftCreateForm />} />
           <Route exact path="/drafts/:id/edit" render={() => <DraftEditForm />} />
           <Route render={() => <NotFound />} />
-        </Switch>
+          <Route exact path="/unsubscribe/:code" render={() => <Unsubscribe />} />
+          </Switch>
       </Container>
     </div>
   );
