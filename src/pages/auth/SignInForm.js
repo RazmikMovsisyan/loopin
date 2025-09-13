@@ -16,6 +16,9 @@ import appStyles from "../../App.module.css";
 import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
 import { useRedirect } from "../../hooks/useRedirect";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function SignInForm() {
   const setCurrentUser = useSetCurrentUser();
   useRedirect("loggedIn");
@@ -38,11 +41,19 @@ function SignInForm() {
         signInData,
         { withCredentials: true }
       );
-      localStorage.setItem('access_token', data.access_token);
-      localStorage.setItem('refresh_token', data.refresh_token);
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
       setCurrentUser(data.user);
+      toast.success("Signed in successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       history.goBack();
     } catch (err) {
+      toast.error("Sign in failed. Check your credentials.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       setErrors(err.response?.data);
     }
   };
@@ -93,6 +104,7 @@ function SignInForm() {
                 {message}
               </Alert>
             ))}
+
             <Button
               className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}
               type="submit"

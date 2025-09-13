@@ -9,6 +9,8 @@ import styles from "../../styles/CommentCreateEditForm.module.css";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 
+import { toast } from "react-toastify";
+
 function CommentCreateForm(props) {
   const { post, setPost, setComments, profileImage, profile_id } = props;
   const [content, setContent] = useState("");
@@ -37,8 +39,10 @@ function CommentCreateForm(props) {
         ],
       }));
       setContent("");
+      toast.success("Comment posted successfully!");
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      toast.error("Failed to post comment. Please try again.");
     }
   };
 
@@ -51,7 +55,7 @@ function CommentCreateForm(props) {
           </Link>
           <Form.Control
             className={styles.Form}
-            placeholder="my comment..."
+            placeholder="Write a comment..."
             as="textarea"
             value={content}
             onChange={handleChange}
@@ -64,7 +68,7 @@ function CommentCreateForm(props) {
         disabled={!content.trim()}
         type="submit"
       >
-        post
+        Post
       </button>
     </Form>
   );

@@ -14,9 +14,12 @@ import btnStyles from "../../styles/Button.module.css";
 
 import { useHistory, useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function PostEditForm() {
   const [errors, setErrors] = useState({});
+  const [uploading, setUploading] = useState(false);
 
   const [postData, setPostData] = useState({
     title: "",
@@ -34,7 +37,6 @@ function PostEditForm() {
       try {
         const { data } = await axiosReq.get(`/posts/${id}/`);
         const { title, content, image, is_owner } = data;
-
         is_owner ? setPostData({ title, content, image }) : history.push("/");
       } catch (err) {
         // console.log(err);
@@ -63,8 +65,9 @@ function PostEditForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
+    setUploading(true);
 
+    const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
 
@@ -74,12 +77,15 @@ function PostEditForm() {
 
     try {
       await axiosReq.put(`/posts/${id}/`, formData);
+      toast.success("Post updated successfully!");
       history.push(`/posts/${id}`);
     } catch (err) {
-      // console.log(err);
+      toast.error("Failed to update post.");
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);
       }
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -119,11 +125,16 @@ function PostEditForm() {
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
+        disabled={uploading}
       >
         cancel
       </Button>
-      <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
-        save
+      <Button
+        className={`${btnStyles.Button} ${btnStyles.Blue}`}
+        type="submit"
+        disabled={uploading}
+      >
+        {uploading ? "Saving..." : "save"}
       </Button>
     </div>
   );

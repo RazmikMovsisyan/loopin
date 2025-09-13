@@ -2,16 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-
 import Card from "react-bootstrap/Card";
 import Media from "react-bootstrap/Media";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-
 import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
+import { toast } from "react-toastify";
 
 const Post = (props) => {
   const {
@@ -42,8 +41,15 @@ const Post = (props) => {
     try {
       await axiosRes.delete(`/posts/${id}/`);
       history.goBack();
+      toast.success("Post deleted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (err) {
-      // console.log(err);
+      toast.error("Failed to delete post.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -58,8 +64,15 @@ const Post = (props) => {
             : post;
         }),
       }));
+      toast.success("Post liked!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
     } catch (err) {
-      // console.log(err);
+      toast.error("Failed to like post.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -74,8 +87,15 @@ const Post = (props) => {
             : post;
         }),
       }));
+      toast.info("Like removed.", {
+        position: "top-right",
+        autoClose: 2000,
+      });
     } catch (err) {
-      // console.log(err);
+      toast.error("Failed to remove like.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 

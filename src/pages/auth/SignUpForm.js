@@ -16,6 +16,9 @@ import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import { useRedirect } from "../../hooks/useRedirect";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const SignUpForm = () => {
   useRedirect("loggedIn");
   const [signUpData, setSignUpData] = useState({
@@ -40,8 +43,16 @@ const SignUpForm = () => {
     event.preventDefault();
     try {
       await axios.post("/dj-rest-auth/registration/", signUpData);
+      toast.success("Account created successfully! Please sign in.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       history.push("/signin");
     } catch (err) {
+      toast.error("Sign up failed. Please check your input.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       setErrors(err.response?.data);
     }
   };
@@ -130,7 +141,9 @@ const SignUpForm = () => {
       >
         <Image
           className={`${appStyles.FillerImage}`}
-          src={"https://codeinstitute.s3.amazonaws.com/AdvancedReact/hero2.jpg"}
+          src={
+            "https://codeinstitute.s3.amazonaws.com/AdvancedReact/hero2.jpg"
+          }
         />
       </Col>
     </Row>

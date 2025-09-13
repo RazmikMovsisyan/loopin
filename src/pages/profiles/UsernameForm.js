@@ -17,6 +17,9 @@ import {
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const UsernameForm = () => {
   const [username, setUsername] = useState("");
   const [errors, setErrors] = useState({});
@@ -38,16 +41,16 @@ const UsernameForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axiosRes.put("/dj-rest-auth/user/", {
-        username,
-      });
+      await axiosRes.put("/dj-rest-auth/user/", { username });
       setCurrentUser((prevUser) => ({
         ...prevUser,
         username,
       }));
+      toast.success("Username updated successfully! Enter new Username next time to log in", { position: "top-right" });
       history.goBack();
     } catch (err) {
       console.log(err);
+      toast.error("Failed to update username.", { position: "top-right" });
       setErrors(err.response?.data);
     }
   };

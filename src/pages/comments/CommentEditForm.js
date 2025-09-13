@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-
 import Form from "react-bootstrap/Form";
 import { axiosRes } from "../../api/axiosDefaults";
-
 import styles from "../../styles/CommentCreateEditForm.module.css";
+import { toast } from "react-toastify";
 
 function CommentEditForm(props) {
   const { id, content, setShowEditForm, setComments } = props;
-
   const [formContent, setFormContent] = useState(content);
 
   const handleChange = (event) => {
@@ -34,8 +32,15 @@ function CommentEditForm(props) {
         }),
       }));
       setShowEditForm(false);
+      toast.success("Comment updated successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (err) {
-      console.log(err);
+      toast.error("Failed to update comment.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 

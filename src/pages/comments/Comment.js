@@ -10,6 +10,10 @@ import styles from "../../styles/Comment.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { axiosRes } from "../../api/axiosDefaults";
 
+// ✅ Toastify importieren
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Comment = (props) => {
   const {
     profile_id,
@@ -42,8 +46,18 @@ const Comment = (props) => {
         ...prevComments,
         results: prevComments.results.filter((comment) => comment.id !== id),
       }));
+
+      // ✅ Erfolgsmeldung
+      toast.success("Comment deleted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (err) {
-      // Error handling can be added here if needed
+      // ✅ Fehlermeldung
+      toast.error("Failed to delete comment.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 

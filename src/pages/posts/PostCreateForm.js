@@ -14,6 +14,7 @@ import btnStyles from "../../styles/Button.module.css";
 import { useHistory } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useRedirect } from "../../hooks/useRedirect";
+import { toast } from "react-toastify";
 
 function PostCreateForm() {
   useRedirect("loggedOut");
@@ -53,12 +54,10 @@ function PostCreateForm() {
 
     try {
       let imageUrl = "";
-      
       if (imageInput.current.files.length) {
         const formData = new FormData();
         formData.append("file", imageInput.current.files[0]);
         formData.append("upload_preset", "unsigned_profile_upload");
-
         const cloudinaryRes = await fetch(
           "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
           {
@@ -66,25 +65,27 @@ function PostCreateForm() {
             body: formData,
           }
         );
-        
         if (!cloudinaryRes.ok) {
           throw new Error("Cloudinary upload failed");
         }
-        
         const cloudinaryData = await cloudinaryRes.json();
         imageUrl = cloudinaryData.public_id;
       }
-
-      // Post mit der Bild-URL erstellen
       const { data } = await axiosReq.post("/posts/", {
         title,
         content,
-        image: imageUrl
+        image: imageUrl,
       });
-      
+      toast.success("Post created successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       history.push(`/posts/${data.id}`);
     } catch (err) {
-      console.log("Upload error:", err);
+      toast.error("Failed to create post.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);
       }
@@ -109,7 +110,6 @@ function PostCreateForm() {
           {message}
         </Alert>
       ))}
-
       <Form.Group>
         <Form.Label>Content</Form.Label>
         <Form.Control
@@ -125,7 +125,6 @@ function PostCreateForm() {
           {message}
         </Alert>
       ))}
-
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
@@ -133,8 +132,8 @@ function PostCreateForm() {
       >
         cancel
       </Button>
-      <Button 
-        className={`${btnStyles.Button} ${btnStyles.Blue}`} 
+      <Button
+        className={`${btnStyles.Button} ${btnStyles.Blue}`}
         type="submit"
         disabled={uploading}
       >
@@ -176,7 +175,6 @@ function PostCreateForm() {
                   />
                 </Form.Label>
               )}
-
               <Form.File
                 id="image-upload"
                 accept="image/*"
@@ -189,7 +187,6 @@ function PostCreateForm() {
                 {message}
               </Alert>
             ))}
-
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>

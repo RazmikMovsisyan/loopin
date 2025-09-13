@@ -14,6 +14,9 @@ import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const UserPasswordForm = () => {
   const history = useHistory();
   const { id } = useParams();
@@ -27,6 +30,12 @@ const UserPasswordForm = () => {
 
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if (currentUser?.profile_id?.toString() !== id) {
+      history.push("/");
+    }
+  }, [currentUser, history, id]);
+
   const handleChange = (event) => {
     setUserData({
       ...userData,
@@ -34,20 +43,15 @@ const UserPasswordForm = () => {
     });
   };
 
-  useEffect(() => {
-    if (currentUser?.profile_id?.toString() !== id) {
-      // redirect user if they are not the owner of this profile
-      history.push("/");
-    }
-  }, [currentUser, history, id]);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await axiosRes.post("/dj-rest-auth/password/change/", userData);
+      toast.success("Password changed successfully! Use your new Password for next log in", { position: "top-right" });
       history.goBack();
     } catch (err) {
       console.log(err);
+      toast.error("Failed to change password.", { position: "top-right" });
       setErrors(err.response?.data);
     }
   };

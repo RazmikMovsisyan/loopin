@@ -21,7 +21,8 @@ import DraftsPage from "./pages/drafts/DraftsPage";
 import DraftCreateForm from "./pages/drafts/DraftCreateForm";
 import DraftEditForm from "./pages/drafts/DraftEditForm";
 import Unsubscribe from "./pages/Unsubscribe";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AppContent = () => {
   const currentUser = useCurrentUser();
@@ -44,7 +45,7 @@ const AppContent = () => {
             path="/feed"
             render={() => (
               <PostsPage
-                message="No results found. Adjust the search keyword or follow a user."
+                message="No results found. Follow users to see their posts here."
                 filter={`owner__followed__owner__profile=${profile_id}&`}
               />
             )}
@@ -54,7 +55,7 @@ const AppContent = () => {
             path="/liked"
             render={() => (
               <PostsPage
-                message="No results found. Adjust the search keyword or like a post."
+                message="No results found. Hit the like button on posts to see them here."
                 filter={`likes__owner__profile=${profile_id}&ordering=-likes__created_at&`}
               />
             )}
@@ -83,9 +84,12 @@ const AppContent = () => {
           <Route exact path="/drafts" render={() => <DraftsPage />} />
           <Route exact path="/drafts/create" render={() => <DraftCreateForm />} />
           <Route exact path="/drafts/:id/edit" render={() => <DraftEditForm />} />
-          <Route render={() => <NotFound />} />
           <Route exact path="/unsubscribe/:code" render={() => <Unsubscribe />} />
-          </Switch>
+          <Route render={() => <NotFound />} />
+        </Switch>
+
+        {/* ✅ ToastContainer außerhalb des Switch platzieren */}
+        <ToastContainer position="top-right" autoClose={3000} />
       </Container>
     </div>
   );

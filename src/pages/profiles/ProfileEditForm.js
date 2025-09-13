@@ -16,7 +16,9 @@ import {
 
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
-import Avatar from "../../components/Avatar"; // 🔁 Avatar statt Image
+import Avatar from "../../components/Avatar";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProfileEditForm = () => {
   const currentUser = useCurrentUser();
@@ -42,7 +44,7 @@ const ProfileEditForm = () => {
           const { name, content, image } = data;
           setProfileData({ name, content, image });
         } catch (err) {
-          console.log(err);
+          toast.error("Failed to load profile.", { position: "top-right" });
           history.push("/");
         }
       } else {
@@ -76,9 +78,11 @@ const ProfileEditForm = () => {
         ...currentUser,
         profile_image: data.image,
       }));
+      toast.success("Profile updated successfully!", { position: "top-right" });
       history.goBack();
     } catch (err) {
       console.log(err);
+      toast.error("Failed to update profile.", { position: "top-right" });
       setErrors(err.response?.data);
     }
   };

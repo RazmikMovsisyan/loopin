@@ -13,6 +13,8 @@ import Avatar from "./Avatar";
 import axios from "axios";
 import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
 import { removeTokenTimestamp } from "../utils/utils";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
@@ -26,22 +28,30 @@ const NavBar = () => {
     currentUser?.profile_image.startsWith("../")
       ? "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg"
       : currentUser?.profile_image;
-      
+
   const handleSignOut = async () => {
     try {
       await axios.post("dj-rest-auth/logout/");
       setCurrentUser(null);
       removeTokenTimestamp();
+      toast.success("Signed out successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (err) {
+      toast.error("Sign out failed!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       console.log(err);
     }
   };
 
-  const addPostIcon = (    
+  const addPostIcon = (
     <NavLink
-    className={styles.NavLink}
-    activeClassName={styles.Active}
-    to="/posts/create"
+      className={styles.NavLink}
+      activeClassName={styles.Active}
+      to="/posts/create"
     >
       <i className="far fa-plus-square"></i>Add post
     </NavLink>

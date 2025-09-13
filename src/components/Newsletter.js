@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { axiosReq } from '../api/axiosDefaults';
 import styles from '../styles/Newsletter.module.css';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Newsletter = () => {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showUnsubscribe, setShowUnsubscribe] = useState(false);
   const [subscribedEmail, setSubscribedEmail] = useState('');
@@ -13,18 +15,23 @@ const Newsletter = () => {
     e.preventDefault();
     try {
       const response = await axiosReq.post('/newsletter/subscribe/', { email });
-      setMessage(response.data.message || 'Subscription successful');
+      toast.success(response.data.message || 'Subscription successful!', {
+        position: 'top-right',
+      });
       setIsSubscribed(true);
       setShowUnsubscribe(true);
-      setSubscribedEmail(email); // E-Mail für Unsubscribe speichern
+      setSubscribedEmail(email); // Save email for unsubscribe
       setEmail('');
     } catch (err) {
-      setMessage(err.response?.data?.error || 'An error occurred. Please try again.');
-      // Immer den Unsubscribe-Button anzeigen, wenn eine E-Mail eingegeben wurde
+      toast.error(
+        err.response?.data?.error || 'An error occurred. Please try again.',
+        { position: 'top-right' }
+      );
+      // Show unsubscribe if user already entered email
       if (email) {
         setShowUnsubscribe(true);
         setIsSubscribed(true);
-        setSubscribedEmail(email); // E-Mail für Unsubscribe speichern
+        setSubscribedEmail(email);
       }
     }
   };
@@ -32,19 +39,24 @@ const Newsletter = () => {
   const handleUnsubscribe = async () => {
     try {
       await axiosReq.post('/newsletter/unsubscribe_by_email/', { email: subscribedEmail });
-      setMessage('You have been successfully unsubscribed from our newsletter.');
+      toast.success('You have been successfully unsubscribed.', {
+        position: 'top-right',
+      });
       setIsSubscribed(false);
       setShowUnsubscribe(false);
       setSubscribedEmail('');
     } catch (err) {
-      setMessage(err.response?.data?.error || 'An error occurred while unsubscribing. Please try again.');
+      toast.error(
+        err.response?.data?.error || 'An error occurred while unsubscribing.',
+        { position: 'top-right' }
+      );
     }
   };
 
   return (
     <div className={styles.Newsletter}>
       <h5>Subscribe to our Newsletter</h5>
-      
+
       {!isSubscribed ? (
         <form onSubmit={handleSubscribe}>
           <input
@@ -56,14 +68,12 @@ const Newsletter = () => {
           />
           <button type="submit">Subscribe</button>
         </form>
-      ) : (
-        <p className={styles.Success}>{message}</p>
-      )}
-      
+      ) : null}
+
       {showUnsubscribe && (
         <div className={styles.UnsubscribeSection}>
           <p>If you wish to unsubscribe, click here:</p>
-          <button 
+          <button
             onClick={handleUnsubscribe}
             className={styles.UnsubscribeButton}
           >
@@ -71,8 +81,6 @@ const Newsletter = () => {
           </button>
         </div>
       )}
-      
-      {message && !isSubscribed && <p className={styles.Error}>{message}</p>}
     </div>
   );
 };
