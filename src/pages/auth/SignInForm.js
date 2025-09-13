@@ -34,10 +34,12 @@ function SignInForm() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://loopin-8006788e0f02.herokuapp.com/dj-rest-auth/login/",
+        "/dj-rest-auth/login/",
         signInData,
         { withCredentials: true }
       );
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.refresh_token);
       setCurrentUser(data.user);
       history.goBack();
     } catch (err) {

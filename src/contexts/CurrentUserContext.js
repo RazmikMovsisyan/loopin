@@ -21,7 +21,7 @@ export const CurrentUserProvider = ({ children }) => {
       
       try {
         const { data: profileData } = await axiosReq.get(
-          `/profiles/${userData.pk}/`
+          `/profiles/${userData.profile_id}/`
         );
         
         setCurrentUser({
@@ -54,7 +54,12 @@ export const CurrentUserProvider = ({ children }) => {
       async (config) => {
         if (shouldRefreshToken()) {
           try {
-            await axios.post("/dj-rest-auth/token/refresh/");
+            const refresh_roken = localStorage.getItem('refresh_token');
+            if (!refresh_roken) {
+              throw new Error('No "refresh_token" found');
+            }
+            const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_roken });
+            localStorage.setItem('access_token', data.access);
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {
@@ -78,7 +83,12 @@ export const CurrentUserProvider = ({ children }) => {
       async (err) => {
         if (err.response?.status === 401) {
           try {
-            await axios.post("/dj-rest-auth/token/refresh/");
+            const refresh_roken = localStorage.getItem('refresh_token');
+            if (!refresh_roken) {
+              throw new Error('No "refresh_token" found');
+            }
+            const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_roken });
+            localStorage.setItem('access_token', data.access);
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {

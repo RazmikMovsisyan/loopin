@@ -8,7 +8,12 @@ export const useRedirect = (userAuthStatus) => {
   useEffect(() => {
     const handleMount = async () => {
       try {
-        await axios.post("/dj-rest-auth/token/refresh/");
+        const refresh_roken = localStorage.getItem('refresh_token');
+        if (!refresh_roken) {
+          throw new Error('No "refresh_token" found');
+        }
+        const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_roken });
+        localStorage.setItem('access_token', data.access);
         // if user is logged in, the code below will run
         if (userAuthStatus === "loggedIn") {
           history.push("/");

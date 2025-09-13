@@ -72,7 +72,7 @@ function PostCreateForm() {
         }
         
         const cloudinaryData = await cloudinaryRes.json();
-        imageUrl = cloudinaryData.secure_url;
+        imageUrl = cloudinaryData.public_id;
       }
 
       // Post mit der Bild-URL erstellen
