@@ -270,29 +270,6 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 
 ## **Custom Model**
 ## Newsletter Feature Implementation - LoopIn
-
-## Table of Contents
-- [Overview](#overview)
-- [Backend Implementation](#backend-implementation)
-  - [Model Creation](#model-creation)
-  - [API Endpoints](#api-endpoints)
-  - [Views](#views)
-  - [URLs](#urls)
-  - [Admin Configuration](#admin-configuration)
-- [Frontend Implementation](#frontend-implementation)
-  - [Newsletter Component](#newsletter-component)
-  - [Unsubscribe Page](#unsubscribe-page)
-  - [Integration](#integration)
-- [Problems and Solutions](#problems-and-solutions)
-  - [Problem 1: Unsubscribe Button Not Appearing](#problem-1-unsubscribe-button-not-appearing)
-  - [Problem 2: Email Required Error on Unsubscribe](#problem-2-email-required-error-on-unsubscribe)
-  - [Problem 3: Emails Not Removed from Database](#problem-3-emails-not-removed-from-database)
-- [Setup Instructions](#setup-instructions)
-- [Testing](#testing)
-- [Screenshots](#screenshots)
-- [User Flow and Database Management](#user-flow-and-database-management)
-- [Technical Implementation Details](#technical-implementation-details)
-
 ---
 
 ## Overview
@@ -483,27 +460,33 @@ subscriber.delete()
 - New subscribtion
 ![new-subscribtion](src/assets/new-subscribtion.png)
 
+---
 
 - Displays Subscribe Success Message
 ![subscribe-success](src/assets/subscribe-success.png)
 
+---
 
 - Displays unsubscribe button instantly.  
 ![direct-unsubscribe](src/assets/direct-unsubscribe.png)
 
+---
 
 - Recognizes previously subscribed emails. Shows "Already subscribed" message.
 - Allows to unsubscribe right away  
 ![already-subscribed](src/assets/return-subscribe.png)
 
+---
 
 - Displays success message when unsubscribing
 ![unsubscribe-success](src/assets/unsubscribe-success.png)
 
+---
 
 - No entry in the database after unsubscribing
 ![empty-database](src/assets/empty-database.png)
 
+---
 
 ### Database Operations
 - **Real-time Updates:** Immediate changes in DB on every action.  
