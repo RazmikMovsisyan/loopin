@@ -492,6 +492,94 @@ The systematic approach to debugging transformed the codebase from having multip
 
 ## **Deployment**
 
+# How to Create and connect GitHub Repository and Heroku App 
+
+## Part 1: Creating the GitHub Repository
+
+1. **Log in to GitHub**  
+   Go to [github.com](https://github.com) and sign in to your account.
+
+2. **Create a New Repository**  
+   - Click the **+** icon in the top-right corner of the page.  
+   - From the dropdown menu, select **New repository**.  
+   - Alternatively, go directly to [github.com/new](https://github.com/new).
+
+3. **Configure Your Repository**  
+   - **Repository name:** Enter `app-loopin`.  
+   - **Description:** (Optional) Add a short description of your project.  
+   - **Public/Private:** Select **Public** (so Heroku can access it).  
+   - **Initialize this repository with a README:** Check this box.  
+     - This creates the initial file needed for the repository.  
+   - Leave the other options (`.gitignore` and license) empty if you wish so.  
+
+4. **Create Repository**  
+   - Click the green **Create repository** button.  
+
+Your empty repository named **`app-loopin`** is now created on GitHub.
+![github-respository](src/assets/github-repository.png)
+
+---
+
+## Part 2: Creating the Heroku App and Connecting GitHub
+
+1. **Log in to Heroku**  
+   Go to [heroku.com](https://www.heroku.com) and log in (or sign up if you don’t have an account).
+
+2. **Create a New App**  
+   - On your Heroku dashboard, click the **New** button.  
+   - From the menu, select **Create new app**.  
+![heroku-create-new-app](src/assets/heroku-create-new-app.png)
+
+3. **Configure Your App**  
+   - **App name:** Enter a unique name, e.g., `app-loopin`.  
+     - ⚠️ Heroku app names must be globally unique across all users.  
+   - **Choose a region:** Select either **United States** or **Europe**.  
+   - Click the purple **Create app** button.  
+![heroku-config-new-app](src/assets/heroku-config-new-app.png)
+---
+
+## Part 3: Connecting Heroku to Your GitHub Repository
+
+1. **Go to the Deploy Tab**  
+   After your Heroku app is created, you’ll land on its settings page.  
+   Click the **Deploy** tab at the top.  
+
+2. **Select Deployment Method**  
+   - In the **Deployment method** section, choose **GitHub**.  
+
+3. **Connect to GitHub**  
+   - Click **Connect to GitHub**.  
+   - Authorize Heroku if prompted.  
+
+4. **Search for Your Repository**  
+   - Use the search field under "Connect to GitHub" to find your repo.  
+   - Type `app-loopin` and press Enter.  
+   - When it appears, click **Connect**.  
+![github-connect](src/assets/github-connect.png)
+---
+
+### (Important Steps You Must Not Forget)
+
+#### Enable Automatic Deploys (Optional but Recommended)  
+- After connecting, scroll to the **Automatic deploys** section.  
+- Select the branch (usually `main` or `master`).  
+- Click **Enable Automatic Deploys**.  
+- This ensures Heroku rebuilds and redeploys your app automatically whenever you push changes to GitHub.
+
+#### Manual Deploy  
+- In the **Manual deploy** section, select the branch (e.g., `main`).  
+- Click **Deploy Branch**.  
+- Heroku will start building your app. You can watch the logs in real time.  
+- Once complete, you’ll see **“Your app was successfully deployed.”**  
+- Click **View** to open your live application in a browser.  
+![deploy](src/assets/deploy.png)
+---
+
+## Done!  
+Now, whenever you push new code to your connected GitHub branch:  
+- If **Automatic Deploys** is enabled → Heroku deploys automatically.  
+- If not → You can trigger a **Manual Deploy** from the dashboard.
+
 ### **Heroku**
 
 Deployed via **Heroku**.
