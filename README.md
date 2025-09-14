@@ -35,7 +35,7 @@ The goal is to promote authentic user interactions and community discussions thr
     - [Typography](#typography)
     - [Color Scheme](#color-scheme)
   - [User Stories (prioritized using MoSCoW method)](#user-stories-prioritized-using-moscow-method)
-  - [Custom Model)](#custom-model)
+  - [Custom Model](#custom-model)
   - [Testing](#testing)
     - [Manual Testing](#manual-testing)
     - [Bugs](#bugs)
@@ -472,33 +472,43 @@ subscriber.delete()
 ## User Flow and Database Management
 
 ### Seamless Subscription Management
-- **Instant Subscription:** Register email immediately without confirmation. 
+- **Instant Subscription:** Register email immediately. 
 ![subscribe](src/assets/subscribe.png)
 ![success](src/assets/success.png)
-- **Immediate Unsubscription:** Users can instantly unsubscribe, removing their email entirely.  
-![unsubscribe](src/assets/unsubscribe.png)
 
 - **Persistent State:** Subscription state is maintained across sessions.  
+
+
+### Return User Experience
+- New subscribtion
+![new-subscribtion](src/assets/new-subscribtion.png)
+
+
+- Displays Subscribe Success Message
+![subscribe-success](src/assets/subscribe-success.png)
+
+
+- Displays unsubscribe button instantly.  
+![direct-unsubscribe](src/assets/direct-unsubscribe.png)
+
+
+- Recognizes previously subscribed emails. Shows "Already subscribed" message.
+- Allows to unsubscribe right away  
+![already-subscribed](src/assets/return-subscribe.png)
+
+
+- Displays success message when unsubscribing
+![unsubscribe-success](src/assets/unsubscribe-success.png)
+
+
+- No entry in the database after unsubscribing
+![empty-database](src/assets/empty-database.png)
+
 
 ### Database Operations
 - **Real-time Updates:** Immediate changes in DB on every action.  
 - **Complete Data Removal:** Emails are deleted, not just flagged.  
 - **Unique Constraint:** Database ensures no duplicates.  
-
-### Return User Experience
-- New subscribtion
-![new-subscribtion](src/assets/new-subscribtion.png)
-- Displays Subscribe Success Message
-![subscribe-success](src/assets/subscribe-success.png)
-- Displays unsubscribe button instantly.  
-![direct-unsubscribe](src/assets/direct-unsubscribe.png)
-- Recognizes previously subscribed emails. Shows "Already subscribed" message.
-- Allows to unsubscribe right away  
-![already-subscribed](src/assets/return-subscribe.png)
-- Displays success message when unsubscribing
-![unsubscribe-success](src/assets/unsubscribe-success.png)
-- No entry in the database after unsubscribing
-![empty-database](src/assets/empty-database.png)
 ---
 
 ## Technical Implementation Details
@@ -510,9 +520,9 @@ subscriber.delete()
 ---
 I migrated from a custom-built notification handler to Toastify, which provides a robust, reusable, and industry-standard approach to managing user notifications.
 
-
-
 This implementation provides a frictionless user experience while maintaining robust database management practices.
+
+---
 
 ## **Testing**
 
