@@ -35,6 +35,7 @@ The goal is to promote authentic user interactions and community discussions thr
     - [Typography](#typography)
     - [Color Scheme](#color-scheme)
   - [User Stories (prioritized using MoSCoW method)](#user-stories-prioritized-using-moscow-method)
+  - [Custom Model)](#custom-model)
   - [Testing](#testing)
     - [Manual Testing](#manual-testing)
     - [Bugs](#bugs)
@@ -266,6 +267,252 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 - **AC1:** No messaging interface or inbox is available in the navigation
 - **AC2:** User profiles do not contain "Send Message" buttons
 - **AC3:** Real-time chat functionality is completely absent from the application
+
+## **Custom Model**
+## Newsletter Feature Implementation - LoopIn
+
+## Table of Contents
+- [Overview](#overview)
+- [Backend Implementation](#backend-implementation)
+  - [Model Creation](#model-creation)
+  - [API Endpoints](#api-endpoints)
+  - [Views](#views)
+  - [URLs](#urls)
+  - [Admin Configuration](#admin-configuration)
+- [Frontend Implementation](#frontend-implementation)
+  - [Newsletter Component](#newsletter-component)
+  - [Unsubscribe Page](#unsubscribe-page)
+  - [Integration](#integration)
+- [Problems and Solutions](#problems-and-solutions)
+  - [Problem 1: Unsubscribe Button Not Appearing](#problem-1-unsubscribe-button-not-appearing)
+  - [Problem 2: Email Required Error on Unsubscribe](#problem-2-email-required-error-on-unsubscribe)
+  - [Problem 3: Emails Not Removed from Database](#problem-3-emails-not-removed-from-database)
+- [Setup Instructions](#setup-instructions)
+- [Testing](#testing)
+- [Screenshots](#screenshots)
+- [User Flow and Database Management](#user-flow-and-database-management)
+- [Technical Implementation Details](#technical-implementation-details)
+
+---
+
+## Overview
+The newsletter feature allows users to subscribe and unsubscribe from a newsletter without email confirmation. It is integrated into the LoopIn social media platform.
+
+---
+
+## Backend Implementation
+
+### Model Creation
+I created a `NewsletterSubscriber` model to store subscriber information.
+
+**File: newsletter/models.py**
+```python
+from django.db import models
+import uuid
+
+class NewsletterSubscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    confirmation_code = models.CharField(max_length=40, unique=True, default=uuid.uuid4)
+
+    def __str__(self):
+        return self.email
+```
+
+### API Endpoints
+I implemented three API endpoints:
+
+- `POST /newsletter/subscribe/`: Subscribe an email to the newsletter.
+- `POST /newsletter/unsubscribe_by_email/`: Unsubscribe an email by providing the email address.
+- `POST /newsletter/unsubscribe/<uuid:code>/`: Unsubscribe using a confirmation code.
+
+### Views
+**File: newsletter/views.py**
+
+The subscribe view handles subscription and returns appropriate messages.
+
+```python
+@api_view(['POST'])
+def subscribe(request):
+    email = request.data.get('email')
+    if not email:
+        return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if NewsletterSubscriber.objects.filter(email=email, subscribed=True).exists():
+        return Response({'error': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+    
+```
+
+The unsubscribe_with_email view handles unsubscription by email and deletes the record.
+
+```python
+@api_view(['POST'])
+def unsubscribe_with_email(request):
+    email = request.data.get('email')
+    if not email:
+        return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        subscriber = NewsletterSubscriber.objects.get(email=email)
+        subscriber.delete()
+        return Response({'message': 'Successfully unsubscribed'}, status=status.HTTP_200_OK)
+    except NewsletterSubscriber.DoesNotExist:
+        return Response({'error': 'Email not found'}, status=status.HTTP_404_NOT_FOUND)
+```
+
+### URLs
+**File: newsletter/urls.py**
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('subscribe/', views.subscribe, name='newsletter-subscribe'),
+    path('unsubscribe_by_email/', views.unsubscribe_with_email, name='newsletter-unsubscribe-with-email'),
+    path('unsubscribe/<uuid:code>/', views.unsubscribe_with_code, name='newsletter-unsubscribe-with-code'),
+]
+```
+
+### Admin Configuration
+I configured the admin interface to only show subscribed emails.
+
+**File: newsletter/admin.py**
+```python
+from django.contrib import admin
+from .models import NewsletterSubscriber
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed', 'created_at')
+    list_filter = ('subscribed', 'created_at')
+    search_fields = ('email',)
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(subscribed=True)
+```
+
+---
+
+## Frontend Implementation
+
+### Newsletter Component
+**File: src/components/Newsletter.js**
+
+I created a component that handles both subscription and unsubscription.
+
+Key features:
+- Input for email
+- Subscribe button
+- Unsubscribe button that appears after subscription
+
+### Unsubscribe Page
+**File: src/pages/Unsubscribe.js**  
+A page to handle unsubscription via confirmation code.
+
+### Integration
+I integrated the Newsletter component into the `PopularProfiles` component, so it appears above the "Most followed profiles" section.
+
+---
+
+## Problems and Solutions
+
+### Problem 1: Unsubscribe Button Not Appearing
+**Problem:** When a user entered an email that was already subscribed, the unsubscribe button did not appear.  
+![unsubscribe-button-missing](src/assets/unsubscribe-button-not-appearing.png)
+
+**Solution:** Modified the frontend error handling to show the unsubscribe button even when the backend returned "Already subscribed".
+
+```javascript
+} catch (err) {
+  if (err.response?.status === 400 && err.response?.data?.error === 'Already subscribed') {
+    setMessage('You are already subscribed to our newsletter.');
+    setIsSubscribed(true);
+    setShowUnsubscribe(true);
+    setSubscribedEmail(email);
+  } else {
+    setMessage(err.response?.data?.error || 'An error occurred. Please try again.');
+  }
+}
+```
+
+### Problem 2: Email Required Error on Unsubscribe
+**Problem:** After subscribing, the email state was cleared, so unsubscribing failed.  
+![email-required](src/assets/email-required.png)
+
+**Solution:** Introduced a new state variable `subscribedEmail` to persist the email.
+
+```javascript
+const [subscribedEmail, setSubscribedEmail] = useState('');
+
+// In handleSubscribe:
+setSubscribedEmail(email);
+
+// In handleUnsubscribe:
+await axiosReq.post('/newsletter/unsubscribe_by_email/', { email: subscribedEmail });
+```
+
+### Problem 3: Emails Not Removed from Database
+**Problem:** Initially, unsubscribe only set `subscribed=False`.  
+![emails-not-removed](src/assets/emails-not-removed.png)
+
+**Solution:** Changed the unsubscribe views to completely delete the record.
+
+```python
+# Instead of:
+# subscriber.subscribed = False
+# subscriber.save()
+
+# I did:
+subscriber.delete()
+```
+
+---
+
+## User Flow and Database Management
+
+### Seamless Subscription Management
+- **Instant Subscription:** Register email immediately without confirmation. 
+![subscribe](src/assets/subscribe.png)
+![success](src/assets/success.png)
+- **Immediate Unsubscription:** Users can instantly unsubscribe, removing their email entirely.  
+![unsubscribe](src/assets/unsubscribe.png)
+
+- **Persistent State:** Subscription state is maintained across sessions.  
+
+### Database Operations
+- **Real-time Updates:** Immediate changes in DB on every action.  
+- **Complete Data Removal:** Emails are deleted, not just flagged.  
+- **Unique Constraint:** Database ensures no duplicates.  
+
+### Return User Experience
+- New subscribtion
+![new-subscribtion](src/assets/new-subscribtion.png)
+- Displays Subscribe Success Message
+![subscribe-success](src/assets/subscribe-success.png)
+- Displays unsubscribe button instantly.  
+![direct-unsubscribe](src/assets/direct-unsubscribe.png)
+- Recognizes previously subscribed emails. Shows "Already subscribed" message.
+- Allows to unsubscribe right away  
+![already-subscribed](src/assets/return-subscribe.png)
+- Displays success message when unsubscribing
+![unsubscribe-success](src/assets/unsubscribe-success.png)
+- No entry in the database after unsubscribing
+![empty-database](src/assets/empty-database.png)
+---
+
+## Technical Implementation Details
+- **State Persistence:** Handled via React state.  
+- **Backend Integration:** Django REST Framework with proper error handling.  
+- **Immediate Feedback:** Real-time UI updates without page reloads.  
+- **Database Integrity:** PostgreSQL constraints for consistency.  
+
+---
+I migrated from a custom-built notification handler to Toastify, which provides a robust, reusable, and industry-standard approach to managing user notifications.
+
+
+
+This implementation provides a frictionless user experience while maintaining robust database management practices.
 
 ## **Testing**
 
