@@ -46,6 +46,12 @@ function CommentCreateForm(props) {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      handleSubmit(event);
+    }
+  };
+
   return (
     <Form className="mt-2" onSubmit={handleSubmit}>
       <Form.Group>
@@ -59,10 +65,14 @@ function CommentCreateForm(props) {
             as="textarea"
             value={content}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             rows={2}
           />
         </InputGroup>
-      </Form.Group>
+        <small className="text-muted d-block text-center mt-1">
+          Shift + Enter → New line
+        </small>
+        </Form.Group>
       <button
         className={`${styles.Button} btn d-block ml-auto`}
         disabled={!content.trim()}

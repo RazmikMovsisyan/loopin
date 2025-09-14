@@ -44,6 +44,12 @@ function CommentEditForm(props) {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      handleSubmit(event);
+    }
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="pr-1">
@@ -52,8 +58,10 @@ function CommentEditForm(props) {
           as="textarea"
           value={formContent}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           rows={2}
         />
+        <small className="text-muted">Shift + Enter für neue Zeile</small>
       </Form.Group>
       <div className="text-right">
         <button

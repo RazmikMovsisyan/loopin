@@ -10,7 +10,6 @@ import styles from "../../styles/Comment.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { axiosRes } from "../../api/axiosDefaults";
 
-// ✅ Toastify importieren
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,13 +46,11 @@ const Comment = (props) => {
         results: prevComments.results.filter((comment) => comment.id !== id),
       }));
 
-      // ✅ Erfolgsmeldung
       toast.success("Comment deleted successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
     } catch (err) {
-      // ✅ Fehlermeldung
       toast.error("Failed to delete comment.", {
         position: "top-right",
         autoClose: 3000,
@@ -69,8 +66,10 @@ const Comment = (props) => {
           <Avatar src={profile_image} />
         </Link>
         <Media.Body className="align-self-center ml-2">
+        <Link to={`/profiles/${profile_id}`}>
           <span className={styles.Owner}>{owner}</span>
           <span className={styles.Date}>{updated_at}</span>
+        </Link>
           {showEditForm ? (
             <CommentEditForm
               id={id}
