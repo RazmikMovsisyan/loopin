@@ -17,15 +17,11 @@ import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
 import NotFound from "./components/NotFound";
-import { DraftsProvider } from "./contexts/DraftsContext";
-import DraftsPage from "./pages/drafts/DraftsPage";
-import DraftCreateForm from "./pages/drafts/DraftCreateForm";
-import DraftEditForm from "./pages/drafts/DraftEditForm";
 import Unsubscribe from "./pages/Unsubscribe";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "./contexts/AuthContext"; // neu
+import { AuthProvider } from "./contexts/AuthContext";
 
 const AppContent = () => {
   const currentUser = useCurrentUser();
@@ -70,9 +66,6 @@ const AppContent = () => {
           <Route exact path="/profiles/:id/edit/username" render={() => <UsernameForm />} />
           <Route exact path="/profiles/:id/edit/password" render={() => <UserPasswordForm />} />
           <Route exact path="/profiles/:id/edit" render={() => <ProfileEditForm />} />
-          <Route exact path="/drafts" render={() => <DraftsPage />} />
-          <Route exact path="/drafts/create" render={() => <DraftCreateForm />} />
-          <Route exact path="/drafts/:id/edit" render={() => <DraftEditForm />} />
           <Route exact path="/unsubscribe/:code" render={() => <Unsubscribe />} />
           <Route render={() => <NotFound />} />
         </Switch>
@@ -87,9 +80,7 @@ function App() {
   return (
     <AuthProvider>
       <CurrentUserProvider>
-        <DraftsProvider>
           <AppContent />
-        </DraftsProvider>
       </CurrentUserProvider>
     </AuthProvider>
   );

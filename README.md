@@ -761,7 +761,7 @@ Update the `.gitignore` file to properly ignore `env.py` and remove any sensitiv
 #### Category 1: Missing React Imports
 
 **Problem**: Components using JSX without importing React
-**Files**: Context files (`CurrentUserContext.js`, `DraftsContext.js`, `ProfileDataContext.js`)
+**Files**: Context files (`CurrentUserContext.js`, `ProfileDataContext.js`)
 **Solution**: Added `import React from 'react'` to all affected files
 
 #### Category 2: PropTypes Validation
