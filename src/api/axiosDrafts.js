@@ -2,7 +2,10 @@ import { axiosReq } from "../api/axiosDefaults";
 
 export const fetchDrafts = async (signal) => {
   try {
-    const { data } = await axiosReq.get("/drafts/", { signal });
+    const access_token = localStorage.getItem('access_token');
+    const { data } = await axiosReq.get("/drafts/", { signal, headers: {
+      'Authorization': `Bearer ${access_token}`    
+    } });
     return data;
   } catch (err) {
     console.error("Error fetching drafts:", err);

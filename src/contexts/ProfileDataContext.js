@@ -21,9 +21,18 @@ export const ProfileDataProvider = ({ children }) => {
 
   const handleFollow = async (clickedProfile) => {
     try {
-      const { data } = await axiosRes.post("/followers/", {
-        followed: clickedProfile.id,
-      });
+      const access_token = localStorage.getItem('access_token');
+      const { data } = await axiosRes.post(
+        "/followers/",
+        {
+          followed: clickedProfile.id,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${access_token}`      
+          }
+        }
+      );
 
       setProfileData((prevState) => ({
         ...prevState,

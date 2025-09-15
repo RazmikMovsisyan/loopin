@@ -763,7 +763,7 @@ root.render(<App />);
 - Potential runtime errors
 - Difficult code maintenance
 
-￼![eslint-before](src/assets/javascript-validation/eslint-before.png)
+![eslint-before](src/assets/javascript-validation/eslint-before.png)
 
 
 **After ESLint Implementation**:
@@ -1029,8 +1029,7 @@ Even though we validated a single HTML file (`build/index.html`), this effective
 
 Validating `build/index.html` ensures that all components, attributes, and generated HTML are W3C-compliant, so the whole project has been effectively checked.
 
-## **Deployment**h
-
+## **Deployment**
 ## How to Create and connect GitHub Repository and Heroku App 
 
 ### Part 1: Creating the GitHub Repository

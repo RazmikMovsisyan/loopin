@@ -17,7 +17,14 @@ export const CurrentUserProvider = ({ children }) => {
 
   const handleMount = async () => {
     try {
-      const { data: userData } = await axiosRes.get("dj-rest-auth/user/");
+      const access_token = localStorage.getItem('access_token');
+      const { data: userData } = await axiosRes.get("dj-rest-auth/user/", 
+        {
+          headers: {
+            'Authorization': `Bearer ${access_token}`
+          }
+        }
+      );
       
       try {
         const { data: profileData } = await axiosReq.get(
@@ -54,11 +61,11 @@ export const CurrentUserProvider = ({ children }) => {
       async (config) => {
         if (shouldRefreshToken()) {
           try {
-            const refresh_roken = localStorage.getItem('refresh_token');
-            if (!refresh_roken) {
+            const refresh_token = localStorage.getItem('refresh_token');
+            if (!refresh_token) {
               throw new Error('No "refresh_token" found');
             }
-            const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_roken });
+            const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_token });
             localStorage.setItem('access_token', data.access);
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
@@ -83,11 +90,11 @@ export const CurrentUserProvider = ({ children }) => {
       async (err) => {
         if (err.response?.status === 401) {
           try {
-            const refresh_roken = localStorage.getItem('refresh_token');
-            if (!refresh_roken) {
+            const refresh_token = localStorage.getItem('refresh_token');
+            if (!refresh_token) {
               throw new Error('No "refresh_token" found');
             }
-            const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_roken });
+            const {data} = await axios.post("/dj-rest-auth/token/refresh/", { refresh: refresh_token });
             localStorage.setItem('access_token', data.access);
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {

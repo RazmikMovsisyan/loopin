@@ -34,6 +34,8 @@ const NavBar = () => {
       await axios.post("dj-rest-auth/logout/");
       setCurrentUser(null);
       removeTokenTimestamp();
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       toast.success("Signed out successfully!", {
         position: "top-right",
         autoClose: 3000,
