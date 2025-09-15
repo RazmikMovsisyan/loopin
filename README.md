@@ -1232,7 +1232,7 @@ Some files might need manual formatting after automatic processing.
 
 - The same code after proper formatting
 
-![example-after-formatting](src/assets/python-validation/example-after-without-pep8-errors.png.png)
+![example-after-formatting](src/assets/python-validation/example-after-without-pep8-errors.png)
 
 ---
 
@@ -1281,6 +1281,8 @@ This ensures Black and Flake8 run automatically on each commit.
 - Your Django backend is automatically PEP8-compliant
 - Black handles formatting, Flake8 shows any remaining warnings
 - Optional pre-commit hook ensures clean code before each commit
+
+---
 
 ## **Deployment**
 
