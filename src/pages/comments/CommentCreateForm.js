@@ -10,34 +10,37 @@ import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 
 import { toast } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
 
-function CommentCreateForm(props) {
-  const { post, setPost, setComments, profileImage, profile_id } = props;
+function CommentCreateForm({ post, setPost, setComments, profileImage, profile_id }) {
   const [content, setContent] = useState("");
+  const { getAuthHeader } = useAuth();
 
-  const handleChange = (event) => {
-    setContent(event.target.value);
-  };
+  const handleChange = (event) => setContent(event.target.value);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axiosRes.post("/comments/", {
-        content,
-        post,
-      });
-      setComments((prevComments) => ({
-        ...prevComments,
-        results: [data, ...prevComments.results],
+      const { data } = await axiosRes.post(
+        "/comments/",
+        { content, post },
+        { headers: getAuthHeader() }
+      );
+
+      setComments((prev) => ({
+        ...prev,
+        results: [data, ...prev.results],
       }));
-      setPost((prevPost) => ({
+
+      setPost((prev) => ({
         results: [
           {
-            ...prevPost.results[0],
-            comments_count: prevPost.results[0].comments_count + 1,
+            ...prev.results[0],
+            comments_count: prev.results[0].comments_count + 1,
           },
         ],
       }));
+
       setContent("");
       toast.success("Comment posted successfully!");
     } catch (err) {
@@ -47,9 +50,7 @@ function CommentCreateForm(props) {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      handleSubmit(event);
-    }
+    if (event.key === "Enter" && !event.shiftKey) handleSubmit(event);
   };
 
   return (
@@ -72,7 +73,7 @@ function CommentCreateForm(props) {
         <small className="text-muted d-block text-center mt-1">
           Shift + Enter → New line
         </small>
-        </Form.Group>
+      </Form.Group>
       <button
         className={`${styles.Button} btn d-block ml-auto`}
         disabled={!content.trim()}

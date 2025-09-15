@@ -44,7 +44,6 @@ const ProfileEditForm = () => {
           const { name, content, image } = data;
           setProfileData({ name, content, image });
         } catch (err) {
-          toast.error("Failed to load profile.", { position: "top-right" });
           history.push("/");
         }
       } else {

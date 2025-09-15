@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
 import styles from "./App.module.css";
 import NavBar from "./components/NavBar";
 import Container from "react-bootstrap/Container";
 import { Route, Switch } from "react-router-dom";
+
 import "./api/axiosDefaults";
 import SignUpForm from "./pages/auth/SignUpForm";
 import SignInForm from "./pages/auth/SignInForm";
@@ -21,8 +22,10 @@ import DraftsPage from "./pages/drafts/DraftsPage";
 import DraftCreateForm from "./pages/drafts/DraftCreateForm";
 import DraftEditForm from "./pages/drafts/DraftEditForm";
 import Unsubscribe from "./pages/Unsubscribe";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "./contexts/AuthContext"; // neu
 
 const AppContent = () => {
   const currentUser = useCurrentUser();
@@ -36,9 +39,7 @@ const AppContent = () => {
           <Route
             exact
             path="/"
-            render={() => (
-              <PostsPage message="No results found. Adjust the search keyword." />
-            )}
+            render={() => <PostsPage message="No results found. Adjust the search keyword." />}
           />
           <Route
             exact
@@ -66,21 +67,9 @@ const AppContent = () => {
           <Route exact path="/posts/:id" render={() => <PostPage />} />
           <Route exact path="/posts/:id/edit" render={() => <PostEditForm />} />
           <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
-          <Route
-            exact
-            path="/profiles/:id/edit/username"
-            render={() => <UsernameForm />}
-          />
-          <Route
-            exact
-            path="/profiles/:id/edit/password"
-            render={() => <UserPasswordForm />}
-          />
-          <Route
-            exact
-            path="/profiles/:id/edit"
-            render={() => <ProfileEditForm />}
-          />
+          <Route exact path="/profiles/:id/edit/username" render={() => <UsernameForm />} />
+          <Route exact path="/profiles/:id/edit/password" render={() => <UserPasswordForm />} />
+          <Route exact path="/profiles/:id/edit" render={() => <ProfileEditForm />} />
           <Route exact path="/drafts" render={() => <DraftsPage />} />
           <Route exact path="/drafts/create" render={() => <DraftCreateForm />} />
           <Route exact path="/drafts/:id/edit" render={() => <DraftEditForm />} />
@@ -88,7 +77,6 @@ const AppContent = () => {
           <Route render={() => <NotFound />} />
         </Switch>
 
-        {/* ✅ ToastContainer außerhalb des Switch platzieren */}
         <ToastContainer position="top-right" autoClose={3000} />
       </Container>
     </div>
@@ -97,11 +85,13 @@ const AppContent = () => {
 
 function App() {
   return (
-    <CurrentUserProvider>
-      <DraftsProvider>
-        <AppContent />
-      </DraftsProvider>
-    </CurrentUserProvider>
+    <AuthProvider>
+      <CurrentUserProvider>
+        <DraftsProvider>
+          <AppContent />
+        </DraftsProvider>
+      </CurrentUserProvider>
+    </AuthProvider>
   );
 }
 

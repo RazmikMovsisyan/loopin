@@ -15,9 +15,11 @@ import { useHistory } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useRedirect } from "../../hooks/useRedirect";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function PostCreateForm() {
   useRedirect("loggedOut");
+
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState(false);
 
@@ -53,35 +55,31 @@ function PostCreateForm() {
     setUploading(true);
 
     try {
-      let imageUrl = "";
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+
       if (imageInput.current.files.length) {
-        const formData = new FormData();
-        formData.append("file", imageInput.current.files[0]);
-        formData.append("upload_preset", "unsigned_profile_upload");
-        const cloudinaryRes = await fetch(
-          "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        if (!cloudinaryRes.ok) {
-          throw new Error("Cloudinary upload failed");
-        }
-        const cloudinaryData = await cloudinaryRes.json();
-        imageUrl = cloudinaryData.public_id;
+        formData.append("image", imageInput.current.files[0]);
       }
-      const { data } = await axiosReq.post("/posts/", {
-        title,
-        content,
-        image: imageUrl,
+
+      const access_token = localStorage.getItem("access_token");
+      if (!access_token) throw new Error("No access token found");
+
+      const { data } = await axiosReq.post("/posts/", formData, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       toast.success("Post created successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
       history.push(`/posts/${data.id}`);
     } catch (err) {
+      console.error(err.response || err);
       toast.error("Failed to create post.", {
         position: "top-right",
         autoClose: 3000,
@@ -110,6 +108,7 @@ function PostCreateForm() {
           {message}
         </Alert>
       ))}
+
       <Form.Group>
         <Form.Label>Content</Form.Label>
         <Form.Control
@@ -125,6 +124,7 @@ function PostCreateForm() {
           {message}
         </Alert>
       ))}
+
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
@@ -187,9 +187,11 @@ function PostCreateForm() {
                 {message}
               </Alert>
             ))}
+
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
+
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
           <Container className={appStyles.Content}>{textFields}</Container>
         </Col>

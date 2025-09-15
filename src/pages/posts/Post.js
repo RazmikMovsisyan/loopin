@@ -32,6 +32,7 @@ const Post = (props) => {
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
+  const access_token = localStorage.getItem("access_token");
 
   const handleEdit = () => {
     history.push(`/posts/${id}/edit`);
@@ -39,7 +40,9 @@ const Post = (props) => {
 
   const handleDelete = async () => {
     try {
-      await axiosRes.delete(`/posts/${id}/`);
+      await axiosRes.delete(`/posts/${id}/`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
       history.goBack();
       toast.success("Post deleted successfully!", {
         position: "top-right",
@@ -55,19 +58,20 @@ const Post = (props) => {
 
   const handleLike = async () => {
     try {
-      const { data } = await axiosRes.post("/likes/", { post: id });
+      const { data } = await axiosRes.post(
+        "/likes/",
+        { post: id },
+        { headers: { Authorization: `Bearer ${access_token}` } }
+      );
       setPosts((prevPosts) => ({
         ...prevPosts,
-        results: prevPosts.results.map((post) => {
-          return post.id === id
+        results: prevPosts.results.map((post) =>
+          post.id === id
             ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
-            : post;
-        }),
+            : post
+        ),
       }));
-      toast.success("Post liked!", {
-        position: "top-right",
-        autoClose: 2000,
-      });
+      toast.success("Post liked!", { position: "top-right", autoClose: 2000 });
     } catch (err) {
       toast.error("Failed to like post.", {
         position: "top-right",
@@ -78,19 +82,18 @@ const Post = (props) => {
 
   const handleUnlike = async () => {
     try {
-      await axiosRes.delete(`/likes/${like_id}/`);
+      await axiosRes.delete(`/likes/${like_id}/`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
       setPosts((prevPosts) => ({
         ...prevPosts,
-        results: prevPosts.results.map((post) => {
-          return post.id === id
+        results: prevPosts.results.map((post) =>
+          post.id === id
             ? { ...post, likes_count: post.likes_count - 1, like_id: null }
-            : post;
-        }),
+            : post
+        ),
       }));
-      toast.info("Like removed.", {
-        position: "top-right",
-        autoClose: 2000,
-      });
+      toast.info("Like removed.", { position: "top-right", autoClose: 2000 });
     } catch (err) {
       toast.error("Failed to remove like.", {
         position: "top-right",
@@ -110,10 +113,7 @@ const Post = (props) => {
           <div className="d-flex align-items-center">
             <span>{updated_at}</span>
             {is_owner && postPage && (
-              <MoreDropdown
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-              />
+              <MoreDropdown handleEdit={handleEdit} handleDelete={handleDelete} />
             )}
           </div>
         </Media>
@@ -122,9 +122,9 @@ const Post = (props) => {
         <Card.Img src={image} alt={title} />
       </Link>
       <Card.Body>
-      <Link to={`/posts/${id}`}>
-        {title && <Card.Title className="text-center">{title}</Card.Title>}
-      </Link>
+        <Link to={`/posts/${id}`}>
+          {title && <Card.Title className="text-center">{title}</Card.Title>}
+        </Link>
         {content && <Card.Text>{content}</Card.Text>}
         <div className={styles.PostBar}>
           {is_owner ? (

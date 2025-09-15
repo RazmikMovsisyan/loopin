@@ -1,36 +1,35 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 import { axiosRes } from "../../api/axiosDefaults";
-import styles from "../../styles/CommentCreateEditForm.module.css";
 import { toast } from "react-toastify";
+import styles from "../../styles/CommentCreateEditForm.module.css";
+import { useAuth } from "../../contexts/AuthContext";
 
-function CommentEditForm(props) {
-  const { id, content, setShowEditForm, setComments } = props;
+function CommentEditForm({ id, content, setShowEditForm, setComments }) {
   const [formContent, setFormContent] = useState(content);
+  const { getAuthHeader } = useAuth();
 
-  const handleChange = (event) => {
-    setFormContent(event.target.value);
-  };
+  const handleChange = (event) => setFormContent(event.target.value);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axiosRes.put(`/comments/${id}/`, {
-        content: formContent.trim(),
-      });
-      setComments((prevComments) => ({
-        ...prevComments,
-        results: prevComments.results.map((comment) => {
-          return comment.id === id
-            ? {
-                ...comment,
-                content: formContent.trim(),
-                updated_at: "now",
-              }
-            : comment;
-        }),
+      await axiosRes.put(
+        `/comments/${id}/`,
+        { content: formContent.trim() },
+        { headers: getAuthHeader() }
+      );
+
+      setComments((prev) => ({
+        ...prev,
+        results: prev.results.map((c) =>
+          c.id === id
+            ? { ...c, content: formContent.trim(), updated_at: "now" }
+            : c
+        ),
       }));
+
       setShowEditForm(false);
       toast.success("Comment updated successfully!", {
         position: "top-right",
@@ -45,21 +44,19 @@ function CommentEditForm(props) {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      handleSubmit(event);
-    }
+    if (event.key === "Enter" && !event.shiftKey) handleSubmit(event);
   };
 
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="pr-1">
         <Form.Control
-          className={styles.Form}
           as="textarea"
           value={formContent}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           rows={2}
+          className={styles.Form}
         />
         <small className="text-muted">Shift + Enter für neue Zeile</small>
       </Form.Group>

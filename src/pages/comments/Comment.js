@@ -13,25 +13,27 @@ import { axiosRes } from "../../api/axiosDefaults";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Comment = (props) => {
-  const {
-    profile_id,
-    profile_image,
-    owner,
-    updated_at,
-    content,
-    id,
-    setPost,
-    setComments,
-  } = props;
-
+const Comment = ({
+  profile_id,
+  profile_image,
+  owner,
+  updated_at,
+  content,
+  id,
+  setPost,
+  setComments,
+}) => {
   const [showEditForm, setShowEditForm] = useState(false);
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
 
   const handleDelete = async () => {
+    const access_token = localStorage.getItem("access_token");
     try {
-      await axiosRes.delete(`/comments/${id}/`);
+      await axiosRes.delete(`/comments/${id}/`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
       setPost((prevPost) => ({
         results: [
           {
@@ -66,16 +68,15 @@ const Comment = (props) => {
           <Avatar src={profile_image} />
         </Link>
         <Media.Body className="align-self-center ml-2">
-        <Link to={`/profiles/${profile_id}`}>
-          <span className={styles.Owner}>{owner}</span>
-          <span className={styles.Date}>{updated_at}</span>
-        </Link>
+          <Link to={`/profiles/${profile_id}`}>
+            <span className={styles.Owner}>{owner}</span>
+            <span className={styles.Date}>{updated_at}</span>
+          </Link>
+
           {showEditForm ? (
             <CommentEditForm
               id={id}
-              profile_id={profile_id}
               content={content}
-              profileImage={profile_image}
               setComments={setComments}
               setShowEditForm={setShowEditForm}
             />
@@ -83,11 +84,9 @@ const Comment = (props) => {
             <p>{content}</p>
           )}
         </Media.Body>
+
         {is_owner && !showEditForm && (
-          <MoreDropdown
-            handleEdit={() => setShowEditForm(true)}
-            handleDelete={handleDelete}
-          />
+          <MoreDropdown handleEdit={() => setShowEditForm(true)} handleDelete={handleDelete} />
         )}
       </Media>
     </>

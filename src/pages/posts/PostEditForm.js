@@ -1,33 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
+import { useHistory, useParams } from "react-router";
+import { Form, Button, Row, Col, Container, Alert, Image } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
 
-import { useHistory, useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function PostEditForm() {
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState(false);
-
   const [postData, setPostData] = useState({
     title: "",
     content: "",
     image: "",
   });
-  const { title, content, image } = postData;
 
+  const { title, content, image } = postData;
   const imageInput = useRef(null);
   const history = useHistory();
   const { id } = useParams();
@@ -35,22 +26,23 @@ function PostEditForm() {
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axiosReq.get(`/posts/${id}/`);
+        const access_token = localStorage.getItem("access_token");
+        const { data } = await axiosReq.get(`/posts/${id}/`, {
+          headers: { Authorization: `Bearer ${access_token}` },
+        });
         const { title, content, image, is_owner } = data;
-        is_owner ? setPostData({ title, content, image }) : history.push("/");
+        setPostData({ title, content, image });
+        if (!is_owner) toast.warning("You are not the owner of this post.");
       } catch (err) {
-        // console.log(err);
+        console.log(err);
+        history.push("/");
       }
     };
-
     handleMount();
   }, [history, id]);
 
   const handleChange = (event) => {
-    setPostData({
-      ...postData,
-      [event.target.name]: event.target.value,
-    });
+    setPostData({ ...postData, [event.target.name]: event.target.value });
   };
 
   const handleChangeImage = (event) => {
@@ -66,24 +58,24 @@ function PostEditForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setUploading(true);
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-
     if (imageInput?.current?.files[0]) {
       formData.append("image", imageInput.current.files[0]);
     }
 
     try {
-      await axiosReq.put(`/posts/${id}/`, formData);
+      const access_token = localStorage.getItem("access_token");
+      await axiosReq.put(`/posts/${id}/`, formData, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
       toast.success("Post updated successfully!");
       history.push(`/posts/${id}`);
     } catch (err) {
       toast.error("Failed to update post.");
-      if (err.response?.status !== 401) {
-        setErrors(err.response?.data);
-      }
+      if (err.response?.status !== 401) setErrors(err.response?.data);
     } finally {
       setUploading(false);
     }
@@ -93,47 +85,20 @@ function PostEditForm() {
     <div className="text-center">
       <Form.Group>
         <Form.Label>Title</Form.Label>
-        <Form.Control
-          type="text"
-          name="title"
-          value={title}
-          onChange={handleChange}
-        />
+        <Form.Control type="text" name="title" value={title} onChange={handleChange} />
       </Form.Group>
-      {errors?.title?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
+      {errors?.title?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
 
       <Form.Group>
         <Form.Label>Content</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={6}
-          name="content"
-          value={content}
-          onChange={handleChange}
-        />
+        <Form.Control as="textarea" rows={6} name="content" value={content} onChange={handleChange} />
       </Form.Group>
-      {errors?.content?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
+      {errors?.content?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
 
-      <Button
-        className={`${btnStyles.Button} ${btnStyles.Blue}`}
-        onClick={() => history.goBack()}
-        disabled={uploading}
-      >
+      <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} onClick={() => history.goBack()} disabled={uploading}>
         cancel
       </Button>
-      <Button
-        className={`${btnStyles.Button} ${btnStyles.Blue}`}
-        type="submit"
-        disabled={uploading}
-      >
+      <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit" disabled={uploading}>
         {uploading ? "Saving..." : "save"}
       </Button>
     </div>
@@ -142,36 +107,31 @@ function PostEditForm() {
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
-        <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
-          <Container
-            className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
-          >
+        <Col md={7} lg={8} className="py-2 p-0 p-md-2">
+          <Container className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}>
             <Form.Group className="text-center">
-              <figure>
-                <Image className={appStyles.Image} src={image} rounded />
-              </figure>
-              <div>
+              {image && (
+                <figure>
+                  <Image className={appStyles.Image} src={image} rounded />
+                </figure>
+              )}
+              <div className="mt-2 text-center">
                 <Form.Label
                   className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
                   htmlFor="image-upload"
                 >
                   Change the image
                 </Form.Label>
+                <Form.File
+                  id="image-upload"
+                  accept="image/*"
+                  ref={imageInput}
+                  onChange={handleChangeImage}
+                  className="d-none"
+                />
               </div>
-
-              <Form.File
-                id="image-upload"
-                accept="image/*"
-                onChange={handleChangeImage}
-                ref={imageInput}
-              />
             </Form.Group>
-            {errors?.image?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
-              </Alert>
-            ))}
-
+            {errors?.image?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
