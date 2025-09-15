@@ -110,11 +110,6 @@ const Draft = ({ draft, setDrafts }) => {
         <Card.Text>{draft.content}</Card.Text>
         <div className={styles.DraftMeta}>
           <span>Status: {draft.status}</span>
-          {draft.scheduled_time && (
-            <span>
-              Scheduled: {new Date(draft.scheduled_time).toLocaleString()}
-            </span>
-          )}
           <span>
             Created: {new Date(draft.created_at).toLocaleDateString()}
           </span>
@@ -143,7 +138,6 @@ Draft.propTypes = {
     author_profile_image: PropTypes.string,
     updated_at: PropTypes.string,
     status: PropTypes.string,
-    scheduled_time: PropTypes.string,
     created_at: PropTypes.string,
     image: PropTypes.string,
     content: PropTypes.string,

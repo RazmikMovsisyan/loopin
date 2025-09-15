@@ -24,9 +24,8 @@ const DraftCreateForm = () => {
     content: "",
     image: "",
     status: "draft",
-    scheduled_time: "",
   });
-  const { title, content, status, scheduled_time } = draftData;
+  const { title, content, status } = draftData;
 
   const history = useHistory();
   const { setDrafts } = useDrafts();
@@ -57,10 +56,6 @@ const DraftCreateForm = () => {
       formData.append("title", title);
       formData.append("content", content);
       formData.append("status", status);
-
-      if (status === "scheduled" && scheduled_time) {
-        formData.append("scheduled_time", new Date(scheduled_time).toISOString());
-      }
 
       if (imageInput.current.files.length) {
         formData.append("image", imageInput.current.files[0]);
@@ -121,35 +116,6 @@ const DraftCreateForm = () => {
         />
       </Form.Group>
       {errors?.content?.map((msg, idx) => (
-        <Alert key={idx} variant="warning">{msg}</Alert>
-      ))}
-
-      <Form.Group>
-        <Form.Label>Status</Form.Label>
-        <Form.Control as="select" name="status" value={status} onChange={handleChange}>
-          <option value="draft">Draft</option>
-          <option value="scheduled">Scheduled</option>
-        </Form.Control>
-      </Form.Group>
-      {errors?.status?.map((msg, idx) => (
-        <Alert key={idx} variant="warning">{msg}</Alert>
-      ))}
-
-      {status === "scheduled" && (
-        <Form.Group>
-          <Form.Label>Scheduled Time</Form.Label>
-          <Form.Control
-            type="datetime-local"
-            name="scheduled_time"
-            value={scheduled_time}
-            onChange={handleChange}
-          />
-          <Form.Text className="text-muted">
-            The draft will be automatically published at the specified time.
-          </Form.Text>
-        </Form.Group>
-      )}
-      {errors?.scheduled_time?.map((msg, idx) => (
         <Alert key={idx} variant="warning">{msg}</Alert>
       ))}
 

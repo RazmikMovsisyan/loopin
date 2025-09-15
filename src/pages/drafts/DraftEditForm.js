@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router-dom";
 import { Form, Button, Row, Col, Container, Alert, Image } from "react-bootstrap";
 import Asset from "../../components/Asset";
 import Upload from "../../assets/upload.png";
@@ -22,9 +22,8 @@ const DraftEditForm = () => {
     content: "",
     image: "",
     status: "draft",
-    scheduled_time: "",
   });
-  const { content, status, scheduled_time } = draftData;
+  const { content, status } = draftData;
 
   const imageInput = useRef(null);
   const history = useHistory();
@@ -35,22 +34,10 @@ const DraftEditForm = () => {
     const handleMount = async () => {
       try {
         const { data } = await axiosReq.get(`/drafts/${id}/`);
-        const { content, image, status, scheduled_time, is_owner } = data;
-
-        let formattedScheduledTime = "";
-        if (scheduled_time) {
-          formattedScheduledTime = new Date(scheduled_time)
-            .toISOString()
-            .slice(0, 16);
-        }
+        const { content, image, status, is_owner } = data;
 
         if (is_owner) {
-          setDraftData({
-            content,
-            image,
-            status,
-            scheduled_time: formattedScheduledTime,
-          });
+          setDraftData({ content, image, status });
         } else {
           history.push("/");
         }
@@ -84,13 +71,6 @@ const DraftEditForm = () => {
       const formData = new FormData();
       formData.append("content", content);
       formData.append("status", status);
-
-      if (status === "scheduled" && scheduled_time) {
-        formData.append(
-          "scheduled_time",
-          new Date(scheduled_time).toISOString()
-        );
-      }
 
       if (imageInput.current.files.length) {
         formData.append("image", imageInput.current.files[0]);
@@ -140,35 +120,6 @@ const DraftEditForm = () => {
         />
       </Form.Group>
       {errors?.content?.map((msg, idx) => (
-        <Alert key={idx} variant="warning">{msg}</Alert>
-      ))}
-
-      <Form.Group>
-        <Form.Label>Status</Form.Label>
-        <Form.Control as="select" name="status" value={status} onChange={handleChange}>
-          <option value="draft">Draft</option>
-          <option value="scheduled">Scheduled</option>
-        </Form.Control>
-      </Form.Group>
-      {errors?.status?.map((msg, idx) => (
-        <Alert key={idx} variant="warning">{msg}</Alert>
-      ))}
-
-      {status === "scheduled" && (
-        <Form.Group>
-          <Form.Label>Scheduled Time</Form.Label>
-          <Form.Control
-            type="datetime-local"
-            name="scheduled_time"
-            value={scheduled_time}
-            onChange={handleChange}
-          />
-          <Form.Text className="text-muted">
-            The draft will be automatically published at the specified time.
-          </Form.Text>
-        </Form.Group>
-      )}
-      {errors?.scheduled_time?.map((msg, idx) => (
         <Alert key={idx} variant="warning">{msg}</Alert>
       ))}
 

@@ -58,6 +58,7 @@ export const CurrentUserProvider = ({ children }) => {
 
   useEffect(() => {
     handleMount();
+// eslint-disable-next-line
   }, []);
 
   useMemo(() => {
