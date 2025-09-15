@@ -25,29 +25,39 @@ The goal is to promote authentic user interactions and community discussions thr
 ---
 
 ## **Table of Contents**
-- [Loopin](#loopin)
-  - [Planning](#planning)
-    - [Features](#features)
-    - [Used Technologies](#used-technologies)
-    - [App Owner Goals](#app-owner-goals)
-    - [User Stories](#user-stories)
-  - [Design](#design)
-    - [Typography](#typography)
-    - [Color Scheme](#color-scheme)
-  - [User Stories (prioritized using MoSCoW method)](#user-stories-prioritized-using-moscow-method)
-  - [Custom Model](#custom-model)
-  - [Testing](#testing)
-    - [Manual Testing](#manual-testing)
-    - [Bugs](#bugs)
-  - [Code Validation](#code-validation)
-  - [Deployment](#deployment)
-    - [Heroku](#heroku)
-  - [Version Control](#version-control)
-  - [Development Process and Git Commands](#development-process-and-git-commands)
-  - [Clone and Fork](#clone-and-fork)
-  - [Custom 404 Page](#custom-404-page)
-  - [Credits](#credits)
-  - [FinishedProduct](#finished-product)
+- [Overview](#overview)
+- [Planning](#planning)
+  - [Features](#features)
+  - [Technologies Used](#technologies-used)
+  - [Project Goals](#project-goals)
+  - [User Stories](#user-stories)
+- [Design](#design)
+  - [Typography](#typography)
+  - [Color Scheme](#color-scheme)
+- [User Stories (MoSCoW Prioritized)](#user-stories-moscow-prioritized)
+  - [Must Have](#must-have)
+  - [Should Have](#should-have)
+  - [Could Have](#could-have)
+  - [Won't Have](#wont-have)
+- [Custom Model](#custom-model)
+  - [Newsletter Feature](#newsletter-feature)
+  - [Backend Implementation](#backend-implementation)
+  - [Frontend Implementation](#frontend-implementation)
+  - [User Flow & Database Management](#user-flow-and-database-management)
+  - [Technical Details](#technical-details)
+- [Testing](#testing)
+  - [Manual Testing](#manual-testing)
+  - [Bugs](#bugs)
+- [Code Validation](#code-validation)
+- [Deployment](#deployment)
+  - [GitHub & Heroku Setup](#github--heroku-setup)
+  - [Heroku Deployment Steps](#heroku-deployment-steps)
+- [Version Control](#version-control)
+- [Development Process](#development-process)
+- [Clone & Fork](#clone--fork)
+- [Custom 404 Page](#custom-404-page)
+- [Credits](#credits)
+- [Finished Product](#finished-product)
 
 
 ---
@@ -150,7 +160,7 @@ The core color scheme consists of three main colors: a light blue (#1486fe) for 
 ## Project Overview
 A responsive web application allowing users to sign up, create posts, interact with content, and follow other users. Built with modern frontend and backend technologies to ensure a seamless user experience.
 
-## User Stories (prioritized using MoSCoW method)
+## User Stories (MoSCoW Prioritized)
 
 I consistently choose to follow the MoSCoW prioritization method in [my projects](https://github.com/users/RazmikMovsisyan/projects/6) because it brings unparalleled clarity, focus, and direction to the development process. 
 By categorizing features into Must-haves, Should-haves, Could-haves, and Won't-haves, 
@@ -254,7 +264,7 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 - **AC1:** Each comment displays its creation time
 - **AC2:** Timestamps use a relative format (e.g., "2 hours ago")
 
-### Won't Have (for now)
+### Won't Have
 
 #### Post Categories or Hashtags
 **As a** user, **I cannot** categorize posts or use hashtags **because** this feature is out of scope for the initial release.
@@ -269,15 +279,15 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 - **AC3:** Real-time chat functionality is completely absent from the application
 
 ## **Custom Model**
-## Newsletter Feature Implementation - LoopIn
+## Newsletter Feature 
 ---
 
 ## Overview
 The newsletter feature allows users to subscribe and unsubscribe from a newsletter without email confirmation. It is integrated into the LoopIn social media platform.
 
 ---
-
 ## Backend Implementation
+
 
 ### Model Creation
 I created a `NewsletterSubscriber` model to store subscriber information.
@@ -385,7 +395,7 @@ Key features:
 
 ### Unsubscribe Page
 **File: src/pages/Unsubscribe.js**  
-A page to handle unsubscription via confirmation code.
+A page to handle unsubscription via confirmation code in background.
 
 ### Integration
 I integrated the Newsletter component into the `PopularProfiles` component, so it appears above the "Most followed profiles" section.
@@ -494,7 +504,7 @@ subscriber.delete()
 - **Unique Constraint:** Database ensures no duplicates.  
 ---
 
-## Technical Implementation Details
+## Technical Details
 - **State Persistence:** Handled via React state.  
 - **Backend Integration:** Django REST Framework with proper error handling.  
 - **Immediate Feedback:** Real-time UI updates without page reloads.  
@@ -732,7 +742,7 @@ The systematic approach to debugging transformed the codebase from having multip
 
 ## **Deployment**
 
-# How to Create and connect GitHub Repository and Heroku App 
+## How to Create and connect GitHub Repository and Heroku App 
 
 ## Part 1: Creating the GitHub Repository
 
