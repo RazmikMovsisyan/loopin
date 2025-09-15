@@ -35,6 +35,7 @@ const ProfileEditForm = () => {
   const { name, content, image } = profileData;
 
   const [errors, setErrors] = useState({});
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const handleMount = async () => {
@@ -63,32 +64,58 @@ const ProfileEditForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("content", content);
-
-    if (imageFile?.current?.files[0]) {
-      formData.append("image", imageFile?.current?.files[0]);
-    }
-
+    setUploading(true);
+    
     try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("content", content);
+
+      if (imageFile?.current?.files[0]) {
+        const file = imageFile.current.files[0];
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", file);
+        uploadFormData.append("upload_preset", "unsigned_profile_upload"); // Dein Upload Preset
+
+        const uploadRes = await fetch(
+          "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
+          {
+            method: "POST",
+            body: uploadFormData,
+          }
+        );
+        
+        if (!uploadRes.ok) {
+          throw new Error("Image upload failed");
+        }
+        
+        const uploadData = await uploadRes.json();
+        formData.append("image", uploadData.secure_url);
+      } else {
+        // Wenn kein neues Bild ausgewählt wurde, das vorhandene Bild beibehalten
+        formData.append("image", image);
+      }
+
       const token = localStorage.getItem("access_token");
       const { data } = await axiosReq.put(`/profiles/${id}/`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       });
+      
       setCurrentUser((currentUser) => ({
         ...currentUser,
         profile_image: data.image,
       }));
+      
       toast.success("Profile updated successfully!", { position: "top-right" });
       history.goBack();
     } catch (err) {
       console.log(err);
       toast.error("Failed to update profile.", { position: "top-right" });
       setErrors(err.response?.data);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -113,11 +140,16 @@ const ProfileEditForm = () => {
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
+        disabled={uploading}
       >
         cancel
       </Button>
-      <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
-        save
+      <Button 
+        className={`${btnStyles.Button} ${btnStyles.Blue}`} 
+        type="submit"
+        disabled={uploading}
+      >
+        {uploading ? "Saving..." : "save"}
       </Button>
     </>
   );
