@@ -47,9 +47,16 @@ const Draft = ({ draft, setDrafts }) => {
   const handlePublish = async () => {
     try {
       const access_token = localStorage.getItem("access_token");
+      
+      // Titel aus dem Draft oder Inhalt generieren, falls nicht vorhanden
+      let publishTitle = draft.title;
+      if (!publishTitle || publishTitle.trim() === "") {
+        publishTitle = draft.content.slice(0, 50) + (draft.content.length > 50 ? "..." : "");
+      }
+
       await axiosReq.put(
         `/drafts/${draft.id}/publish/`,
-        {},
+        { title: publishTitle }, // Titel im Request-Body mitsenden
         { headers: { Authorization: `Bearer ${access_token}` } }
       );
 
@@ -68,10 +75,19 @@ const Draft = ({ draft, setDrafts }) => {
       }, 1000);
     } catch (err) {
       console.error("Error publishing draft:", err);
-      toast.error("Failed to publish draft.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      
+      // Spezifische Fehlermeldung anzeigen
+      if (err.response?.data?.title) {
+        toast.error(`Publish failed: ${err.response.data.title[0]}`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("Failed to publish draft.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
@@ -107,6 +123,7 @@ const Draft = ({ draft, setDrafts }) => {
       )}
 
       <Card.Body>
+        {draft.title && <Card.Title>{draft.title}</Card.Title>}
         <Card.Text>{draft.content}</Card.Text>
         <div className={styles.DraftMeta}>
           <span>Status: {draft.status}</span>
@@ -141,6 +158,7 @@ Draft.propTypes = {
     created_at: PropTypes.string,
     image: PropTypes.string,
     content: PropTypes.string,
+    title: PropTypes.string,
   }).isRequired,
   setDrafts: PropTypes.func.isRequired,
 };

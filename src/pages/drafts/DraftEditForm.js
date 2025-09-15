@@ -17,13 +17,15 @@ const DraftEditForm = () => {
 
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const [draftData, setDraftData] = useState({
+    title: "",
     content: "",
     image: "",
     status: "draft",
   });
-  const { content, status } = draftData;
+  const { title, content, status } = draftData;
 
   const imageInput = useRef(null);
   const history = useHistory();
@@ -33,16 +35,25 @@ const DraftEditForm = () => {
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axiosReq.get(`/drafts/${id}/`);
-        const { content, image, status, is_owner } = data;
+        const access_token = localStorage.getItem("access_token");
+        const { data } = await axiosReq.get(`/drafts/${id}/`, {
+          headers: { Authorization: `Bearer ${access_token}` }
+        });
+        
+        const { title, content, image, status, is_owner } = data;
 
         if (is_owner) {
-          setDraftData({ content, image, status });
+          setDraftData({ title, content, image, status });
+          setHasLoaded(true);
         } else {
           history.push("/");
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error loading draft:", err);
+        toast.error("Failed to load draft.", { 
+          position: "top-right", 
+          autoClose: 3000 
+        });
       }
     };
 
@@ -50,7 +61,10 @@ const DraftEditForm = () => {
   }, [history, id]);
 
   const handleChange = (event) => {
-    setDraftData({ ...draftData, [event.target.name]: event.target.value });
+    setDraftData({ 
+      ...draftData, 
+      [event.target.name]: event.target.value 
+    });
   };
 
   const handleChangeImage = (event) => {
@@ -65,10 +79,17 @@ const DraftEditForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    if (!title.trim()) {
+      setErrors({ title: ["Title is required"] });
+      return;
+    }
+    
     setUploading(true);
 
     try {
       const formData = new FormData();
+      formData.append("title", title);
       formData.append("content", content);
       formData.append("status", status);
 
@@ -80,7 +101,12 @@ const DraftEditForm = () => {
       const { data: updatedDraft } = await axiosReq.put(
         `/drafts/${id}/`,
         formData,
-        { headers: { Authorization: `Bearer ${access_token}` } }
+        { 
+          headers: { 
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "multipart/form-data"
+          } 
+        }
       );
 
       setDrafts((prevDrafts) => ({
@@ -98,10 +124,13 @@ const DraftEditForm = () => {
       history.push("/drafts");
     } catch (err) {
       console.error("Upload error:", err);
-      toast.error("Failed to update draft.", { position: "top-right", autoClose: 3000 });
-      if (err.response?.status !== 401) {
-        setErrors(err.response?.data);
+      if (err.response?.data) {
+        setErrors(err.response.data);
       }
+      toast.error("Failed to update draft.", { 
+        position: "top-right", 
+        autoClose: 3000 
+      });
     } finally {
       setUploading(false);
     }
@@ -110,6 +139,21 @@ const DraftEditForm = () => {
   const textFields = (
     <div className="text-center">
       <Form.Group>
+        <Form.Label>Title *</Form.Label>
+        <Form.Control
+          type="text"
+          name="title"
+          value={title}
+          onChange={handleChange}
+          placeholder="Enter a title for your draft"
+          required
+        />
+      </Form.Group>
+      {errors?.title?.map((msg, idx) => (
+        <Alert key={idx} variant="warning">{msg}</Alert>
+      ))}
+
+      <Form.Group>
         <Form.Label>Content</Form.Label>
         <Form.Control
           as="textarea"
@@ -117,6 +161,7 @@ const DraftEditForm = () => {
           name="content"
           value={content}
           onChange={handleChange}
+          placeholder="Write your content here..."
         />
       </Form.Group>
       {errors?.content?.map((msg, idx) => (
@@ -124,7 +169,7 @@ const DraftEditForm = () => {
       ))}
 
       <Button
-        className={`${btnStyles.Button} ${btnStyles.Blue}`}
+        className={`${btnStyles.Button} ${btnStyles.Blue} mr-2`}
         onClick={() => history.goBack()}
         disabled={uploading}
       >
@@ -140,6 +185,10 @@ const DraftEditForm = () => {
     </div>
   );
 
+  if (!hasLoaded) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -149,7 +198,11 @@ const DraftEditForm = () => {
               {draftData.image && (
                 <>
                   <figure>
-                    <Image className={appStyles.Image} src={draftData.image} rounded />
+                    <Image 
+                      className={appStyles.Image} 
+                      src={draftData.image} 
+                      rounded 
+                    />
                   </figure>
                   <div className="text-center">
                     <Form.Label
@@ -163,8 +216,14 @@ const DraftEditForm = () => {
               )}
 
               {!draftData.image && (
-                <Form.Label className="d-flex justify-content-center" htmlFor="image-upload">
-                  <Asset src={Upload} message="Click or tap to upload an image" />
+                <Form.Label 
+                  className="d-flex justify-content-center" 
+                  htmlFor="image-upload"
+                >
+                  <Asset 
+                    src={Upload} 
+                    message="Click or tap to upload an image" 
+                  />
                 </Form.Label>
               )}
 
@@ -175,7 +234,9 @@ const DraftEditForm = () => {
                 ref={imageInput}
               />
             </Form.Group>
-            {errors?.image?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
+            {errors?.image?.map((msg, idx) => 
+              <Alert key={idx} variant="warning">{msg}</Alert>
+            )}
 
             <div className="d-md-none">{textFields}</div>
           </Container>
