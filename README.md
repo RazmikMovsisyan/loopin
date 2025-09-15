@@ -914,14 +914,16 @@ Create a `.stylelintrc.json` file in the project root with the following configu
 
 ### Validate all CSS files:
 
+Select the directory where your CSS files are located.
+
 ```bash
-npx stylelint "**/*.css"
+npx stylelint "src/**/*.css"
 ```
 
 ### You can automatically fix fixable issues in case you encounter to some errors.
 
 ```bash
-npx stylelint "**/*.css" --fix
+npx stylelint "src/**/*.css" --fix
 ```
 
 ![no-errors](src/assets/css-validation/no-errors-found.png)
