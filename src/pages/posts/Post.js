@@ -122,7 +122,9 @@ const Post = (props) => {
         <Card.Img src={image} alt={title} />
       </Link>
       <Card.Body>
+      <Link to={`/posts/${id}`}>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
+      </Link>
         {content && <Card.Text>{content}</Card.Text>}
         <div className={styles.PostBar}>
           {is_owner ? (

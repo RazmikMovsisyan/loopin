@@ -32,6 +32,7 @@ The goal is to promote authentic user interactions and community discussions thr
   - [Project Goals](#project-goals)
   - [User Stories](#user-stories)
 - [Design](#design)
+  - [Wireframes](#wireframes)
   - [Typography](#typography)
   - [Color Scheme](#color-scheme)
 - [User Stories (MoSCoW Prioritized)](#user-stories-moscow-prioritized)
@@ -144,6 +145,39 @@ The goal is to promote authentic user interactions and community discussions thr
 ---
 
 # **Design**
+
+### Wireframes
+
+## **Wireframes**
+
+I used [Balsamiq](https://balsamiq.com/wireframes) to create the wireframes for this project. 
+I chose Balsamiq because it has a sketchy, hand-drawn look that makes it clear these are 
+wireframes, not real screenshots. This helps avoid confusion and shows that the designs are 
+just drafts.
+
+I tried to make the wireframes as realistic and useful as possible, while still keeping the 
+rough, planning-style look that wireframes are meant to have.
+
+Balsamiq was helpful because:
+
+- It let me focus on layout and structure instead of details
+- It made it easy to share ideas and get feedback
+- It was quick to use and good for early design work
+
+The wireframes can also be viewed as a [PDF exported from Balsamiq.](src/assets/wireframes/balsamiq-wireframes.pdf)
+
+### **Wireframes Table**
+
+| Page                     | Desktop View                                          | Mobile View                                         |
+|--------------------------|------------------------------------------------------|----------------------------------------------------|
+| Base                     | ![](src/assets/wireframes/base-desktop.png)          | ![](src/assets/wireframes/base-mobile.png)         |
+| 404                      | ![](src/assets/wireframes/404-desktop.png)           | ![](src/assets/wireframes/404-mobile.png)          |
+| Signin                   | ![](src/assets/wireframes/signin-desktop.png)        | ![](src/assets/wireframes/signin-mobile.png)       |
+| Signup                   | ![](src/assets/wireframes/signup-desktop.png)        | ![](src/assets/wireframes/signup-mobile.png)       |
+| PostPage                 | ![](src/assets/wireframes/postpage-desktop.png)      | ![](src/assets/wireframes/postpage-mobile.png)     |
+| ProfilePage              | ![](src/assets/wireframes/profilepage-desktop.png)   | ![](src/assets/wireframes/mobile-profile-page-signed-in.png)  |
+| ProfilePageSignedIn      | ![](src/assets/wireframes/profile-page-signed.png) | ![](src/assets/wireframes/mobile-profile-page-signed-in.png) |
+
 
 ### Typography
 The main body font for the app was chosen to use the native font of the user's operating system, ensuring a seamless and familiar user experience. This is achieved through a fallback list that includes common system fonts like -apple-system (for macOS) and Segoe UI (for Windows). For code blocks and source text, the font source-code-pro is used, also secured with a fallback list.
@@ -283,7 +317,7 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 ---
 
 ## Overview
-The newsletter feature allows users to subscribe and unsubscribe from a newsletter without email confirmation. It is integrated into the LoopIn social media platform.
+The newsletter feature allows users to subscribe and unsubscribe from a newsletter without email confirmation, as advised by my Mentor Marcel. It is integrated into the LoopIn social media platform.
 
 ---
 ## Backend Implementation
@@ -458,7 +492,7 @@ subscriber.delete()
 
 ## User Flow and Database Management
 
-### Seamless Subscription Management
+### Seamless Subscription Management Testing
 - **Instant Subscription:** Register email immediately. 
 ![subscribe](src/assets/subscribe.png)
 ![success](src/assets/success.png)
