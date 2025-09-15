@@ -46,9 +46,13 @@ export const CurrentUserProvider = ({ children }) => {
           image: null
         });
       }
-    } catch (err) {
-      console.log("User data loading failed:", err);
+    } catch (err) {   
       setCurrentUser(null);
+      if (axios.isAxiosError(err)) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        history.push("/");
+      }
     }
   };
 
