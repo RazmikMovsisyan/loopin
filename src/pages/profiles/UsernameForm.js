@@ -41,7 +41,12 @@ const UsernameForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axiosRes.put("/dj-rest-auth/user/", { username });
+      const token = localStorage.getItem("access_token");
+      await axiosRes.put("/dj-rest-auth/user/", { username }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCurrentUser((prevUser) => ({
         ...prevUser,
         username,

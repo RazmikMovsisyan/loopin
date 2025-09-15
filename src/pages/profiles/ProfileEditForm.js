@@ -72,7 +72,13 @@ const ProfileEditForm = () => {
     }
 
     try {
-      const { data } = await axiosReq.put(`/profiles/${id}/`, formData);
+      const token = localStorage.getItem("access_token");
+      const { data } = await axiosReq.put(`/profiles/${id}/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setCurrentUser((currentUser) => ({
         ...currentUser,
         profile_image: data.image,

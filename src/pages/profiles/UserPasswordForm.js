@@ -46,7 +46,12 @@ const UserPasswordForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axiosRes.post("/dj-rest-auth/password/change/", userData);
+      const token = localStorage.getItem("access_token");
+      await axiosRes.post("/dj-rest-auth/password/change/", userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       toast.success("Password changed successfully! Use your new Password for next log in", { position: "top-right" });
       history.goBack();
     } catch (err) {
