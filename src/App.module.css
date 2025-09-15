@@ -1,5 +1,5 @@
 .App {
-  background-color: #ffffff;
+  background-color: #fff;
   min-height: 100vh;
 }
 
@@ -8,7 +8,7 @@
 }
 
 .Content {
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 10px;
   border-radius: 2px;
   border: 1px solid #dadadf;
@@ -31,7 +31,7 @@
 }
 
 a {
-    color: #000000;
+  color: #000;
   transition: color ease-in-out 0.3s;
 }
 
@@ -40,7 +40,7 @@ a:hover {
 }
 
 a:hover i {
-    color: #1486fe;
+  color: #1486fe;
   transition: color ease-in-out 0.3s;
 }
 
@@ -50,7 +50,7 @@ input[type="file"] {
 
 i {
   color: #cfced3;
-    font-size: 1.2rem;
+  font-size: 1.2rem;
   padding: 7px;
   vertical-align: middle;
 }
@@ -70,12 +70,15 @@ figure {
 *::-webkit-scrollbar {
   width: 5px;
 }
+
 *::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
 *::-webkit-scrollbar-thumb {
   background: #888;
 }
+
 *::-webkit-scrollbar-thumb:hover {
   background: #555;
 }

@@ -50,6 +50,8 @@ The goal is to promote authentic user interactions and community discussions thr
   - [Manual Testing](#manual-testing)
   - [Bugs](#bugs)
 - [Code Validation](#code-validation)
+  - [JavaScript](#javascript)
+  - [CSS](#css)
 - [Deployment](#deployment)
   - [GitHub & Heroku Setup](#github--heroku-setup)
   - [Heroku Deployment Steps](#heroku-deployment-steps)
@@ -605,7 +607,8 @@ Update the `.gitignore` file to properly ignore `env.py` and remove any sensitiv
 ---
 
 ## **Code Validation**
- 
+
+## JavaScript
 ## Comprehensive Debugging and ESLint Setup Guide
 
 ### ESLint Setup in Visual Studio Code
@@ -774,11 +777,77 @@ root.render(<App />);
 
 The systematic approach to debugging transformed the codebase from having multiple quality issues to meeting industry standards for production-ready React applications. The process not only fixed existing errors but also established preventive measures to maintain code quality throughout future development.
 
+## CSS
+
+### CSS Validation Setup for React + CSS Modules
+
+This project implements CSS validation using **Stylelint**, customized for a **React** project with **CSS Modules**. It ensures clean and error-free CSS code, even with CamelCase or PascalCase class names.
+
+### 1. Installed Version
+
+An older, Node <18 compatible version of Stylelint is used:
+
+```bash
+npm install --save-dev stylelint@14 stylelint-config-standard@23
+```
+
+This avoids issues with modern features like `findLastIndex` and works reliably on our Node version.
+
+### 2. Stylelint Configuration
+
+Create a `.stylelintrc.json` file in the project root with the following configuration:
+
+```json
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "no-descending-specificity": null,
+    "selector-class-pattern": null,
+    "indentation": 2,
+    "string-quotes": "double",
+    "color-no-invalid-hex": true,
+    "block-no-empty": true,
+    "declaration-block-trailing-semicolon": "always",
+    "no-duplicate-selectors": true,
+    "no-extra-semicolons": true,
+    "unit-no-unknown": true,
+    "property-no-unknown": true,
+    "selector-pseudo-class-no-unknown": true,
+    "selector-pseudo-element-no-unknown": true
+  }
+}
+```
+
+### Key Points
+- Allows CamelCase and PascalCase class names for CSS Modules.
+- Detects syntax errors, empty blocks, invalid colors, duplicate selectors, and unknown properties/units.
+- Uses Node <18 compatible rules.
+![stylelint-installation](<src/assets/css validation/stylelint-installation.png>)
+
+### 3. Running CSS Validation
+
+### Validate all CSS files:
+
+```bash
+npx stylelint "**/*.css"
+```
+
+### You can automatically fix fixable issues in case you encounter to some errors.
+
+```bash
+npx stylelint "**/*.css" --fix
+```
+![no-errors](<src/assets/css validation/no-errors-found.png>)
+
+## Conclusion
+
+With this setup, CSS validation runs reliably in a React project using CSS Modules, ensuring clean, consistent, and error-free CSS code, compatible even with older Node versions.
+
 ## **Deployment**
 
 ## How to Create and connect GitHub Repository and Heroku App 
 
-## Part 1: Creating the GitHub Repository
+### Part 1: Creating the GitHub Repository
 
 1. **Log in to GitHub**  
    Go to [github.com](https://github.com) and sign in to your account.
@@ -804,7 +873,7 @@ Your empty repository named **`app-loopin`** is now created on GitHub.
 
 ---
 
-## Part 2: Creating the Heroku App and Connecting GitHub
+### Part 2: Creating the Heroku App and Connecting GitHub
 
 1. **Log in to Heroku**  
    Go to [heroku.com](https://www.heroku.com) and log in (or sign up if you don’t have an account).
@@ -822,7 +891,7 @@ Your empty repository named **`app-loopin`** is now created on GitHub.
 ![heroku-config-new-app](src/assets/heroku-config-new-app.png)
 ---
 
-## Part 3: Connecting Heroku to Your GitHub Repository
+### Part 3: Connecting Heroku to Your GitHub Repository
 
 1. **Go to the Deploy Tab**  
    After your Heroku app is created, you’ll land on its settings page.  
