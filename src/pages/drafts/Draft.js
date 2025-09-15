@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import styles from "../../styles/Draft.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { MoreDropdown } from "../../components/MoreDropdown";
-import { useHistory } from "react-router-dom";
-import { deleteDraft, publishDraft } from "../../api/axiosDrafts";
+import { useHistory, Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Media from "react-bootstrap/Media";
-import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
+import { axiosReq } from "../../api/axiosDefaults";
+import { toast } from "react-toastify";
 
 const Draft = ({ draft, setDrafts }) => {
   const currentUser = useCurrentUser();
@@ -21,34 +21,60 @@ const Draft = ({ draft, setDrafts }) => {
 
   const handleDelete = async () => {
     try {
-      await deleteDraft(draft.id);
+      const access_token = localStorage.getItem("access_token");
+      await axiosReq.delete(`/drafts/${draft.id}/`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
       setDrafts((prevDrafts) => ({
         ...prevDrafts,
         results: prevDrafts.results.filter((d) => d.id !== draft.id),
       }));
+
+      toast.success("Draft deleted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (err) {
       console.error("Error deleting draft:", err);
+      toast.error("Failed to delete draft.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
   const handlePublish = async () => {
     try {
-      await publishDraft(draft.id);
-      
+      const access_token = localStorage.getItem("access_token");
+      await axiosReq.put(
+        `/drafts/${draft.id}/publish/`,
+        {},
+        { headers: { Authorization: `Bearer ${access_token}` } }
+      );
+
       setDrafts((prevDrafts) => ({
         ...prevDrafts,
         results: prevDrafts.results.filter((d) => d.id !== draft.id),
       }));
-      
+
+      toast.success("Draft published successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
       setTimeout(() => {
         history.push("/");
       }, 1000);
     } catch (err) {
       console.error("Error publishing draft:", err);
-      alert("Failed to publish draft. Please try again.");
+      toast.error("Failed to publish draft.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
-  
+
   return (
     <Card className={styles.Draft}>
       <Card.Body>
@@ -59,7 +85,7 @@ const Draft = ({ draft, setDrafts }) => {
           </Link>
           <div className="d-flex align-items-center">
             <span>{new Date(draft.updated_at).toLocaleDateString()}</span>
-            {is_owner && draft.status !== 'published' && (
+            {is_owner && draft.status !== "published" && (
               <MoreDropdown
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
@@ -69,27 +95,34 @@ const Draft = ({ draft, setDrafts }) => {
           </div>
         </Media>
       </Card.Body>
-      
+
       {draft.image && (
         <div className="text-center">
-          <img src={draft.image} alt="Draft content" className={styles.DraftImage} />
+          <img
+            src={draft.image}
+            alt="Draft content"
+            className={styles.DraftImage}
+          />
         </div>
       )}
-      
+
       <Card.Body>
         <Card.Text>{draft.content}</Card.Text>
         <div className={styles.DraftMeta}>
           <span>Status: {draft.status}</span>
           {draft.scheduled_time && (
-            <span>Scheduled: {new Date(draft.scheduled_time).toLocaleString()}</span>
+            <span>
+              Scheduled: {new Date(draft.scheduled_time).toLocaleString()}
+            </span>
           )}
-          <span>Created: {new Date(draft.created_at).toLocaleDateString()}</span>
+          <span>
+            Created: {new Date(draft.created_at).toLocaleDateString()}
+          </span>
         </div>
-        
-        {/* Publish Button für nicht veröffentlichte Drafts */}
-        {is_owner && draft.status !== 'published' && (
+
+        {is_owner && draft.status !== "published" && (
           <div className="text-center mt-3">
-            <button 
+            <button
               className={`btn ${styles.PublishButton}`}
               onClick={handlePublish}
             >

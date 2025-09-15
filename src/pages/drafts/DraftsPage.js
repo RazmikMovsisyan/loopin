@@ -5,7 +5,7 @@ import Draft from "./Draft";
 import styles from "../../styles/DraftsPage.module.css";
 
 const DraftsPage = () => {
-  const { drafts, hasLoaded, refreshDrafts } = useDrafts();
+  const { drafts, hasLoaded, refreshDrafts, setDrafts } = useDrafts();
 
   useEffect(() => {
     refreshDrafts();
@@ -17,10 +17,10 @@ const DraftsPage = () => {
       {hasLoaded ? (
         drafts.results.length ? (
           drafts.results.map((draft) => (
-            <Draft key={draft.id} draft={draft} />
+            <Draft key={draft.id} draft={draft} setDrafts={setDrafts} />
           ))
         ) : (
-          <p>No Draft entries.</p>
+          <p>No draft entries.</p>
         )
       ) : (
         <p>Loading drafts...</p>

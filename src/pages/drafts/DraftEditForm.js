@@ -1,23 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
+import { useHistory, useParams } from "react-router";
+import { Form, Button, Row, Col, Container, Alert, Image } from "react-bootstrap";
 import Asset from "../../components/Asset";
 import Upload from "../../assets/upload.png";
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-import { useHistory, useParams } from "react-router";
-import { axiosReq } from "../../api/axiosDefaults";
 import { useRedirect } from "../../hooks/useRedirect";
-import { updateDraft } from "../../api/axiosDrafts";
+import { useDrafts } from "../../contexts/DraftsContext";
+import { axiosReq } from "../../api/axiosDefaults";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function DraftEditForm() {
+const DraftEditForm = () => {
   useRedirect("loggedOut");
+
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState(false);
 
@@ -32,6 +29,7 @@ function DraftEditForm() {
   const imageInput = useRef(null);
   const history = useHistory();
   const { id } = useParams();
+  const { setDrafts } = useDrafts();
 
   useEffect(() => {
     const handleMount = async () => {
@@ -41,20 +39,23 @@ function DraftEditForm() {
 
         let formattedScheduledTime = "";
         if (scheduled_time) {
-          const date = new Date(scheduled_time);
-          formattedScheduledTime = date.toISOString().slice(0, 16);
+          formattedScheduledTime = new Date(scheduled_time)
+            .toISOString()
+            .slice(0, 16);
         }
 
-        is_owner 
-          ? setDraftData({ 
-              content, 
-              image, 
-              status, 
-              scheduled_time: formattedScheduledTime 
-            }) 
-          : history.push("/");
+        if (is_owner) {
+          setDraftData({
+            content,
+            image,
+            status,
+            scheduled_time: formattedScheduledTime,
+          });
+        } else {
+          history.push("/");
+        }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
@@ -62,10 +63,7 @@ function DraftEditForm() {
   }, [history, id]);
 
   const handleChange = (event) => {
-    setDraftData({
-      ...draftData,
-      [event.target.name]: event.target.value,
-    });
+    setDraftData({ ...draftData, [event.target.name]: event.target.value });
   };
 
   const handleChangeImage = (event) => {
@@ -86,19 +84,41 @@ function DraftEditForm() {
       const formData = new FormData();
       formData.append("content", content);
       formData.append("status", status);
-      
+
       if (status === "scheduled" && scheduled_time) {
-        formData.append("scheduled_time", new Date(scheduled_time).toISOString());
+        formData.append(
+          "scheduled_time",
+          new Date(scheduled_time).toISOString()
+        );
       }
-      
+
       if (imageInput.current.files.length) {
         formData.append("image", imageInput.current.files[0]);
       }
 
-      await updateDraft(id, formData);
-      history.push(`/drafts`);
+      const access_token = localStorage.getItem("access_token");
+      const { data: updatedDraft } = await axiosReq.put(
+        `/drafts/${id}/`,
+        formData,
+        { headers: { Authorization: `Bearer ${access_token}` } }
+      );
+
+      setDrafts((prevDrafts) => ({
+        ...prevDrafts,
+        results: prevDrafts.results.map((d) =>
+          d.id === updatedDraft.id ? updatedDraft : d
+        ),
+      }));
+
+      toast.success("Draft updated successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      history.push("/drafts");
     } catch (err) {
-      console.log("Upload error:", err);
+      console.error("Upload error:", err);
+      toast.error("Failed to update draft.", { position: "top-right", autoClose: 3000 });
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);
       }
@@ -119,28 +139,19 @@ function DraftEditForm() {
           onChange={handleChange}
         />
       </Form.Group>
-      {errors?.content?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
+      {errors?.content?.map((msg, idx) => (
+        <Alert key={idx} variant="warning">{msg}</Alert>
       ))}
 
       <Form.Group>
         <Form.Label>Status</Form.Label>
-        <Form.Control
-          as="select"
-          name="status"
-          value={status}
-          onChange={handleChange}
-        >
+        <Form.Control as="select" name="status" value={status} onChange={handleChange}>
           <option value="draft">Draft</option>
           <option value="scheduled">Scheduled</option>
         </Form.Control>
       </Form.Group>
-      {errors?.status?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
+      {errors?.status?.map((msg, idx) => (
+        <Alert key={idx} variant="warning">{msg}</Alert>
       ))}
 
       {status === "scheduled" && (
@@ -157,10 +168,8 @@ function DraftEditForm() {
           </Form.Text>
         </Form.Group>
       )}
-      {errors?.scheduled_time?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
+      {errors?.scheduled_time?.map((msg, idx) => (
+        <Alert key={idx} variant="warning">{msg}</Alert>
       ))}
 
       <Button
@@ -170,8 +179,8 @@ function DraftEditForm() {
       >
         Cancel
       </Button>
-      <Button 
-        className={`${btnStyles.Button} ${btnStyles.Blue}`} 
+      <Button
+        className={`${btnStyles.Button} ${btnStyles.Blue}`}
         type="submit"
         disabled={uploading}
       >
@@ -183,17 +192,15 @@ function DraftEditForm() {
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
-        <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
-          <Container
-            className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
-          >
+        <Col md={7} lg={8} className="py-2 p-0 p-md-2">
+          <Container className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}>
             <Form.Group className="text-center">
-              {draftData.image ? (
+              {draftData.image && (
                 <>
                   <figure>
                     <Image className={appStyles.Image} src={draftData.image} rounded />
                   </figure>
-                  <div>
+                  <div className="text-center">
                     <Form.Label
                       className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
                       htmlFor="image-upload"
@@ -202,15 +209,11 @@ function DraftEditForm() {
                     </Form.Label>
                   </div>
                 </>
-              ) : (
-                <Form.Label
-                  className="d-flex justify-content-center"
-                  htmlFor="image-upload"
-                >
-                  <Asset
-                    src={Upload}
-                    message="Click or tap to upload an image"
-                  />
+              )}
+
+              {!draftData.image && (
+                <Form.Label className="d-flex justify-content-center" htmlFor="image-upload">
+                  <Asset src={Upload} message="Click or tap to upload an image" />
                 </Form.Label>
               )}
 
@@ -221,21 +224,18 @@ function DraftEditForm() {
                 ref={imageInput}
               />
             </Form.Group>
-            {errors?.image?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
-              </Alert>
-            ))}
+            {errors?.image?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
 
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
+
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
           <Container className={appStyles.Content}>{textFields}</Container>
         </Col>
       </Row>
     </Form>
   );
-}
+};
 
 export default DraftEditForm;
