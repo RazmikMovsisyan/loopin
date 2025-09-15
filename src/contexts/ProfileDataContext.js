@@ -25,7 +25,7 @@ export const ProfileDataProvider = ({ children }) => {
       const { data } = await axiosRes.post(
         "/followers/",
         {
-          followed: clickedProfile.id,
+          followed_profile: clickedProfile.id,
         },
         {
           headers: {
