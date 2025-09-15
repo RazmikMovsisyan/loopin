@@ -49,6 +49,12 @@ const DraftCreateForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    if (!title.trim()) {
+      setErrors({ title: ["Title is required"] });
+      return;
+    }
+    
     setUploading(true);
 
     try {
@@ -91,13 +97,14 @@ const DraftCreateForm = () => {
   const textFields = (
     <div className="text-center">
       <Form.Group>
-        <Form.Label>Title</Form.Label>
+        <Form.Label>Title *</Form.Label>
         <Form.Control
           type="text"
           name="title"
           value={title}
           onChange={handleChange}
           placeholder="Enter a title for your draft"
+          required
         />
       </Form.Group>
       {errors?.title?.map((msg, idx) => (
