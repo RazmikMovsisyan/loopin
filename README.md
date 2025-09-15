@@ -52,6 +52,7 @@ The goal is to promote authentic user interactions and community discussions thr
 - [Code Validation](#code-validation)
   - [JavaScript](#javascript)
   - [CSS](#css)
+  - [HTML](#html)
 - [Deployment](#deployment)
   - [GitHub & Heroku Setup](#github--heroku-setup)
   - [Heroku Deployment Steps](#heroku-deployment-steps)
@@ -762,7 +763,7 @@ root.render(<App />);
 - Potential runtime errors
 - Difficult code maintenance
 
-￼![eslint-before](src/assets/eslint-before.png)
+￼![eslint-before](src/assets/javascript-validation/eslint-before.png)
 
 
 **After ESLint Implementation**:
@@ -772,7 +773,7 @@ root.render(<App />);
 - Modern React 18 compliance
 - Professional-grade code quality
 
-![eslint-after](src/assets/eslint-after.png)
+![eslint-after](src/assets/javascript-validation/eslint-after.png)
 
 
 The systematic approach to debugging transformed the codebase from having multiple quality issues to meeting industry standards for production-ready React applications. The process not only fixed existing errors but also established preventive measures to maintain code quality throughout future development.
@@ -822,7 +823,7 @@ Create a `.stylelintrc.json` file in the project root with the following configu
 - Allows CamelCase and PascalCase class names for CSS Modules.
 - Detects syntax errors, empty blocks, invalid colors, duplicate selectors, and unknown properties/units.
 - Uses Node <18 compatible rules.
-![stylelint-installation](<src/assets/css validation/stylelint-installation.png>)
+![stylelint-installation](<src/assets/css-validation/stylelint-installation.png>)
 
 ### 3. Running CSS Validation
 
@@ -837,13 +838,198 @@ npx stylelint "**/*.css"
 ```bash
 npx stylelint "**/*.css" --fix
 ```
-![no-errors](<src/assets/css validation/no-errors-found.png>)
+![no-errors](<src/assets/css-validation/no-errors-found.png>)
 
 ## Conclusion
 
 With this setup, CSS validation runs reliably in a React project using CSS Modules, ensuring clean, consistent, and error-free CSS code, compatible even with older Node versions.
 
-## **Deployment**
+
+# **HTML**
+
+## React Project HTML Validation
+
+## Overview
+
+In a React project, validating HTML differs from static HTML projects because React uses JSX and placeholders like `%PUBLIC_URL%` in `public/index.html`. This section outlines how HTML validation was ensured in a React 17.0.2 project.
+
+---
+
+## ESLint for JSX and JavaScript Validation
+
+Note: ESLint was already installed in this project to check JavaScript code quality and catch runtime errors early. For completeness, here’s a brief overview of installation for React projects:
+
+### Installation (if not installed):
+
+```bash
+npm install eslint --save-dev
+npm install eslint-plugin-react --save-dev
+```
+
+> **Why `--save-dev`?**
+>
+> `--save-dev` is used when a package is needed **only during development** and not in production. ESLint is used to check code during development (linting, warnings, code style).
+> 
+> If installed with `--save-dev`, ESLint is added to `devDependencies` in `package.json`, ensuring it **won’t be included in the production build**. Installing without `--save-dev` would put it in `dependencies`, unnecessarily increasing production bundle size.
+>
+> **Tip:**
+> - Use `dependencies` for packages your app **needs at runtime**.
+> - Use `devDependencies` for tools needed **only during development** (e.g., ESLint, testing frameworks, build tools).
+
+### Global Installation of html-validator-cli
+
+You can also install `html-validator-cli` globally to use it from anywhere:
+
+```bash
+npm install -g html-validator-cli
+```
+
+> Note: Installing globally is convenient for personal use, but for project automation (e.g., in CI/CD pipelines or `npm run lint:html`), you might prefer a **project-local installation**:
+>
+```bash
+npm install html-validator-cli --save-dev
+```
+
+This ensures that the HTML validator is part of your project's dependencies and version-controlled for the team.
+
+### Basic ESLint Configuration (`.eslintrc.js`):
+
+```javascript
+module.exports = {
+  env: { browser: true, es2021: true },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "react-app",
+    "react-app/jest"
+  ],
+  parserOptions: { ecmaFeatures: { jsx: true }, ecmaVersion: 12, sourceType: "module" },
+  plugins: ["react"],
+  settings: { react: { version: "17.0.2" } }
+};
+```
+
+### VSCode Integration:
+
+```json
+"eslint.validate": ["javascript", "javascriptreact"],
+"editor.codeActionsOnSave": { "source.fixAll.eslint": true },
+"eslint.format.enable": true
+```
+
+### Outcome:
+
+- Validated all JSX files for invalid HTML-like tags.
+- Corrected `class` → `className`, unescaped apostrophes, and missing imports.
+- Added PropTypes validation and modernized deprecated React/ReactDOM usage.
+- Result: 0 linting errors, consistent code style, fully functional components.
+
+---
+
+## Validating `public/index.html` (Development Template)
+
+React uses placeholders (`%PUBLIC_URL%`) in `public/index.html`. Running a validator directly on this file produces warnings and errors.
+
+```bash
+html-validator --file=public/index.html --verbose
+```
+
+### Observed Issues:
+
+- Errors for `%PUBLIC_URL%/...` in href attributes → placeholders, not actual HTML errors.
+- Trailing slashes on void elements (`<link />`, `<meta />`) → informational only.
+
+### Conclusion:
+
+Warnings in the development template are expected and do not indicate real HTML problems.
+
+---
+
+## Validating the Production Build
+
+### Steps:
+
+1. Build the project:
+
+```bash
+npm run build
+```
+![run-build](<src/assets/html-validation/run-build.png>)
+
+2. Validate the built HTML:
+
+```bash
+html-validator --file=build/index.html --verbose
+```
+![no-significant-errors](<src/assets/html-validation/no-significant-errors.png>)
+
+### Results:
+
+- Only informational messages about trailing slashes.
+- No errors → HTML is fully W3C-compliant.
+
+### Reason:
+
+`%PUBLIC_URL%` is replaced with actual paths during the build. Validator sees final URLs and correct HTML structure.
+
+---
+
+## Key Takeaways
+
+- ESLint ensures JSX and JavaScript correctness.
+- `%PUBLIC_URL%` in `public/index.html` is a template placeholder → ignore errors.
+- Always validate `build/index.html` for W3C compliance.
+- Trailing slashes on void elements are harmless in HTML5.
+
+---
+
+## Optional: Automating Validation
+
+You can automate HTML validation in your build process:
+
+```json
+"scripts": {
+  "lint:html": "html-validator --file=build/index.html --verbose"
+}
+```
+
+Run:
+
+```bash
+npm run build
+npm run lint:html
+```
+
+This ensures that every build produces valid HTML automatically.
+
+---
+
+## Conclusion
+
+Following these steps guarantees that your React project has:
+
+- JSX validated via ESLint.
+- Production HTML validated with html-validator.
+- No W3C errors, ready for deployment or submission.
+- Clean, modern React code with consistent style and best practices.
+
+### Whole Project HTML Validation
+
+Even though we validated a single HTML file (`build/index.html`), this effectively covers the entire React project.
+
+**Why one file is enough:** In React, all visible HTML is generated from JSX components and ultimately rendered into the root index.html.
+
+**Validation coverage:**
+
+- JSX code and component structure checked with ESLint (`eslint-plugin-react`).
+- Final HTML output validated with `html-validator` on the built file.
+- Optional: CSS issues can be checked with stylelint.
+
+**Conclusion:**
+
+Validating `build/index.html` ensures that all components, attributes, and generated HTML are W3C-compliant, so the whole project has been effectively checked.
+
+## **Deployment**h
 
 ## How to Create and connect GitHub Repository and Heroku App 
 
