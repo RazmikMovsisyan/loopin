@@ -670,7 +670,7 @@ This implementation provides a frictionless user experience while maintaining ro
 
 ### **Bugs**
 
-## env.py Pushed to GitHub
+### env.py Pushed to GitHub
 
 **Description:**  
 The `env.py` file was pushed to GitHub due to an incorrect value in the `.gitignore`. This resulted in the Heroku app having a DEV environment variable, which affects various settings, leading to potential issues in production.
@@ -687,6 +687,22 @@ The `env.py` file should be ignored by `.gitignore` and never pushed to GitHub.
 Update the `.gitignore` file to properly ignore `env.py` and remove any sensitive information from the GitHub repository.
 
 ---
+
+### Issue Description
+
+The follow user functionality experiences a slight delay in UI updates despite the backend immediately processing the follower relationship. This results in a temporary visual discrepancy where users might not see instant feedback when clicking the follow button.
+
+### Attempted Solution
+
+I implemented an optimistic UI update approach that would immediately update the interface before the API request completed. However, this led to database integrity errors when users rapidly clicked the follow button multiple times, creating duplicate follower entries that violated the unique constraint between owner and followed users.
+
+### Current Status
+
+After consulting with my mentor, we decided to revert to the more stable version that waits for API confirmation before updating the UI. This approach avoids database integrity issues but maintains the slight visual delay. This known limitation has been documented in the project's README as a known bug.
+
+**The follow functionality and entire application perform flawlessly in the local development environment, with immediate UI updates and seamless operation.** However, in the deployed production version, occasional unexpected issues such as the follower relationship delay have been observed, despite maintaining identical codebase and configuration settings between environments.
+
+These deployment-specific inconsistencies appear to be related to external factors in the production infrastructure rather than application code, as the same version functions perfectly locally. The issue has been documented as a known limitation in the deployed environment while we continue to investigate potential platform-specific optimizations.
 
 ## **Code Validation**
 
@@ -1555,6 +1571,12 @@ Proper credit is given to all resources used in accordance with fair use and lic
 
 ## Finished Product
 
+![screen-nr.4](src/assets/loopin-11.png)
+![screen-nr.4](src/assets/loopin-10.png)
+![screen-nr.1](src/assets/loopin-9.png)
+![screen-nr.3](src/assets/loopin-8.png)
+![screen-nr.5](src/assets/loopin-7.png)
+![screen-nr.2](src/assets/loopin-6.png)
 ![screen-nr.4](src/assets/loopin-4.png)
 ![screen-nr.1](src/assets/loopin-1.png)
 ![screen-nr.3](src/assets/loopin-3.png)

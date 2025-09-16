@@ -42,13 +42,13 @@
 .BlueOutline,
 .Blue:hover {
   background-color: #2142b2;
-  color: #1486fe;
+  color: #2ed9ff;
 }
 
 .Black,
 .BlackOutline:hover {
   background-color: #242a3d;
-  color: #ffffff;
+  color: #fff;
 }
 
 .Black:hover,
