@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button"; // Button-Komponente importieren
 
 import Post from "./Post";
 import Asset from "../../components/Asset";
@@ -24,10 +25,28 @@ function PostsPage({ message, filter = "" }) {
   const [posts, setPosts] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const { pathname } = useLocation();
-
   const [query, setQuery] = useState("");
-
   const currentUser = useCurrentUser();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const checkScrollTop = useCallback(() => {
+    if (!showScrollTop && window.pageYOffset > 300) {
+      setShowScrollTop(true);
+    } else if (showScrollTop && window.pageYOffset <= 300) {
+      setShowScrollTop(false);
+    }
+  }, [showScrollTop]);
+
+  // Scroll-Event-Listener hinzufügen/entfernen
+  useEffect(() => {
+    window.addEventListener('scroll', checkScrollTop);
+    return () => window.removeEventListener('scroll', checkScrollTop);
+  }, [checkScrollTop]);
+
+  // Funktion zum Scrollen nach oben
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -96,6 +115,17 @@ function PostsPage({ message, filter = "" }) {
       <Col md={4} className="d-none d-lg-block p-0 p-lg-2">
         <PopularProfiles />
       </Col>
+      {/* Back to Top Button */}
+      {showScrollTop && (
+        <Button 
+          variant="primary" 
+          className={styles.ScrollTop} 
+          onClick={scrollTop}
+          aria-label="Scroll to top"
+        >
+          <i className="fas fa-arrow-up"></i>
+        </Button>
+      )}
     </Row>
   );
 }
