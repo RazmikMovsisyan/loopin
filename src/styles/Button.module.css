@@ -10,8 +10,7 @@
 }
 
 .Button:hover {
-  opacity: 80%;
-  border-color: transparent;
+  background-color: #1486fe !important;
   cursor: pointer;
 }
 
@@ -35,32 +34,26 @@
 .Blue,
 .BlueOutline:hover,
 .Bright:hover {
-  background-color: transparent;
+  background-color: #2ed9ff;
   border: 1px solid #2142b2;
   color: #2142b2;
 }
 
 .BlueOutline,
 .Blue:hover {
-  /* border: 1px solid #2142b2; */
-  background-color: #fff;
+  background-color: #2142b2;
   color: #1486fe;
 }
 
 .Black,
 .BlackOutline:hover {
-  /* background-color: #242a3d;
-    color: white; */
   background-color: #242a3d;
-  color: aliceblue;
+  color: #ffffff;
 }
 
 .Black:hover,
 .BlackOutline {
-  /* background-color: #dadadf;
-    color: #242a3d;
-    border-color: #242a3d; */
-  background-color: aliceblue;
+  background-color: #2ed9ff;
   color: #242a3d;
 }
 

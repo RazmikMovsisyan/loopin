@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ PropTypes für children
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };

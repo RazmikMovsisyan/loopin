@@ -32,6 +32,7 @@ The goal is to promote authentic user interactions and community discussions thr
   - [User Stories](#user-stories)
 - [Design](#design)
   - [Wireframes](#wireframes)
+  - [ER Diagram Django API](#er-diagram-django-api)
   - [Typography](#typography)
   - [Color Scheme](#color-scheme)
 - [User Stories (MoSCoW Prioritized)](#user-stories-moscow-prioritized)
@@ -185,6 +186,18 @@ The wireframes can also be viewed as a [PDF exported from Balsamiq.](src/assets/
 | PostPage            | ![](src/assets/wireframes/postpage-desktop.png)    | ![](src/assets/wireframes/postpage-mobile.png)               |
 | ProfilePage         | ![](src/assets/wireframes/profilepage-desktop.png) | ![](src/assets/wireframes/mobile-profile-page-signed-in.png) |
 | ProfilePageSignedIn | ![](src/assets/wireframes/profile-page-signed.png) | ![](src/assets/wireframes/mobile-profile-page-signed-in.png) |
+
+### **ER Diagram Django API**
+
+## Database Design
+
+Based on my project structure, I created an Entity-Relationship Diagram (ERD) that illustrates the relationships between the models in your Django API using Mermaid. I chose Mermaid because it allows for quick, readable diagrams directly from text, making it easy to maintain and update alongside your code.
+
+This ERD highlights the core models of the Django project and their connections.
+I kept it simple and clear so that anyone can quickly understand how the data is structured and how the models interact with each other.
+
+![Entity Relationship Diagrams](src/assets/entity-relationship-diagrams.png)
+[Live Preview in Mermaid Editor](https://mermaid.live/edit#pako:eNqtlW1vmzAQx78K8uu0goQSwrspo1W0JExJpmoTEjJwIZ7AjmyzLEvz3WcgTytuk0m1hPDd_e372fjwDiUsBeQh4J8JzjguQmqo9m3uz4yXl7s7tjO-zoLH0dg3PGOFhSYczBcqlnDAEjTxYTCZ-NNKsuFEqxiPvvjvzfAYjMfB82j6pERLluds86bIn82ViIio0UEaxdtGW2O2kE4rugwfeDgkQH6BRjD8tPCfgtl3JYohZzQTkWQhvYDaNf2qESoNkp5tITmhmVEK4BQX0ApAgUne8q6xEBvGL-ZJ1WZJUkDdiX4yQuEQ3TevA_fh671DVNkVTqTBjAlr-UiBM9CAlOuqm0ZY6jiq_bsCgUu5YloMSWTe3qqEUQlU3gzYnLAz4O30xxNzZQFrJmT02sk2VL-3LfwPAK3P7sdQvknzT8JzcV7J2k5QeU91-v-ZT1V4vdi0hZaCSDhZS8KoZvap_zwf-4vFTcX8qmZP_KKMqxzx5RJQB2WcpMiTvIQOKoCrwcpEdZoQyRUoWOSpbgpLXOYyRCGthq0x_cFYcRzJWZmtkLfEuVBWcyoOP_GjRBUUm29pcrTVDMjbod_Is3ruvWWZXac_6A6sXm_w0EFb5PUrr2vbtvvgOLZjWvsO-lPnNO_7btceqMe0-6brOl1FADQFPmQllchzrA6ClEjGJ82VUt8s-7-GH-Lj)
 
 ### Typography
 

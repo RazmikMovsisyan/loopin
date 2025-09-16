@@ -37,13 +37,11 @@ function PostsPage({ message, filter = "" }) {
     }
   }, [showScrollTop]);
 
-  // Scroll-Event-Listener hinzufügen/entfernen
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
     return () => window.removeEventListener('scroll', checkScrollTop);
   }, [checkScrollTop]);
 
-  // Funktion zum Scrollen nach oben
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

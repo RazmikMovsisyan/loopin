@@ -58,6 +58,7 @@ export const CurrentUserProvider = ({ children }) => {
 
   useEffect(() => {
     handleMount();
+    //Mentor suggestion to disable Eslint
 // eslint-disable-next-line
   }, []);
 

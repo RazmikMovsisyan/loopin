@@ -92,7 +92,6 @@ const ProfileEditForm = () => {
         const uploadData = await uploadRes.json();
         formData.append("image", uploadData.secure_url);
       } else {
-        // Wenn kein neues Bild ausgewählt wurde, das vorhandene Bild beibehalten
         formData.append("image", image);
       }
 
