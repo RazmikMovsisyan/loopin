@@ -18,6 +18,32 @@ export const ProfileDataProvider = ({ children }) => {
 
   const currentUser = useCurrentUser();
 
+  const refreshProfileData = async () => {
+    try {
+      const { data: popularData } = await axiosReq.get(
+        "/profiles/?ordering=-followers_count"
+      );
+      
+      if (profileData.pageProfile.results.length > 0) {
+        const currentProfileId = profileData.pageProfile.results[0].id;
+        const { data: pageData } = await axiosReq.get(`/profiles/${currentProfileId}/`);
+        
+        setProfileData((prevState) => ({
+          ...prevState,
+          pageProfile: { results: [pageData] },
+          popularProfiles: popularData,
+        }));
+      } else {
+        setProfileData((prevState) => ({
+          ...prevState,
+          popularProfiles: popularData,
+        }));
+      }
+    } catch (err) {
+      console.log("Error refreshing profile data:", err);
+    }
+  };
+
   const handleFollow = async (clickedProfile) => {
     try {
       const access_token = localStorage.getItem('access_token');
@@ -33,6 +59,7 @@ export const ProfileDataProvider = ({ children }) => {
         }
       );
 
+      // Sofortiges UI-Update
       setProfileData((prevState) => ({
         ...prevState,
         pageProfile: {
@@ -47,6 +74,11 @@ export const ProfileDataProvider = ({ children }) => {
           ),
         },
       }));
+
+      setTimeout(() => {
+        refreshProfileData();
+      }, 500);
+
     } catch (err) {
       console.log(err);
     }
@@ -70,6 +102,11 @@ export const ProfileDataProvider = ({ children }) => {
           ),
         },
       }));
+
+      setTimeout(() => {
+        refreshProfileData();
+      }, 500);
+
     } catch (err) {
       console.log(err);
     }
@@ -96,7 +133,7 @@ export const ProfileDataProvider = ({ children }) => {
   return (
     <ProfileDataContext.Provider value={profileData}>
       <SetProfileDataContext.Provider
-        value={{ setProfileData, handleFollow, handleUnfollow }}
+        value={{ setProfileData, handleFollow, handleUnfollow, refreshProfileData }}
       >
         {children}
       </SetProfileDataContext.Provider>

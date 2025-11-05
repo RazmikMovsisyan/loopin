@@ -53,7 +53,7 @@ function ProfilePage() {
       }
     };
     fetchData();
-  }, [id, setProfileData]);
+  }, [id, setProfileData, currentUser]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];

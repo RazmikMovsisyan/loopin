@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "../../styles/Profile.module.css";
 import btnStyles from "../../styles/Button.module.css";
@@ -11,11 +11,30 @@ import { useSetProfileData } from "../../contexts/ProfileDataContext";
 const Profile = (props) => {
   const { profile, mobile, imageSize = 55 } = props;
   const { id, following_id, image, owner } = profile;
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
 
   const { handleFollow, handleUnfollow } = useSetProfileData();
+
+  const handleFollowClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleFollow(profile);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUnfollowClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleUnfollow(profile);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div
@@ -36,16 +55,18 @@ const Profile = (props) => {
           (following_id ? (
             <Button
               className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-              onClick={() => handleUnfollow(profile)}
+              onClick={handleUnfollowClick}
+              disabled={isLoading}
             >
-              Unfollow
+              {isLoading ? "..." : "Unfollow"}
             </Button>
           ) : (
             <Button
               className={`${btnStyles.Button} ${btnStyles.Black}`}
-              onClick={() => handleFollow(profile)}
+              onClick={handleFollowClick}
+              disabled={isLoading}
             >
-              Follow
+              {isLoading ? "..." : "Follow"}
             </Button>
           ))}
       </div>
