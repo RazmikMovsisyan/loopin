@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import appStyles from "../../App.module.css";
 import Asset from "../../components/Asset";
 import { useProfileData } from "../../contexts/ProfileDataContext";
@@ -25,7 +26,14 @@ const PopularProfiles = ({ mobile }) => {
           {mobile ? (
             <div className="d-flex justify-content-around">
               {popularProfiles.results.slice(0, 4).map((profile) => (
-                <Profile key={profile.id} profile={profile} mobile />
+                <div key={profile.id} className="text-center">
+                  <Link 
+                    to={`/profiles/${profile.id}`}
+                    className="text-decoration-none"
+                  >
+                    <Profile profile={profile} mobile showAvatarOnly />
+                  </Link>
+                </div>
               ))}
             </div>
           ) : (

@@ -9,7 +9,7 @@ import { Button } from "react-bootstrap";
 import { useSetProfileData } from "../../contexts/ProfileDataContext";
 
 const Profile = (props) => {
-  const { profile, mobile, imageSize = 55 } = props;
+  const { profile, mobile, imageSize = 55, showFollowButton = true } = props;
   const { id, following_id, image, owner } = profile;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,10 +46,13 @@ const Profile = (props) => {
         </Link>
       </div>
       <div className={`mx-2 ${styles.WordBreak}`}>
-        <strong>{owner}</strong>
+        <Link to={`/profiles/${id}`} className="text-decoration-none">
+          <strong>{owner}</strong>
+        </Link>
       </div>
       <div className={`text-right ${!mobile && "ml-auto"}`}>
-        {!mobile &&
+        {showFollowButton &&
+          !mobile &&
           currentUser &&
           !is_owner &&
           (following_id ? (
@@ -83,6 +86,7 @@ Profile.propTypes = {
   }).isRequired,
   mobile: PropTypes.bool,
   imageSize: PropTypes.number,
+  showFollowButton: PropTypes.bool,
 };
 
 export default Profile;

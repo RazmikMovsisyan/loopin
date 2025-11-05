@@ -130,14 +130,14 @@ function PostCreateForm() {
         onClick={() => history.goBack()}
         disabled={uploading}
       >
-        cancel
+        Cancel
       </Button>
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         type="submit"
         disabled={uploading}
       >
-        {uploading ? "Uploading..." : "create"}
+        {uploading ? "Uploading..." : "Create"}
       </Button>
     </div>
   );

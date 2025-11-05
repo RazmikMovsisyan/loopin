@@ -96,10 +96,10 @@ function PostEditForm() {
       {errors?.content?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
 
       <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} onClick={() => history.goBack()} disabled={uploading}>
-        cancel
+        Cancel
       </Button>
       <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit" disabled={uploading}>
-        {uploading ? "Saving..." : "save"}
+        {uploading ? "Saving..." : "Save"}
       </Button>
     </div>
   );
