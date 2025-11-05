@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
@@ -7,14 +7,33 @@ import InputGroup from "react-bootstrap/InputGroup";
 
 import styles from "../../styles/CommentCreateEditForm.module.css";
 import Avatar from "../../components/Avatar";
-import { axiosRes } from "../../api/axiosDefaults";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
-function CommentCreateForm({ post, setPost, setComments, profileImage, profile_id }) {
+function CommentCreateForm({ post, setPost, setComments }) {
   const [content, setContent] = useState("");
+  const [currentProfileImage, setCurrentProfileImage] = useState("");
   const { getAuthHeader } = useAuth();
+  const currentUser = useCurrentUser();
+
+  useEffect(() => {
+    const fetchCurrentProfile = async () => {
+      if (currentUser?.profile_id) {
+        try {
+          const { data } = await axiosReq.get(`/profiles/${currentUser.profile_id}/`);
+          setCurrentProfileImage(data.image);
+        } catch (err) {
+          console.log("Could not fetch current profile");
+          setCurrentProfileImage(currentUser?.profile_image);
+        }
+      }
+    };
+
+    fetchCurrentProfile();
+  }, [currentUser]);
 
   const handleChange = (event) => setContent(event.target.value);
 
@@ -57,8 +76,8 @@ function CommentCreateForm({ post, setPost, setComments, profileImage, profile_i
     <Form className="mt-2" onSubmit={handleSubmit}>
       <Form.Group>
         <InputGroup>
-          <Link to={`/profiles/${profile_id}`}>
-            <Avatar src={profileImage} />
+          <Link to={`/profiles/${currentUser?.profile_id}`}>
+            <Avatar src={currentProfileImage} />
           </Link>
           <Form.Control
             className={styles.Form}
@@ -89,8 +108,6 @@ CommentCreateForm.propTypes = {
   post: PropTypes.number.isRequired,
   setPost: PropTypes.func.isRequired,
   setComments: PropTypes.func.isRequired,
-  profileImage: PropTypes.string.isRequired,
-  profile_id: PropTypes.number.isRequired,
 };
 
 export default CommentCreateForm;

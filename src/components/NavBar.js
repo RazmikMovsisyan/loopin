@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -15,19 +15,36 @@ import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
 import { removeTokenTimestamp } from "../utils/utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { axiosReq } from "../api/axiosDefaults";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
+  const [currentProfileImage, setCurrentProfileImage] = useState("");
 
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
-  const profileImageSrc =
-    !currentUser?.profile_image ||
-    currentUser?.profile_image.includes("default_profile_rxsxdv") ||
-    currentUser?.profile_image.startsWith("../")
-      ? "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg"
-      : currentUser?.profile_image;
+  useEffect(() => {
+    const fetchCurrentProfile = async () => {
+      if (currentUser?.profile_id) {
+        try {
+          const { data } = await axiosReq.get(`/profiles/${currentUser.profile_id}/`);
+          setCurrentProfileImage(data.image);
+        } catch (err) {
+          console.log("Could not fetch current profile");
+          const fallbackImage = 
+            !currentUser?.profile_image ||
+            currentUser?.profile_image.includes("default_profile_rxsxdv") ||
+            currentUser?.profile_image.startsWith("../")
+              ? "https://res.cloudinary.com/dj5p9ubcu/image/upload/v1750632467/default_profile_rxsxdv.jpg"
+              : currentUser?.profile_image;
+          setCurrentProfileImage(fallbackImage);
+        }
+      }
+    };
+
+    fetchCurrentProfile();
+  }, [currentUser]);
 
   const handleSignOut = async () => {
     try {
@@ -81,7 +98,7 @@ const NavBar = () => {
         className={styles.NavLink}
         to={`/profiles/${currentUser?.profile_id}`}
       >
-        <Avatar src={profileImageSrc} text="Profile" height={40} />
+        <Avatar src={currentProfileImage} text="Profile" height={40} />
       </NavLink>
     </>
   );

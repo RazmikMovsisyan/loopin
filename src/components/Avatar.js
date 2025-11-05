@@ -9,8 +9,12 @@ const Avatar = ({ src, height = 45, text }) => {
     if (!src) return defaultImage;
     if (src.includes("default_profile_rxsxdv")) return defaultImage;
     if (src.startsWith("../")) return defaultImage;
-    if (src.startsWith("http")) return src;
-    return `${process.env.REACT_APP_CLOUDINARY_BASE_URL || 'https://res.cloudinary.com/dj5p9ubcu/image/upload/'}${src}`;
+    
+    if (src.includes('cloudinary.com') && !src.includes('?')) {
+      return `${src}?ts=${new Date().getTime()}`;
+    }
+    
+    return src;
   };
 
   const avatarSrc = getAvatarSrc();

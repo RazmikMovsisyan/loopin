@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Media } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import { MoreDropdown } from "../../components/MoreDropdown";
 import CommentEditForm from "./CommentEditForm";
-
 import styles from "../../styles/Comment.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-import { axiosRes } from "../../api/axiosDefaults";
-
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,8 +22,24 @@ const Comment = ({
   setComments,
 }) => {
   const [showEditForm, setShowEditForm] = useState(false);
+  const [currentProfileImage, setCurrentProfileImage] = useState(profile_image);
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
+
+  useEffect(() => {
+    const fetchCurrentProfileImage = async () => {
+      try {
+        const { data } = await axiosReq.get(`/profiles/${profile_id}/`);
+        if (data.image && data.image !== profile_image) {
+          setCurrentProfileImage(data.image);
+        }
+      } catch (err) {
+        console.log("Could not fetch updated profile image");
+      }
+    };
+
+    fetchCurrentProfileImage();
+  }, [profile_id, profile_image]);
 
   const handleDelete = async () => {
     const access_token = localStorage.getItem("access_token");
@@ -65,7 +79,7 @@ const Comment = ({
       <hr />
       <Media>
         <Link to={`/profiles/${profile_id}`}>
-          <Avatar src={profile_image} />
+          <Avatar src={currentProfileImage} height={40} />
         </Link>
         <Media.Body className="align-self-center ml-2">
           <Link to={`/profiles/${profile_id}`}>
