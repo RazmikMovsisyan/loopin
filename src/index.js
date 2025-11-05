@@ -7,7 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import { ProfileDataProvider } from './contexts/ProfileDataContext';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:8000';
+
 axios.defaults.withCredentials = true;
 
 ReactDOM.render(
