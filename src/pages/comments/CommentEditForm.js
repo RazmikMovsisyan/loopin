@@ -58,7 +58,7 @@ function CommentEditForm({ id, content, setShowEditForm, setComments }) {
           rows={2}
           className={styles.Form}
         />
-        <small className="text-muted">Shift + Enter für neue Zeile</small>
+        <small className="text-muted">Shift + Enter for new line</small>
       </Form.Group>
       <div className="text-right">
         <button

@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { removeTokenTimestamp, shouldRefreshToken } from "../utils/utils";
 
 export const CurrentUserContext = createContext();
@@ -14,10 +14,20 @@ export const useSetCurrentUser = () => useContext(SetCurrentUserContext);
 export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const history = useHistory();
+  const location = useLocation();
 
-  const handleMount = async () => {
-    try {
-      const access_token = localStorage.getItem('access_token');
+  const handleMount = useCallback(async () => {
+    const access_token = localStorage.getItem('access_token');
+
+    if (!access_token) {
+      return
+    }
+
+    if (location.pathname === "/") {
+      return;
+    }
+
+    try {  
       const { data: userData } = await axiosRes.get("dj-rest-auth/user/", 
         {
           headers: {
@@ -51,21 +61,21 @@ export const CurrentUserProvider = ({ children }) => {
       if (axios.isAxiosError(err)) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        history.push("/");
+        if (location.pathname !== "/") {
+          history.push("/");
+        }
       }
     }
-  };
+  }, [history, location.pathname]);
 
   useEffect(() => {
     handleMount();
-    //Mentor suggestion to disable Eslint
-// eslint-disable-next-line
-  }, []);
+  }, [handleMount]);
 
   useMemo(() => {
     axiosReq.interceptors.request.use(
       async (config) => {
-        if (shouldRefreshToken()) {
+        if (location.pathname !== "/" && shouldRefreshToken()) {
           try {
             const refresh_token = localStorage.getItem('refresh_token');
             if (!refresh_token) {
@@ -76,7 +86,9 @@ export const CurrentUserProvider = ({ children }) => {
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {
-                history.push("/signin");
+                if (location.pathname !== "/") {
+                  history.push("/signin");
+                }
               }
               return null;
             });
@@ -94,7 +106,7 @@ export const CurrentUserProvider = ({ children }) => {
     axiosRes.interceptors.response.use(
       (response) => response,
       async (err) => {
-        if (err.response?.status === 401) {
+        if (err.response?.status === 401 && location.pathname !== "/") {
           try {
             const refresh_token = localStorage.getItem('refresh_token');
             if (!refresh_token) {
@@ -105,7 +117,9 @@ export const CurrentUserProvider = ({ children }) => {
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {
-                history.push("/signin");
+                if (location.pathname !== "/") {
+                  history.push("/signin");
+                }
               }
               return null;
             });
@@ -116,7 +130,7 @@ export const CurrentUserProvider = ({ children }) => {
         return Promise.reject(err);
       }
     );
-  }, [history]);
+  }, [history, location.pathname]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

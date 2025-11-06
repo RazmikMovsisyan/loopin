@@ -8,3 +8,17 @@ axios.defaults.withCredentials = true;
 
 export const axiosReq = axios.create();
 export const axiosRes = axios.create();
+
+axiosReq.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    const currentPath = window.location.pathname;
+    
+    if (token && currentPath !== "/") {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
