@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -22,6 +22,7 @@ function PostCreateForm() {
 
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState(false);
+  const isMounted = useRef(true);
 
   const [postData, setPostData] = useState({
     title: "",
@@ -32,6 +33,12 @@ function PostCreateForm() {
 
   const imageInput = useRef(null);
   const history = useHistory();
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleChange = (event) => {
     setPostData({
@@ -47,21 +54,49 @@ function PostCreateForm() {
         ...postData,
         image: URL.createObjectURL(event.target.files[0]),
       });
+      if (errors.image) {
+        setErrors(prev => ({ ...prev, image: undefined }));
+      }
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    const hasImage = imageInput.current.files.length > 0;
+    const hasTitle = title.trim();
+    
+    let newErrors = {};
+    
+    if (!hasTitle) {
+      newErrors.title = ["Title is required."];
+    }
+    
+    if (!hasImage) {
+      newErrors.image = ["Image is required. Please select an image."];
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      
+      if (!hasTitle) {
+        document.querySelector('input[name="title"]').focus();
+      } else if (!hasImage)
+      
+      return;
+    }
+    
+    if (!isMounted.current) return;
+    
     setUploading(true);
+    setErrors({});
 
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("content", content);
 
-      if (imageInput.current.files.length) {
-        formData.append("image", imageInput.current.files[0]);
-      }
+      formData.append("image", imageInput.current.files[0]);
 
       const access_token = localStorage.getItem("access_token");
       if (!access_token) throw new Error("No access token found");
@@ -73,34 +108,42 @@ function PostCreateForm() {
         },
       });
 
-      toast.success("Post created successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      history.push(`/posts/${data.id}`);
-    } catch (err) {
-      console.error(err.response || err);
-      toast.error("Failed to create post.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      if (err.response?.status !== 401) {
-        setErrors(err.response?.data);
+      if (!data || !data.id) {
+        throw new Error("Invalid response from server - missing post ID");
       }
-    } finally {
-      setUploading(false);
+
+      if (isMounted.current) {
+        toast.success("Post created successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        history.push(`/posts/${data.id}`);
+      }
+    } catch (err) {
+      if (isMounted.current) {
+        console.error("Error creating post:", err.response || err);
+        toast.error("Failed to create post.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        if (err.response?.status !== 401) {
+          setErrors(err.response?.data || { detail: err.message });
+        }
+        setUploading(false);
+      }
     }
   };
 
   const textFields = (
     <div className="text-center">
       <Form.Group>
-        <Form.Label>Title</Form.Label>
+        <Form.Label>Title *</Form.Label>
         <Form.Control
           type="text"
           name="title"
           value={title}
           onChange={handleChange}
+          isInvalid={!!errors.title}
         />
       </Form.Group>
       {errors?.title?.map((message, idx) => (
@@ -117,6 +160,7 @@ function PostCreateForm() {
           name="content"
           value={content}
           onChange={handleChange}
+          isInvalid={!!errors.content}
         />
       </Form.Group>
       {errors?.content?.map((message, idx) => (
@@ -160,7 +204,7 @@ function PostCreateForm() {
                       className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
                       htmlFor="image-upload"
                     >
-                      Change the image
+                      Change the image *
                     </Form.Label>
                   </div>
                 </>
@@ -171,7 +215,7 @@ function PostCreateForm() {
                 >
                   <Asset
                     src={Upload}
-                    message="Click or tap to upload an image"
+                    message="Click or tap to upload an image *"
                   />
                 </Form.Label>
               )}
