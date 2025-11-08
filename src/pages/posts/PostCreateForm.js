@@ -81,7 +81,9 @@ function PostCreateForm() {
       
       if (!hasTitle) {
         document.querySelector('input[name="title"]').focus();
-      } else if (!hasImage)
+      } else if (!hasImage) {
+        document.getElementById('image-upload').focus();
+      }
       
       return;
     }
@@ -95,7 +97,7 @@ function PostCreateForm() {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("content", content);
-
+      
       formData.append("image", imageInput.current.files[0]);
 
       const access_token = localStorage.getItem("access_token");
@@ -121,7 +123,6 @@ function PostCreateForm() {
       }
     } catch (err) {
       if (isMounted.current) {
-        console.error("Error creating post:", err.response || err);
         toast.error("Failed to create post.", {
           position: "top-right",
           autoClose: 3000,

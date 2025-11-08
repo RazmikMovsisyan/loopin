@@ -26,7 +26,6 @@ function CommentCreateForm({ post, setPost, setComments }) {
           const { data } = await axiosReq.get(`/profiles/${currentUser.profile_id}/`);
           setCurrentProfileImage(data.image);
         } catch (err) {
-          console.log("Could not fetch current profile");
           setCurrentProfileImage(currentUser?.profile_image);
         }
       }
@@ -63,7 +62,6 @@ function CommentCreateForm({ post, setPost, setComments }) {
       setContent("");
       toast.success("Comment posted successfully!");
     } catch (err) {
-      console.error(err);
       toast.error("Failed to post comment. Please try again.");
     }
   };
