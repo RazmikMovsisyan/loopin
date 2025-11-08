@@ -75,7 +75,7 @@ const ProfileEditForm = () => {
         const file = imageFile.current.files[0];
         const uploadFormData = new FormData();
         uploadFormData.append("file", file);
-        uploadFormData.append("upload_preset", "unsigned_profile_upload"); // Dein Upload Preset
+        uploadFormData.append("upload_preset", "unsigned_profile_upload");
 
         const uploadRes = await fetch(
           "https://api.cloudinary.com/v1_1/dj5p9ubcu/image/upload",
@@ -110,7 +110,6 @@ const ProfileEditForm = () => {
       toast.success("Profile updated successfully!", { position: "top-right" });
       history.goBack();
     } catch (err) {
-      console.log(err);
       toast.error("Failed to update profile.", { position: "top-right" });
       setErrors(err.response?.data);
     } finally {

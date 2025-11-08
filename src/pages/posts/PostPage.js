@@ -42,7 +42,6 @@ function PostPage() {
           setNotFound(true);
         }
       } catch (err) {
-        // console.log(err);
         setNotFound(true);
       } finally {
         setHasLoaded(true);

@@ -55,7 +55,6 @@ const UserPasswordForm = () => {
       toast.success("Password changed successfully! Use your new Password for next log in", { position: "top-right" });
       history.goBack();
     } catch (err) {
-      console.log(err);
       toast.error("Failed to change password.", { position: "top-right" });
       setErrors(err.response?.data);
     }

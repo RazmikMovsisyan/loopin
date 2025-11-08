@@ -40,7 +40,7 @@ export const ProfileDataProvider = ({ children }) => {
         }));
       }
     } catch (err) {
-      console.log("Error refreshing profile data:", err);
+      // Error handling removed for production
     }
   };
 
@@ -59,7 +59,6 @@ export const ProfileDataProvider = ({ children }) => {
         }
       );
 
-      // Sofortiges UI-Update
       setProfileData((prevState) => ({
         ...prevState,
         pageProfile: {
@@ -80,7 +79,7 @@ export const ProfileDataProvider = ({ children }) => {
       }, 500);
 
     } catch (err) {
-      console.log(err);
+      // Error handling removed for production
     }
   };
 
@@ -108,7 +107,7 @@ export const ProfileDataProvider = ({ children }) => {
       }, 500);
 
     } catch (err) {
-      console.log(err);
+      // Error handling removed for production
     }
   };
 
@@ -123,7 +122,7 @@ export const ProfileDataProvider = ({ children }) => {
           popularProfiles: data,
         }));
       } catch (err) {
-        console.log(err);
+        // Error handling removed for production
       }
     };
 

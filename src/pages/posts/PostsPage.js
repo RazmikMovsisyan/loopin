@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button"; // Button-Komponente importieren
+import Button from "react-bootstrap/Button";
 
 import Post from "./Post";
 import Asset from "../../components/Asset";
@@ -53,7 +53,7 @@ function PostsPage({ message, filter = "" }) {
         setPosts(data);
         setHasLoaded(true);
       } catch (err) {
-        // console.log(err);
+        // Error handling removed for production
       }
     };
 
@@ -113,7 +113,6 @@ function PostsPage({ message, filter = "" }) {
       <Col md={4} className="d-none d-lg-block p-0 p-lg-2">
         <PopularProfiles />
       </Col>
-      {/* Back to Top Button */}
       {showScrollTop && (
         <Button 
           variant="primary" 

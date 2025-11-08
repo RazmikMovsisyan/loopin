@@ -31,7 +31,6 @@ const NavBar = () => {
           const { data } = await axiosReq.get(`/profiles/${currentUser.profile_id}/`);
           setCurrentProfileImage(data.image);
         } catch (err) {
-          console.log("Could not fetch current profile");
           const fallbackImage = 
             !currentUser?.profile_image ||
             currentUser?.profile_image.includes("default_profile_rxsxdv") ||
@@ -62,7 +61,6 @@ const NavBar = () => {
         position: "top-right",
         autoClose: 3000,
       });
-      console.log(err);
     }
   };
 

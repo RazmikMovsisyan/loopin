@@ -34,7 +34,6 @@ function PostEditForm() {
         setPostData({ title, content, image });
         if (!is_owner) toast.warning("You are not the owner of this post.");
       } catch (err) {
-        console.log(err);
         history.push("/");
       }
     };

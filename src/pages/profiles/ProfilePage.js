@@ -49,7 +49,7 @@ function ProfilePage() {
         setProfilePosts(profilePosts);
         setHasLoaded(true);
       } catch (err) {
-        console.log(err);
+        // Error handling removed for production
       }
     };
     fetchData();
@@ -92,7 +92,7 @@ function ProfilePage() {
         },
       }));
     } catch (err) {
-      console.error("Upload failed:", err);
+      // Error handling removed for production
     } finally {
       setUploading(false);
     }
