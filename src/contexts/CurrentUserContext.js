@@ -20,10 +20,6 @@ export const CurrentUserProvider = ({ children }) => {
     const access_token = localStorage.getItem('access_token');
 
     if (!access_token) {
-      return
-    }
-
-    if (location.pathname === "/") {
       return;
     }
 
@@ -61,8 +57,8 @@ export const CurrentUserProvider = ({ children }) => {
       if (axios.isAxiosError(err)) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        if (location.pathname !== "/") {
-          history.push("/");
+        if (location.pathname !== "/" && location.pathname !== "/signin" && location.pathname !== "/signup") {
+          history.push("/signin");
         }
       }
     }
@@ -75,7 +71,7 @@ export const CurrentUserProvider = ({ children }) => {
   useMemo(() => {
     axiosReq.interceptors.request.use(
       async (config) => {
-        if (location.pathname !== "/" && shouldRefreshToken()) {
+        if (shouldRefreshToken()) {
           try {
             const refresh_token = localStorage.getItem('refresh_token');
             if (!refresh_token) {
@@ -86,9 +82,7 @@ export const CurrentUserProvider = ({ children }) => {
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {
-                if (location.pathname !== "/") {
-                  history.push("/signin");
-                }
+                history.push("/signin");
               }
               return null;
             });
@@ -106,7 +100,7 @@ export const CurrentUserProvider = ({ children }) => {
     axiosRes.interceptors.response.use(
       (response) => response,
       async (err) => {
-        if (err.response?.status === 401 && location.pathname !== "/") {
+        if (err.response?.status === 401) {
           try {
             const refresh_token = localStorage.getItem('refresh_token');
             if (!refresh_token) {
@@ -117,9 +111,7 @@ export const CurrentUserProvider = ({ children }) => {
           } catch (err) {
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {
-                if (location.pathname !== "/") {
-                  history.push("/signin");
-                }
+                history.push("/signin");
               }
               return null;
             });
@@ -130,7 +122,7 @@ export const CurrentUserProvider = ({ children }) => {
         return Promise.reject(err);
       }
     );
-  }, [history, location.pathname]);
+  }, [history]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

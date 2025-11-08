@@ -101,6 +101,7 @@ function PostPage() {
                     <Comment
                       key={comment.id}
                       {...comment}
+                      profile_image={comment.profile_image || comment.owner_profile_image || ""}
                       setPost={setPost}
                       setComments={setComments}
                     />
