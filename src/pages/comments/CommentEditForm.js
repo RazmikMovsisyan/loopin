@@ -51,6 +51,7 @@ function CommentEditForm({ id, content, setShowEditForm, setComments }) {
     <Form onSubmit={handleSubmit}>
       <Form.Group className="pr-1">
         <Form.Control
+          id={`edit-comment-${id}`}
           as="textarea"
           value={formContent}
           onChange={handleChange}

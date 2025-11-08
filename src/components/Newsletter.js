@@ -60,6 +60,7 @@ const Newsletter = () => {
       {!isSubscribed ? (
         <form onSubmit={handleSubscribe}>
           <input
+            id="newsletter-email"
             type="email"
             placeholder="Enter your email"
             value={email}

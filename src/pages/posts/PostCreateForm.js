@@ -135,11 +135,12 @@ function PostCreateForm() {
     }
   };
 
-  const textFields = (
+  const textFields = (isMobile = false) => (
     <div className="text-center">
       <Form.Group>
-        <Form.Label>Title *</Form.Label>
+        <Form.Label htmlFor={`post-title-${isMobile ? 'mobile' : 'desktop'}`}>Title *</Form.Label>
         <Form.Control
+          id={`post-title-${isMobile ? 'mobile' : 'desktop'}`}
           type="text"
           name="title"
           value={title}
@@ -154,8 +155,9 @@ function PostCreateForm() {
       ))}
 
       <Form.Group>
-        <Form.Label>Content</Form.Label>
+        <Form.Label htmlFor={`post-content-${isMobile ? 'mobile' : 'desktop'}`}>Content</Form.Label>
         <Form.Control
+          id={`post-content-${isMobile ? 'mobile' : 'desktop'}`}
           as="textarea"
           rows={6}
           name="content"
@@ -233,12 +235,12 @@ function PostCreateForm() {
               </Alert>
             ))}
 
-            <div className="d-md-none">{textFields}</div>
+            <div className="d-md-none">{textFields(true)}</div>
           </Container>
         </Col>
 
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
-          <Container className={appStyles.Content}>{textFields}</Container>
+          <Container className={appStyles.Content}>{textFields(false)}</Container>
         </Col>
       </Row>
     </Form>

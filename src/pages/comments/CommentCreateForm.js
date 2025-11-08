@@ -78,6 +78,7 @@ function CommentCreateForm({ post, setPost, setComments }) {
             <Avatar src={currentProfileImage} />
           </Link>
           <Form.Control
+            id="comment-create"
             className={styles.Form}
             placeholder="Write a comment..."
             as="textarea"

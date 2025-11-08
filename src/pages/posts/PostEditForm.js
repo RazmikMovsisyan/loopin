@@ -80,17 +80,30 @@ function PostEditForm() {
     }
   };
 
-  const textFields = (
+  const textFields = (isMobile = false) => (
     <div className="text-center">
       <Form.Group>
-        <Form.Label>Title</Form.Label>
-        <Form.Control type="text" name="title" value={title} onChange={handleChange} />
+        <Form.Label htmlFor={`edit-title-${isMobile ? 'mobile' : 'desktop'}`}>Title</Form.Label>
+        <Form.Control 
+          id={`edit-title-${isMobile ? 'mobile' : 'desktop'}`}
+          type="text" 
+          name="title" 
+          value={title} 
+          onChange={handleChange} 
+        />
       </Form.Group>
       {errors?.title?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
 
       <Form.Group>
-        <Form.Label>Content</Form.Label>
-        <Form.Control as="textarea" rows={6} name="content" value={content} onChange={handleChange} />
+        <Form.Label htmlFor={`edit-content-${isMobile ? 'mobile' : 'desktop'}`}>Content</Form.Label>
+        <Form.Control 
+          id={`edit-content-${isMobile ? 'mobile' : 'desktop'}`}
+          as="textarea" 
+          rows={6} 
+          name="content" 
+          value={content} 
+          onChange={handleChange} 
+        />
       </Form.Group>
       {errors?.content?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
 
@@ -131,11 +144,11 @@ function PostEditForm() {
               </div>
             </Form.Group>
             {errors?.image?.map((msg, idx) => <Alert key={idx} variant="warning">{msg}</Alert>)}
-            <div className="d-md-none">{textFields}</div>
+            <div className="d-md-none">{textFields(true)}</div>
           </Container>
         </Col>
         <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
-          <Container className={appStyles.Content}>{textFields}</Container>
+          <Container className={appStyles.Content}>{textFields(false)}</Container>
         </Col>
       </Row>
     </Form>

@@ -117,11 +117,12 @@ const ProfileEditForm = () => {
     }
   };
 
-  const textFields = (
+  const textFields = (isMobile = false) => (
     <>
       <Form.Group>
-        <Form.Label>Bio</Form.Label>
+        <Form.Label htmlFor={`profile-bio-${isMobile ? 'mobile' : 'desktop'}`}>Bio</Form.Label>
         <Form.Control
+          id={`profile-bio-${isMobile ? 'mobile' : 'desktop'}`}
           as="textarea"
           value={content}
           onChange={handleChange}
@@ -189,11 +190,11 @@ const ProfileEditForm = () => {
                 }}
               />
             </Form.Group>
-            <div className="d-md-none">{textFields}</div>
+            <div className="d-md-none">{textFields(true)}</div>
           </Container>
         </Col>
         <Col md={5} lg={6} className="d-none d-md-block p-0 p-md-2 text-center">
-          <Container className={appStyles.Content}>{textFields}</Container>
+          <Container className={appStyles.Content}>{textFields(false)}</Container>
         </Col>
       </Row>
     </Form>
