@@ -31,9 +31,15 @@ function PostEditForm() {
           headers: { Authorization: `Bearer ${access_token}` },
         });
         const { title, content, image, is_owner } = data;
+        
+        if (!is_owner) {
+          history.push("/");
+          return;
+        }
+        
         setPostData({ title, content, image });
-        if (!is_owner) toast.warning("You are not the owner of this post.");
       } catch (err) {
+        // Silent redirect if post doesn't exist or other error
         history.push("/");
       }
     };
@@ -73,8 +79,12 @@ function PostEditForm() {
       toast.success("Post updated successfully!");
       history.push(`/posts/${id}`);
     } catch (err) {
-      toast.error("Failed to update post.");
-      if (err.response?.status !== 401) setErrors(err.response?.data);
+      if (err.response?.status === 404) {
+        history.push("/");
+      } else {
+        toast.error("Failed to update post.");
+        if (err.response?.status !== 401) setErrors(err.response?.data);
+      }
     } finally {
       setUploading(false);
     }
