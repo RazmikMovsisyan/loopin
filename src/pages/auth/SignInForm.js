@@ -81,6 +81,7 @@ function SignInForm() {
                 className={styles.Input}
                 value={username}
                 onChange={handleChange}
+                autoComplete="username"
               />
             </Form.Group>
             {errors.username?.map((message, idx) => (
@@ -99,6 +100,7 @@ function SignInForm() {
                 className={styles.Input}
                 value={password}
                 onChange={handleChange}
+                autoComplete="current-password"
               />
             </Form.Group>
             {errors.password?.map((message, idx) => (
