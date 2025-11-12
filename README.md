@@ -47,6 +47,7 @@ The goal is to promote authentic user interactions and community discussions thr
   - [User Flow & Database Management](#user-flow-and-database-management)
   - [Technical Details](#technical-details)
 - [Testing](#testing)
+  - [Testing Methodology](#testing-methodology)
   - [Manual Testing](#manual-testing)
   - [Bugs](#bugs)
 - [Code Validation](#code-validation)
@@ -104,7 +105,7 @@ The goal is to promote authentic user interactions and community discussions thr
 - **Sign Up:** As a user, I want to create an account so I can access exclusive features.
 - **Sign In:** As a user, I want to sign in to access my account features.
 - **Login Status:** As a user, I want to easily check if I am logged in.
-- **Token Refresh:** As a user, I want my login session to stay active until I log out.
+- **Session Persistence:** As a user, I want my login session to stay active until I log out.
 - **Login Options for Guests:** As a logged-out user, I should see options to sign in or create an account.
 - **Edit Profile:** As a logged-in user, I can update my profile picture and bio.
 - **Change Username & Password:** As a logged-in user, I can change my username and password to keep my account secure.
@@ -139,17 +140,17 @@ The goal is to promote authentic user interactions and community discussions thr
 
 - **User Avatars:** As a user, I want to see avatars for other users to make it easier to identify them.
 
-| **Original Story Title**   | **Included** |
-| -------------------------- | ------------ |
-| **Edit and Delete a Post** | ✅           |
-| **Comment on Post**        | ✅           |
-| **User Profile Page**      | ✅           |
-| **User Registration**      | ✅           |
-| **User Login/Logout**      | ✅           |
-| **Delete Post**            | ✅           |
-| **Edit Post**              | ✅           |
-| **View Posts**             | ✅           |
-| **Create Post**            | ✅           |
+| **User Story**             | **Status** |
+| -------------------------- | ---------- |
+| **User Registration**      | ✅         |
+| **User Login/Logout**      | ✅         |
+| **Create Post**            | ✅         |
+| **View Posts**             | ✅         |
+| **Edit Post**              | ✅         |
+| **Delete Post**            | ✅         |
+| **Edit and Delete a Post** | ✅         |
+| **Comment on Post**        | ✅         |
+| **User Profile Page**      | ✅         |
 
 ---
 
@@ -229,13 +230,14 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 
 ### Must Have
 
-#### User Registration
+#### User Registration & Authentication
 
 **As a** new visitor, **I can** register for an account **so that** I can access exclusive features.
 
 - **AC1:** When I provide valid registration details, I am successfully registered
 - **AC2:** I am automatically logged in after registration
 - **AC3:** I receive visual confirmation of successful registration
+- **AC4:** I can log in and out securely using session authentication
 
 #### User Login/Logout
 
@@ -632,6 +634,29 @@ This implementation provides a frictionless user experience while maintaining ro
 ---
 
 ## **Testing**
+
+### **Testing Methodology**
+
+The application was tested using a comprehensive approach:
+
+### Manual Testing
+
+- Each user story was manually tested to ensure functionality
+- All CRUD operations were verified (Create, Read, Update, Delete)
+- Authentication flows were tested across different user roles
+- Responsive design was tested on multiple devices and browsers
+
+### User Experience Testing
+
+- Navigation flows were validated for intuitive user journeys
+- Form validations and error handling were thoroughly tested
+- Loading states and user feedback were verified
+- Accessibility considerations were implemented and tested
+
+### Cross-Browser Compatibility
+
+- Chrome, Firefox, Safari, and Edge browsers were tested
+- Mobile responsiveness was verified on iOS and Android devices
 
 ### **Manual Testing**
 
@@ -1423,8 +1448,17 @@ Now, whenever you push new code to your connected GitHub branch:
 
 ### **Heroku**
 
-Deployed via **Heroku**.
-Live link: [Loopin](https://loopinapp-d364a1b22906.herokuapp.com/)
+The frontend application is deployed via **Heroku** and integrates seamlessly with the Django REST API backend.
+
+**Live Application:** [Loopin Frontend](https://loopinapp-d364a1b22906.herokuapp.com/)
+**Backend API:** [Loopin API](https://loopin-8006788e0f02.herokuapp.com/)
+
+**Key Deployment Features:**
+
+- Continuous deployment from GitHub main branch
+- Environment variables for API configuration
+- Optimized build process for React application
+- Secure connection with HTTPS enforcement
 
 Steps:
 
@@ -1568,6 +1602,14 @@ A custom **404 error page** has been implemented to handle non-existent routes o
 All images featured in this project were sourced from **Stockimages/Pexel-Images**, ensuring high-quality visuals that enhance the overall design and user experience. These images were selected to complement the content and provide a clean, engaging aesthetic throughout the site.
 
 The favicon I have created using Adobe Photoshop.
+
+**Technologies & Libraries**
+
+- **Frontend Framework:** React 17.0.2 with modern hooks
+- **Routing:** React Router DOM for seamless navigation
+- **HTTP Client:** Axios for API communication
+- **Styling:** CSS Modules for component-scoped styles
+- **Authentication:** Django Session Authentication via REST API
 
 Proper credit is given to all resources used in accordance with fair use and licensing guidelines.
 
