@@ -16,6 +16,22 @@ export const CurrentUserProvider = ({ children }) => {
   const history = useHistory();
   const location = useLocation();
 
+  const logout = useCallback(async () => {
+    try {
+      await axios.post("dj-rest-auth/logout/");
+    } catch (err) {
+      console.log("Logout API optional, continuing with client cleanup");
+    } finally {
+      setCurrentUser(null);
+      removeTokenTimestamp();
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('refreshTokenTimestamp');
+      
+      window.location.href = "/";
+    }
+  }, []);
+
   const handleMount = useCallback(async () => {
     const access_token = localStorage.getItem('access_token');
 
@@ -126,7 +142,7 @@ export const CurrentUserProvider = ({ children }) => {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <SetCurrentUserContext.Provider value={setCurrentUser}>
+      <SetCurrentUserContext.Provider value={{ setCurrentUser, logout }}>
         {children}
       </SetCurrentUserContext.Provider>
     </CurrentUserContext.Provider>

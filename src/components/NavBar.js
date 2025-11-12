@@ -10,16 +10,14 @@ import {
   useSetCurrentUser,
 } from "../contexts/CurrentUserContext";
 import Avatar from "./Avatar";
-import axios from "axios";
 import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
-import { removeTokenTimestamp } from "../utils/utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosReq } from "../api/axiosDefaults";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
-  const setCurrentUser = useSetCurrentUser();
+  const { logout } = useSetCurrentUser();
   const [currentProfileImage, setCurrentProfileImage] = useState("");
 
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
@@ -46,22 +44,12 @@ const NavBar = () => {
   }, [currentUser]);
 
   const handleSignOut = async () => {
-    try {
-      await axios.post("dj-rest-auth/logout/");
-      setCurrentUser(null);
-      removeTokenTimestamp();
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      toast.success("Signed out successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } catch (err) {
-      toast.error("Sign out failed!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
+    toast.success("Signed out successfully!", {
+      position: "top-right",
+      autoClose: 2000,
+    });
+
+    await logout();
   };
 
   const addPostIcon = (

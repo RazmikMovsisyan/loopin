@@ -22,7 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ProfileEditForm = () => {
   const currentUser = useCurrentUser();
-  const setCurrentUser = useSetCurrentUser();
+  const { setCurrentUser } = useSetCurrentUser();
   const { id } = useParams();
   const history = useHistory();
   const imageFile = useRef();

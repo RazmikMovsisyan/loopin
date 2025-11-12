@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function SignInForm() {
-  const setCurrentUser = useSetCurrentUser();
+  const { setCurrentUser } = useSetCurrentUser();
   useRedirect("loggedIn");
 
   const [signInData, setSignInData] = useState({

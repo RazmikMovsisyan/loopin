@@ -28,7 +28,7 @@ const UsernameForm = () => {
   const { id } = useParams();
 
   const currentUser = useCurrentUser();
-  const setCurrentUser = useSetCurrentUser();
+  const { setCurrentUser } = useSetCurrentUser();
 
   useEffect(() => {
     if (currentUser?.profile_id?.toString() === id) {
