@@ -58,7 +58,7 @@ The goal is to promote authentic user interactions and community discussions thr
   - [GitHub & Heroku Setup](#github--heroku-setup)
   - [Heroku Deployment Steps](#heroku-deployment-steps)
 - [Version Control](#version-control)
-- [Development Process](#development-process)
+- [Development Process and Git Commands](#development-process-and-git-commands)
 - [Clone & Fork](#clone--fork)
 - [Custom 404 Page](#custom-404-page)
 - [Credits](#credits)
@@ -76,7 +76,7 @@ The goal is to promote authentic user interactions and community discussions thr
 - Admin dashboard for managing users and posts.
 - Responsive design and accessibility-compliant interface.
 
-### **Used Technologies**
+### **Technologies Used**
 
 - React, Django Rest Framework, PostgreSQL
 - HTML5, CSS3, JavaScript
@@ -88,7 +88,7 @@ The goal is to promote authentic user interactions and community discussions thr
 
 ---
 
-### **App Owner Goals**
+### **Project Goals**
 
 - Provide a safe and friendly platform.
 - Enable easy post interaction through comments.
@@ -1317,6 +1317,8 @@ This ensures Black and Flake8 run automatically on each commit.
 
 ## **Deployment**
 
+## GitHub & Heroku Setup
+
 ## How to Create and connect GitHub Repository and Heroku App
 
 ### Part 1: Creating the GitHub Repository
@@ -1346,6 +1348,8 @@ Your empty repository named **`app-loopin`** is now created on GitHub.
 ![github-respository](src/assets/github-repository.png)
 
 ---
+
+## Heroku Deployment Steps
 
 ### Part 2: Creating the Heroku App and Connecting GitHub
 
@@ -1499,7 +1503,7 @@ The project should now be connected and deployed to Heroku!
 - Finally, I pushed the changes to GitHub with `git push`.
 - Every push automatically deploys the latest changes to Heroku from the 'main' branch.
 
-## Clone and Fork the Repository
+## Clone & Fork
 
 You can easily clone or fork the **Loopin** repository for further development.
 
