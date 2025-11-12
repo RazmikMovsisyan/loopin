@@ -1113,6 +1113,8 @@ html-validator --file=build/index.html --verbose
 
 ### Results:
 
+#### The document validates according to the specified schema(s).
+
 - Only informational messages about trailing slashes.
 - No errors → HTML is fully W3C-compliant.
 
@@ -1289,6 +1291,8 @@ Some files might need manual formatting after automatic processing.
 - The same code after proper formatting
 
 ![example-after-formatting](src/assets/python-validation/example-after-without-pep8-errors.png)
+
+[Link to settings.py according to the screenshot](https://pep8ci.herokuapp.com/https://raw.githubusercontent.com/RazmikMovsisyan/drf-api/refs/heads/main/drf_api/settings.py)
 
 ---
 
