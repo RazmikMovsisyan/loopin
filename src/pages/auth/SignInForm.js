@@ -35,6 +35,13 @@ function SignInForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!username.trim() || !password.trim()) {
+      toast.error("Please fill in all fields.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
       const { data } = await axios.post(
         "/dj-rest-auth/login/",
