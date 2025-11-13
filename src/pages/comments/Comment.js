@@ -64,12 +64,12 @@ const Comment = ({
 
       toast.success("Comment deleted successfully!", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     } catch (err) {
       toast.error("Failed to delete comment.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };

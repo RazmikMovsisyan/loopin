@@ -38,7 +38,7 @@ function SignInForm() {
     if (!username.trim() || !password.trim()) {
       toast.error("Please fill in all fields.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       return;
     }
@@ -53,13 +53,13 @@ function SignInForm() {
       setCurrentUser(data.user);
       toast.success("Signed in successfully!", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       history.goBack();
     } catch (err) {
       toast.error("Sign in failed. Check your credentials.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       setErrors(err.response?.data);
     }

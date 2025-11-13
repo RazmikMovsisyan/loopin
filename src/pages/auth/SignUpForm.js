@@ -45,13 +45,13 @@ const SignUpForm = () => {
       await axios.post("/dj-rest-auth/registration/", signUpData);
       toast.success("Account created successfully! Please sign in.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       history.push("/signin");
     } catch (err) {
       toast.error("Sign up failed. Please check your input.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
       setErrors(err.response?.data);
     }

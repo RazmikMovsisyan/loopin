@@ -33,12 +33,12 @@ function CommentEditForm({ id, content, setShowEditForm, setComments }) {
       setShowEditForm(false);
       toast.success("Comment updated successfully!", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     } catch (err) {
       toast.error("Failed to update comment.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };

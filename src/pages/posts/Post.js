@@ -46,12 +46,12 @@ const Post = (props) => {
       history.goBack();
       toast.success("Post deleted successfully!", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     } catch (err) {
       toast.error("Failed to delete post.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };
@@ -75,7 +75,7 @@ const Post = (props) => {
     } catch (err) {
       toast.error("Failed to like post.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };
@@ -97,7 +97,7 @@ const Post = (props) => {
     } catch (err) {
       toast.error("Failed to remove like.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };

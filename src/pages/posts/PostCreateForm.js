@@ -117,7 +117,7 @@ function PostCreateForm() {
       if (isMounted.current) {
         toast.success("Post created successfully!", {
           position: "top-right",
-          autoClose: 3000,
+          autoClose: 2000,
         });
         history.push(`/posts/${data.id}`);
       }
@@ -125,7 +125,7 @@ function PostCreateForm() {
       if (isMounted.current) {
         toast.error("Failed to create post.", {
           position: "top-right",
-          autoClose: 3000,
+          autoClose: 2000,
         });
         if (err.response?.status !== 401) {
           setErrors(err.response?.data || { detail: err.message });
