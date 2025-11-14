@@ -16,18 +16,19 @@ import { useLocation } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 
 import NoResults from "../../assets/no-results.png";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { fetchMoreData } from "../../utils/utils";
 import PopularProfiles from "../profiles/PopularProfiles";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
 function PostsPage({ message, filter = "" }) {
-  const [posts, setPosts] = useState({ results: [] });
+  const [allPosts, setAllPosts] = useState([]);
+  const [displayedPosts, setDisplayedPosts] = useState([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const { pathname } = useLocation();
   const [query, setQuery] = useState("");
   const currentUser = useCurrentUser();
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 3;
 
   const checkScrollTop = useCallback(() => {
     if (!showScrollTop && window.pageYOffset > 300) {
@@ -37,21 +38,48 @@ function PostsPage({ message, filter = "" }) {
     }
   }, [showScrollTop]);
 
+  const loadMorePosts = useCallback(() => {
+    if (displayedPosts.length < allPosts.length) {
+      setCurrentPage(prev => prev + 1);
+    }
+  }, [displayedPosts.length, allPosts.length]);
+
+  const checkScrollBottom = useCallback(() => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      loadMorePosts();
+    }
+  }, [loadMorePosts]); // loadMorePosts als Abhängigkeit hinzugefügt
+
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
-    return () => window.removeEventListener('scroll', checkScrollTop);
-  }, [checkScrollTop]);
+    window.addEventListener('scroll', checkScrollBottom);
+    return () => {
+      window.removeEventListener('scroll', checkScrollTop);
+      window.removeEventListener('scroll', checkScrollBottom);
+    };
+  }, [checkScrollTop, checkScrollBottom]);
 
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
+    const endIndex = currentPage * postsPerPage;
+    setDisplayedPosts(allPosts.slice(0, endIndex));
+  }, [allPosts, currentPage]);
+
+  useEffect(() => {
     const fetchPosts = async () => {
       try {
+        // Load once
         const { data } = await axiosReq.get(`/posts/?${filter}search=${query}`);
-        setPosts(data);
+        setAllPosts(data.results);
         setHasLoaded(true);
+        setCurrentPage(1); // Zurück zur ersten Seite bei neuer Suche
       } catch (err) {
         // Error handling removed for production
       }
@@ -97,17 +125,19 @@ function PostsPage({ message, filter = "" }) {
 
         {hasLoaded ? (
           <>
-            {posts.results.length ? (
-              <InfiniteScroll
-                dataLength={posts.results.length}
-                loader={<Asset spinner />}
-                hasMore={!!posts.next}
-                next={() => fetchMoreData(posts, setPosts)}
-              >
-                {posts.results.map((post) => (
-                  <Post key={post.id} {...post} setPosts={setPosts} />
+            {displayedPosts.length ? (
+              <div>
+                {displayedPosts.map((post) => (
+                  <Post key={post.id} {...post} setPosts={setAllPosts} />
                 ))}
-              </InfiniteScroll>
+                
+                {displayedPosts.length < allPosts.length && (
+                  <div className="text-center my-3">
+                    <Asset spinner />
+                    <p>Loading more posts...</p>
+                  </div>
+                )}
+              </div>
             ) : (
               <Container className={appStyles.Content}>
                 <Asset src={NoResults} message={message} />
