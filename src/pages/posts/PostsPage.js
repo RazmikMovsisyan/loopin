@@ -71,6 +71,15 @@ function PostsPage({ message, filter = "" }) {
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <PopularProfiles mobile />
+        {pathname === "/" && !currentUser && (
+          <div className={styles.WebsiteDescription}>
+          <h3>Welcome to LoopIn!</h3>
+          <p>Discover exciting posts, share your creative ideas and connect with the community.<br />
+       Search for content, follow other users and interact with posts that inspire you.<br />
+       Stay in the Loop!</p>
+        </div>
+        )}
+        
         <i className={`fas fa-search ${styles.SearchIcon}`} />
         <Form
           className={styles.SearchBar}

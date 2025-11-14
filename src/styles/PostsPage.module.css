@@ -29,3 +29,23 @@
   justify-content: center;
   z-index: 1000;
 }
+
+.WebsiteDescription {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 40px;
+  margin-bottom: 20px;
+  border-left: 4px solid #007bff;
+}
+
+.WebsiteDescription h3 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.WebsiteDescription p {
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
