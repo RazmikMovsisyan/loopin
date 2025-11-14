@@ -20,7 +20,7 @@ export const CurrentUserProvider = ({ children }) => {
     try {
       await axios.post("dj-rest-auth/logout/");
     } catch (err) {
-      console.log("Logout API optional, continuing with client cleanup");
+      // Silent fail in production - logout API is optional
     } finally {
       setCurrentUser(null);
       removeTokenTimestamp();
@@ -60,7 +60,7 @@ export const CurrentUserProvider = ({ children }) => {
           image: profileData.image
         });
       } catch (profileErr) {
-        console.log("Profile loading failed, using basic user data:", profileErr);
+        // Silent fail for profile loading - use basic user data
         setCurrentUser({
           ...userData,
           profile: null,

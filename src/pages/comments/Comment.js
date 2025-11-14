@@ -34,10 +34,13 @@ const Comment = ({
           setCurrentProfileImage(data.image);
         }
       } catch (err) {
-        console.log("Could not fetch updated profile image");
+        toast.error("Failed to update profile image. Refresh the page and try again", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     };
-
+  
     fetchCurrentProfileImage();
   }, [profile_id, profile_image]);
 

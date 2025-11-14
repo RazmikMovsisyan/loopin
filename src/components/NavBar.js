@@ -22,6 +22,19 @@ const NavBar = () => {
 
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
+  // Check for logout success message on component mount
+  useEffect(() => {
+    const showLogoutMessage = localStorage.getItem("showLogoutSuccess");
+    if (showLogoutMessage) {
+      toast.success("Signed out successfully!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      // Remove the flag so it doesn't show again
+      localStorage.removeItem("showLogoutSuccess");
+    }
+  }, []);
+
   useEffect(() => {
     const fetchCurrentProfile = async () => {
       if (currentUser?.profile_id) {
@@ -44,12 +57,23 @@ const NavBar = () => {
   }, [currentUser]);
 
   const handleSignOut = async () => {
-    toast.success("Signed out successfully!", {
-      position: "top-right",
-      autoClose: 2000,
-    });
-
-    await logout();
+    try {
+      // Set flag in localStorage before logout
+      localStorage.setItem("showLogoutSuccess", "true");
+      
+      // Perform logout
+      await logout();
+      
+      // The page will refresh as part of the logout process
+      // The toast will be shown on the next page load
+    } catch (error) {
+      // Remove the flag if logout failed
+      localStorage.removeItem("showLogoutSuccess");
+      toast.error("Sign out failed. Please try again.", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    }
   };
 
   const addPostIcon = (
@@ -61,6 +85,7 @@ const NavBar = () => {
       <i className="far fa-plus-square"></i>Add post
     </NavLink>
   );
+  
   const loggedInIcons = (
     <>
       <NavLink
@@ -88,6 +113,7 @@ const NavBar = () => {
       </NavLink>
     </>
   );
+  
   const loggedOutIcons = (
     <>
       <NavLink
