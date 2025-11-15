@@ -49,6 +49,7 @@ The goal is to promote authentic user interactions and community discussions thr
 - [Testing](#testing)
   - [Testing Methodology](#testing-methodology)
   - [Manual Testing](#manual-testing)
+  - [Lighthouse Performance](#lighthouse-performance)
   - [Bugs](#bugs)
 - [Code Validation](#code-validation)
   - [JavaScript](#javascript)
@@ -692,6 +693,24 @@ The application was tested using a comprehensive approach:
 |                                         | PROF-05      | Top Profiles                 | Check the "Top Profiles" section                              | List of most followed users is displayed                                              | ✅     |
 
 ---
+
+### **Lighthouse Performance**
+
+I utilized **Chrome DevTools Lighthouse** to conduct a comprehensive audit of the project's homepage. The results speak for themselves — the page achieved **optimal scores across all key categories**:
+
+- **Performance**
+- **Accessibility**
+- **Best Practices**
+- **SEO**
+
+This demonstrates a strong foundation in web development best practices, ensuring a fast, accessible, and search-engine-friendly user experience.
+
+The same high standards and development approach have been consistently applied to all other pages within the project.
+
+> **Note on Lighthouse Results:**  
+> It's important to acknowledge that Lighthouse scores can fluctuate due to various external factors, such as network latency, device capabilities, and the specific testing environment. Nevertheless, Lighthouse remains an invaluable tool for benchmarking performance and pinpointing potential areas for enhancement.
+
+![lighthouse-performance](src/assets/lighthouse-performance.jpg)
 
 ### **Bugs**
 
@@ -1553,6 +1572,27 @@ You can easily clone or fork the **Loopin** repository for further development.
 ## Clone and Fork the Repository
 
 You can easily clone or fork the **Loopin** repository for further development.
+
+For Back End you will need to create a new file called `env.py` at the root-level, and include the same environment variables listed above from the Heroku deployment steps.
+
+> [!IMPORTANT]
+> This is a sample only; you would replace the values with your own if cloning/forking my repository.
+
+Sample `env.py` file:
+
+```python
+import os
+
+os.environ.setdefault("SECRET_KEY", "any-random-secret-key")
+os.environ.setdefault("DATABASE_URL", "user-inserts-own-postgres-database-url")
+os.environ.setdefault("CLOUDINARY_URL", "user-inserts-own-cloudinary-url")  # only if using Cloudinary
+os.environ.setdefault("HOST", "user-inserts-own-host")
+os.environ.setdefault("CSRF_TRUSTED_ORIGIN", "https://localhost")
+
+# local environment only (do not include these in production/deployment!)
+# (in settings I made sure that DEBUG = False in heroku if you do not add DEBUG to your config vars there)
+os.environ.setdefault("DEBUG", "False")
+```
 
 #### **Fork the Repository**
 

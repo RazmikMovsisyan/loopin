@@ -151,9 +151,21 @@ const Post = (props) => {
             </OverlayTrigger>
           )}
           {likes_count}
-          <Link to={`/posts/${id}`}>
-            <i className="far fa-comments" />
-          </Link>
+          
+          {currentUser ? (
+            <Link to={`/posts/${id}`}>
+              <i className="far fa-comments" />
+            </Link>
+          ) : (
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Log in to comment!</Tooltip>}
+            >
+              <Link to={`/posts/${id}`}>
+                <i className="far fa-comments" />
+              </Link>
+            </OverlayTrigger>
+          )}
           {comments_count}
         </div>
       </Card.Body>
