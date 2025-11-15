@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 
 import Form from "react-bootstrap/Form";
@@ -29,6 +29,8 @@ function PostsPage({ message, filter = "" }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 3;
+  
+  const isMounted = useRef(true);
 
   const checkScrollTop = useCallback(() => {
     if (!showScrollTop && window.pageYOffset > 300) {
@@ -52,11 +54,12 @@ function PostsPage({ message, filter = "" }) {
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       loadMorePosts();
     }
-  }, [loadMorePosts]); // loadMorePosts als Abhängigkeit hinzugefügt
+  }, [loadMorePosts]);
 
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
     window.addEventListener('scroll', checkScrollBottom);
+    
     return () => {
       window.removeEventListener('scroll', checkScrollTop);
       window.removeEventListener('scroll', checkScrollBottom);
@@ -73,15 +76,21 @@ function PostsPage({ message, filter = "" }) {
   }, [allPosts, currentPage]);
 
   useEffect(() => {
+    isMounted.current = true;
+
     const fetchPosts = async () => {
       try {
-        // Load once
         const { data } = await axiosReq.get(`/posts/?${filter}search=${query}`);
-        setAllPosts(data.results);
-        setHasLoaded(true);
-        setCurrentPage(1); // Zurück zur ersten Seite bei neuer Suche
+        
+        if (isMounted.current) {
+          setAllPosts(data.results);
+          setHasLoaded(true);
+          setCurrentPage(1);
+        }
       } catch (err) {
-        // Error handling removed for production
+        if (isMounted.current) {
+          setHasLoaded(true);
+        }
       }
     };
 
@@ -92,8 +101,15 @@ function PostsPage({ message, filter = "" }) {
 
     return () => {
       clearTimeout(timer);
+      isMounted.current = false;
     };
   }, [filter, query, pathname, currentUser]);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   return (
     <Row className="h-100">
@@ -101,11 +117,11 @@ function PostsPage({ message, filter = "" }) {
         <PopularProfiles mobile />
         {pathname === "/" && !currentUser && (
           <div className={styles.WebsiteDescription}>
-          <h3>Welcome to LoopIn!</h3>
-          <p>Discover exciting posts, share your creative ideas and connect with the community.<br />
-       Search for content, follow other users and interact with posts that inspire you.<br />
-       Stay in the Loop!</p>
-        </div>
+            <h3>Welcome to LoopIn!</h3>
+            <p>Discover exciting posts, share your creative ideas and connect with the community.<br />
+              Search for content, follow other users and interact with posts that inspire you.<br />
+              Stay in the Loop!</p>
+          </div>
         )}
         
         <i className={`fas fa-search ${styles.SearchIcon}`} />

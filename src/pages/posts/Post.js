@@ -63,14 +63,28 @@ const Post = (props) => {
         { post: id },
         { headers: { Authorization: `Bearer ${access_token}` } }
       );
-      setPosts((prevPosts) => ({
-        ...prevPosts,
-        results: prevPosts.results.map((post) =>
-          post.id === id
-            ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
-            : post
-        ),
-      }));
+      
+      setPosts((prevPosts) => {
+        if (Array.isArray(prevPosts)) {
+          return prevPosts.map((post) =>
+            post.id === id
+              ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
+              : post
+          );
+        }
+        
+        if (prevPosts && prevPosts.results) {
+          const updatedResults = prevPosts.results.map((post) =>
+            post.id === id
+              ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
+              : post
+          );
+          return { ...prevPosts, results: updatedResults };
+        }
+        
+        return prevPosts;
+      });
+      
       toast.success("Post liked!", { position: "top-right", autoClose: 2000 });
     } catch (err) {
       toast.error("Failed to like post.", {
@@ -85,14 +99,28 @@ const Post = (props) => {
       await axiosRes.delete(`/likes/${like_id}/`, {
         headers: { Authorization: `Bearer ${access_token}` },
       });
-      setPosts((prevPosts) => ({
-        ...prevPosts,
-        results: prevPosts.results.map((post) =>
-          post.id === id
-            ? { ...post, likes_count: post.likes_count - 1, like_id: null }
-            : post
-        ),
-      }));
+      
+      setPosts((prevPosts) => {
+        if (Array.isArray(prevPosts)) {
+          return prevPosts.map((post) =>
+            post.id === id
+              ? { ...post, likes_count: post.likes_count - 1, like_id: null }
+              : post
+          );
+        }
+        
+        if (prevPosts && prevPosts.results) {
+          const updatedResults = prevPosts.results.map((post) =>
+            post.id === id
+              ? { ...post, likes_count: post.likes_count - 1, like_id: null }
+              : post
+          );
+          return { ...prevPosts, results: updatedResults };
+        }
+        
+        return prevPosts;
+      });
+      
       toast.info("Like removed.", { position: "top-right", autoClose: 2000 });
     } catch (err) {
       toast.error("Failed to remove like.", {
