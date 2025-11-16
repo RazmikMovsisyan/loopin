@@ -19,18 +19,26 @@ const Profile = (props) => {
   const { handleFollow, handleUnfollow } = useSetProfileData();
 
   const handleFollowClick = async () => {
+    if (isLoading) return;
+    
     setIsLoading(true);
     try {
       await handleFollow(profile);
+    } catch (error) {
+      console.error("Follow failed:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleUnfollowClick = async () => {
+    if (isLoading) return;
+    
     setIsLoading(true);
     try {
       await handleUnfollow(profile);
+    } catch (error) {
+      console.error("Unfollow failed:", error);
     } finally {
       setIsLoading(false);
     }

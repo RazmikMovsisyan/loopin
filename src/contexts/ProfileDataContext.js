@@ -18,46 +18,11 @@ export const ProfileDataProvider = ({ children }) => {
 
   const currentUser = useCurrentUser();
 
-  const refreshProfileData = async () => {
-    try {
-      const { data: popularData } = await axiosReq.get(
-        "/profiles/?ordering=-followers_count"
-      );
-      
-      if (profileData.pageProfile.results.length > 0) {
-        const currentProfileId = profileData.pageProfile.results[0].id;
-        const { data: pageData } = await axiosReq.get(`/profiles/${currentProfileId}/`);
-        
-        setProfileData((prevState) => ({
-          ...prevState,
-          pageProfile: { results: [pageData] },
-          popularProfiles: popularData,
-        }));
-      } else {
-        setProfileData((prevState) => ({
-          ...prevState,
-          popularProfiles: popularData,
-        }));
-      }
-    } catch (err) {
-      // Error handling removed for production
-    }
-  };
-
   const handleFollow = async (clickedProfile) => {
     try {
-      const access_token = localStorage.getItem('access_token');
-      const { data } = await axiosRes.post(
-        "/followers/",
-        {
-          followed_profile: clickedProfile.id,
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${access_token}`      
-          }
-        }
-      );
+      const { data } = await axiosRes.post("/followers/", {
+        followed_profile: clickedProfile.id,
+      });
 
       setProfileData((prevState) => ({
         ...prevState,
@@ -74,17 +39,19 @@ export const ProfileDataProvider = ({ children }) => {
         },
       }));
 
-      setTimeout(() => {
-        refreshProfileData();
-      }, 500);
-
     } catch (err) {
-      // Error handling removed for production
+      console.error("Follow error:", err);
     }
   };
 
   const handleUnfollow = async (clickedProfile) => {
     try {
+      // CRITICAL FIX: Prüfe ob following_id existiert
+      if (!clickedProfile.following_id) {
+        console.error("No following_id found for profile:", clickedProfile);
+        return;
+      }
+
       await axiosRes.delete(`/followers/${clickedProfile.following_id}/`);
 
       setProfileData((prevState) => ({
@@ -102,27 +69,36 @@ export const ProfileDataProvider = ({ children }) => {
         },
       }));
 
-      setTimeout(() => {
-        refreshProfileData();
-      }, 500);
-
     } catch (err) {
-      // Error handling removed for production
+      console.error("Unfollow error:", err);
+      // Falls 404, aktualisiere die Daten um inkonsistente States zu bereinigen
+      if (err.response?.status === 404) {
+        const handleMount = async () => {
+          try {
+            const { data } = await axiosReq.get("/profiles/?ordering=-followers_count");
+            setProfileData((prevState) => ({
+              ...prevState,
+              popularProfiles: data,
+            }));
+          } catch (refreshErr) {
+            console.error("Refresh error:", refreshErr);
+          }
+        };
+        handleMount();
+      }
     }
   };
 
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axiosReq.get(
-          "/profiles/?ordering=-followers_count"
-        );
+        const { data } = await axiosReq.get("/profiles/?ordering=-followers_count");
         setProfileData((prevState) => ({
           ...prevState,
           popularProfiles: data,
         }));
       } catch (err) {
-        // Error handling removed for production
+        console.error("Error loading popular profiles:", err);
       }
     };
 
@@ -132,7 +108,7 @@ export const ProfileDataProvider = ({ children }) => {
   return (
     <ProfileDataContext.Provider value={profileData}>
       <SetProfileDataContext.Provider
-        value={{ setProfileData, handleFollow, handleUnfollow, refreshProfileData }}
+        value={{ setProfileData, handleFollow, handleUnfollow }}
       >
         {children}
       </SetProfileDataContext.Provider>

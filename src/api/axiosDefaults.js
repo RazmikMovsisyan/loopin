@@ -12,12 +12,20 @@ export const axiosRes = axios.create();
 axiosReq.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
-    const currentPath = window.location.pathname;
-    
-    if (token && currentPath !== "/") {
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+axiosRes.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => Promise.reject(error)
