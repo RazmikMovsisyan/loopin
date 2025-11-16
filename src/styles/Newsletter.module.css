@@ -1,8 +1,6 @@
 .Newsletter {
   margin-bottom: 20px;
   padding: 15px;
-  border: 1px solid #dadadf;
-  border-radius: 4px;
   background-color: #fff;
 }
 
@@ -29,7 +27,7 @@
   background-color: #1486fe;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   margin-bottom: 10px;
 }

@@ -1,5 +1,5 @@
 .App {
-  background-color: #fff;
+  background-color: #fefefe;
   min-height: 100vh;
 }
 
@@ -10,8 +10,7 @@
 .Content {
   background-color: #fff;
   padding: 10px;
-  border-radius: 2px;
-  border: 1px solid #dadadf;
+  border-radius: 8px;
 }
 
 .FillerImage {
