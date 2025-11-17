@@ -1,6 +1,6 @@
 .NavBar {
   background-color: #fcfcfc;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 5px rgb(0 0 0 / 15%);
   font-weight: 500;
   text-transform: uppercase;
 }
