@@ -40,8 +40,9 @@ The goal is to promote authentic user interactions and community discussions thr
   - [Should Have](#should-have)
   - [Could Have](#could-have)
   - [Won't Have](#wont-have)
+  - [Project Milestones](#project-milestones)
 - [Custom Model](#custom-model)
-  - [Newsletter Feature](#newsletter-feature)
+  - [Newsletter Feature](#newsletter-feature-overview)
   - [Backend Implementation](#backend-implementation)
   - [Frontend Implementation](#frontend-implementation)
   - [User Flow & Database Management](#user-flow-and-database-management)
@@ -143,15 +144,15 @@ The goal is to promote authentic user interactions and community discussions thr
 
 | **User Story**             | **Status** |
 | -------------------------- | ---------- |
-| **User Registration**      | ✅         |
-| **User Login/Logout**      | ✅         |
-| **Create Post**            | ✅         |
-| **View Posts**             | ✅         |
-| **Edit Post**              | ✅         |
-| **Delete Post**            | ✅         |
-| **Edit and Delete a Post** | ✅         |
-| **Comment on Post**        | ✅         |
-| **User Profile Page**      | ✅         |
+| **User Registration**      | ✔          |
+| **User Login/Logout**      | ✔          |
+| **Create Post**            | ✔          |
+| **View Posts**             | ✔          |
+| **Edit Post**              | ✔          |
+| **Delete Post**            | ✔          |
+| **Edit and Delete a Post** | ✔          |
+| **Comment on Post**        | ✔          |
+| **User Profile Page**      | ✔          |
 
 ---
 
@@ -370,13 +371,94 @@ That’s why I rely on it as it turns vision into actionable, prioritized progre
 - **AC2:** User profiles do not contain "Send Message" buttons
 - **AC3:** Real-time chat functionality is completely absent from the application
 
-## **Custom Model**
+# Project Milestones
 
-## Newsletter Feature
+Based on the 2nd assessment feedback I have implemented comprehensive milestone management to enhance project tracking and organization.
+
+## Milestone Overview
+
+The table below provides an overview of all project milestones, including status, due date, and a brief description.
+
+| Milestone                             | Status                 | Due Date          | Description                                                    |
+| ------------------------------------- | ---------------------- | ----------------- | -------------------------------------------------------------- |
+| Core Authentication & User Management | ✔ Completed            | November 18, 2024 | Core login, registration, user profiles, and permission system |
+| Post Management & Interactions        | ✔ Completed            | November 18, 2024 | CRUD operations for posts, likes, and user interactions        |
+| Social Features & UX Improvements     | ✔ Completed            | November 18, 2024 | UI/UX improvements, follow system, feed enhancements           |
+| API & Documentation Polish            | ✔ Completed            | November 18, 2024 | API refinement, documentation updates, endpoint consistency    |
+| WontHave – Out of Scope Features      | x Completed (Excluded) | November 18, 2024 | Features intentionally excluded from the project roadmap       |
 
 ---
 
-## Overview
+## How to Create and Manage Milestones in GitHub
+
+### 1️ Creating Milestones
+
+1. Navigate to your GitHub repository
+2. Click **Issues**
+3. Select **Milestones** in the right sidebar
+4. Click **New milestone**
+5. Enter:
+   - **Title** (e.g., "Core Authentication Epic")
+   - **Due Date**
+   - **Description**
+
+---
+
+### 2️ Assigning Issues to Milestones
+
+- Open any issue
+- In the right sidebar, locate the **Milestone** dropdown
+- Select the appropriate milestone
+- Repeat this process for all related issues
+
+---
+
+### 3️ Tracking Progress
+
+- GitHub automatically calculates milestone completion
+- Progress bars show open vs. closed issues
+- Milestones display all linked issues and due dates
+
+---
+
+### 4️ Closing Milestones
+
+When all issues within a milestone are completed:
+
+1. Go to **Issues → Milestones**
+2. Open the relevant milestone
+3. Click **Close milestone**
+4. Closed milestones remain visible as historical project documentation
+
+---
+
+## Benefits of Milestone Implementation
+
+### Improved Project Organization
+
+- Related user stories grouped into epics
+- Clear structure for large features and objectives
+- Better visibility into development progress
+
+### Enhanced Progress Tracking
+
+- Automatic progress percentage per milestone
+- Easy comparison of completed vs. pending work
+- Better timeline planning using due dates
+
+### Agile Methodology Compliance
+
+- Proper epic-to-milestone mapping
+- MoSCoW prioritization reflected in milestones
+- Demonstrates strong understanding of agile project management
+
+---
+
+## **Custom Model**
+
+---
+
+## Newsletter Feature Overview
 
 The newsletter feature allows users to subscribe and unsubscribe from a newsletter without email confirmation, as advised by my Mentor Marcel. It is integrated into the LoopIn social media platform.
 
