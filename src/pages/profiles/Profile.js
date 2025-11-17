@@ -25,7 +25,7 @@ const Profile = (props) => {
     try {
       await handleFollow(profile);
     } catch (error) {
-      console.error("Follow failed:", error);
+      // Console error removed for production
     } finally {
       setIsLoading(false);
     }
@@ -38,7 +38,7 @@ const Profile = (props) => {
     try {
       await handleUnfollow(profile);
     } catch (error) {
-      console.error("Unfollow failed:", error);
+      // Console error removed for production
     } finally {
       setIsLoading(false);
     }

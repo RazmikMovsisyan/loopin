@@ -40,15 +40,13 @@ export const ProfileDataProvider = ({ children }) => {
       }));
 
     } catch (err) {
-      console.error("Follow error:", err);
+      // Console error removed for production
     }
   };
 
   const handleUnfollow = async (clickedProfile) => {
     try {
-      // CRITICAL FIX: Prüfe ob following_id existiert
       if (!clickedProfile.following_id) {
-        console.error("No following_id found for profile:", clickedProfile);
         return;
       }
 
@@ -70,8 +68,8 @@ export const ProfileDataProvider = ({ children }) => {
       }));
 
     } catch (err) {
-      console.error("Unfollow error:", err);
-      // Falls 404, aktualisiere die Daten um inkonsistente States zu bereinigen
+      // Console error removed for production
+      // If 404, refresh data to clean inconsistent states
       if (err.response?.status === 404) {
         const handleMount = async () => {
           try {
@@ -81,7 +79,7 @@ export const ProfileDataProvider = ({ children }) => {
               popularProfiles: data,
             }));
           } catch (refreshErr) {
-            console.error("Refresh error:", refreshErr);
+            // Console error removed for production
           }
         };
         handleMount();
@@ -98,7 +96,7 @@ export const ProfileDataProvider = ({ children }) => {
           popularProfiles: data,
         }));
       } catch (err) {
-        console.error("Error loading popular profiles:", err);
+        // Console error removed for production
       }
     };
 
