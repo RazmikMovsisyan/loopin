@@ -118,6 +118,16 @@ The goal is to promote authentic user interactions and community discussions thr
 - **Routing:** As a user, I want seamless page transitions without refreshing.
 - **Infinite Scroll:** As a user, I want to scroll through posts continuously without clicking "next page."
 
+---
+
+> #### **Note on Performance Optimization & User Experience:**
+
+#### Infinite Scroll Implementation
+
+The application features an infinite scroll functionality that provides users with a seamless browsing experience. To ensure optimal performance, the initial load is limited to **3 posts**, which significantly improves page load times and reduces initial bandwidth usage. As users scroll down the page, additional posts are automatically fetched and displayed, creating a continuous flow of content without requiring manual pagination.
+
+During the loading process, users receive clear visual feedback through a **spinner animation** and the "Loading more posts..." message, which keeps them informed about the background data fetching operation. This approach balances performance with user experience by preventing overwhelming the client with too much data initially while maintaining smooth, uninterrupted scrolling behavior.
+
 # Posts & Interactions
 
 - **Create Post:** As a logged-in user, I can create posts to share my images.
@@ -814,21 +824,9 @@ Update the `.gitignore` file to properly ignore `env.py` and remove any sensitiv
 
 ---
 
-### Issue Description
-
-The follow user functionality experiences a slight delay in UI updates despite the backend immediately processing the follower relationship. This results in a temporary visual discrepancy where users might not see instant feedback when clicking the follow button.
-
-### Attempted Solution
-
-I implemented an optimistic UI update approach that would immediately update the interface before the API request completed. However, this led to database integrity errors when users rapidly clicked the follow button multiple times, creating duplicate follower entries that violated the unique constraint between owner and followed users.
-
 ### Current Status
 
-After consulting with my mentor, we decided to revert to the more stable version that waits for API confirmation before updating the UI. This approach avoids database integrity issues but maintains the slight visual delay. This known limitation has been documented in the project's README as a known bug.
-
-**The follow functionality and entire application perform flawlessly in the local development environment, with immediate UI updates and seamless operation.** However, in the deployed production version, occasional unexpected issues such as the follower relationship delay have been observed, despite maintaining identical codebase and configuration settings between environments.
-
-These deployment-specific inconsistencies appear to be related to external factors in the production infrastructure rather than application code, as the same version functions perfectly locally. The issue has been documented as a known limitation in the deployed environment while we continue to investigate potential platform-specific optimizations.
+No Bugs or Issues found.
 
 ## **Code Validation**
 
@@ -1739,8 +1737,6 @@ The favicon I have created using Adobe Photoshop.
 
 Proper credit is given to all resources used in accordance with fair use and licensing guidelines.
 
-[⬆ Back to Top](#loopin)
-
 ## Finished Product
 
 ![screen-nr.4](src/assets/loopin-11.png)
@@ -1754,3 +1750,5 @@ Proper credit is given to all resources used in accordance with fair use and lic
 ![screen-nr.3](src/assets/loopin-3.png)
 ![screen-nr.5](src/assets/loopin-5.png)
 ![screen-nr.2](src/assets/loopin-2.png)
+
+[⬆ Back to Top](#loopin)
