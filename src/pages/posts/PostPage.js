@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
+import { useParams, useHistory } from "react-router-dom";
 
 import appStyles from "../../App.module.css";
-import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 import Comment from "../comments/Comment";
-
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../components/Asset";
 import { fetchMoreData } from "../../utils/utils";
@@ -19,8 +17,8 @@ import PopularProfiles from "../profiles/PopularProfiles";
 
 function PostPage() {
   const { id } = useParams();
+  const history = useHistory();
   const [post, setPost] = useState({ results: [] });
-  const [notFound, setNotFound] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   const currentUser = useCurrentUser();
@@ -39,25 +37,17 @@ function PostPage() {
           setPost({ results: [post] });
           setComments(comments);
         } else {
-          setNotFound(true);
+          history.push("/404");
         }
       } catch (err) {
-        setNotFound(true);
+        history.push("/404");
       } finally {
         setHasLoaded(true);
       }
     };
 
     handleMount();
-  }, [id]);
-
-  if (notFound) {
-    return (
-      <Container className={appStyles.Content}>
-        <p>Post not found.</p>
-      </Container>
-    );
-  }
+  }, [id, history]);
 
   if (!hasLoaded) {
     return (
@@ -115,7 +105,7 @@ function PostPage() {
           </>
         ) : (
           <Container className={appStyles.Content}>
-            <p>Post not found.</p>
+            <Asset spinner />
           </Container>
         )}
       </Col>

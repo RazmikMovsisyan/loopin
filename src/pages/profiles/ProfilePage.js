@@ -8,7 +8,7 @@ import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import PopularProfiles from "./PopularProfiles";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import {
   useProfileData,
@@ -25,6 +25,7 @@ function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [profilePosts, setProfilePosts] = useState({ results: [] });
   const [uploading, setUploading] = useState(false);
+  const history = useHistory();
 
   const currentUser = useCurrentUser();
   const { id } = useParams();
@@ -42,18 +43,33 @@ function ProfilePage() {
             axiosReq.get(`/profiles/${id}/`),
             axiosReq.get(`/posts/?owner__profile=${id}`),
           ]);
-        setProfileData((prevState) => ({
-          ...prevState,
-          pageProfile: { results: [pageProfile] },
-        }));
-        setProfilePosts(profilePosts);
-        setHasLoaded(true);
+        
+        if (pageProfile && pageProfile.id) {
+          setProfileData((prevState) => ({
+            ...prevState,
+            pageProfile: { results: [pageProfile] },
+          }));
+          setProfilePosts(profilePosts);
+        } else {
+          history.push("/404");
+        }
       } catch (err) {
-        // Error handling removed for production
+        history.push("/404");
+      } finally {
+        setHasLoaded(true);
       }
     };
     fetchData();
-  }, [id, setProfileData, currentUser]);
+  }, [id, setProfileData, history]);
+
+  // Early return if still loading
+  if (!hasLoaded) {
+    return (
+      <Container className={appStyles.Content}>
+        <Asset spinner />
+      </Container>
+    );
+  }
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -200,14 +216,8 @@ function ProfilePage() {
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <PopularProfiles mobile />
         <Container className={appStyles.Content}>
-          {hasLoaded ? (
-            <>
-              {mainProfile}
-              {mainProfilePosts}
-            </>
-          ) : (
-            <Asset spinner />
-          )}
+          {mainProfile}
+          {mainProfilePosts}
         </Container>
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
