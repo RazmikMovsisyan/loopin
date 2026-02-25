@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 
 import appStyles from "../../App.module.css";
+import styles from "../../styles/Comment.module.css";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 import Comment from "../comments/Comment";
@@ -79,6 +80,7 @@ function PostPage() {
               ) : comments.results.length ? (
                 "Comments"
               ) : null}
+              
               {comments.results.length ? (
                 <InfiniteScroll
                   dataLength={comments.results.length}
@@ -96,10 +98,27 @@ function PostPage() {
                     />
                   ))}
                 </InfiniteScroll>
-              ) : currentUser ? (
-                <span>No comments yet, be the first to comment!</span>
               ) : (
-                <span>No comments... yet. Join our community and engage with people!</span>
+                <div className={styles.noCommentsContainer}>
+                  {currentUser ? (
+                    <>
+                      <h3 className={styles.noCommentsTitle}>💬 No comments yet</h3>
+                      <p className={styles.noCommentsText}>
+                        Be the first to share your thoughts!
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className={styles.noCommentsTitle}>✨ No comments... yet</h3>
+                      <p className={styles.noCommentsText}>
+                        Join our community and engage with people!
+                      </p>
+                      <Link to="/signup" className={styles.signupLink}>
+                        Sign up now
+                      </Link>
+                    </>
+                  )}
+                </div>
               )}
             </Container>
           </>

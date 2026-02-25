@@ -17,7 +17,6 @@ const PopularProfiles = ({ mobile }) => {
         mobile && "d-lg-none text-center mb-3"
       }`}
     >
-      {/* Newsletter Component - only show on desktop (non-mobile) */}
       {!mobile && <Newsletter />}
       
       {popularProfiles.results.length ? (

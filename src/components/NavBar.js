@@ -106,10 +106,11 @@ const NavBar = () => {
         <i className="fas fa-sign-out-alt"></i>Sign out
       </NavLink>
       <NavLink
-        className={styles.NavLink}
+        className={`${styles.NavLink} ${styles.userProfileLink}`}
         to={`/profiles/${currentUser?.profile_id}`}
       >
-        <Avatar src={currentProfileImage} text="My Profile" height={40} />
+        <span className={styles.usernameDisplay}>{currentUser?.username}</span>
+        <Avatar src={currentProfileImage} height={55} />
       </NavLink>
     </>
   );
@@ -142,8 +143,11 @@ const NavBar = () => {
     >
       <Container>
         <NavLink to="/">
-          <Navbar.Brand>
-            <img src={logo} alt="logo" height="60" />
+          <Navbar.Brand className={`d-flex align-items-center ${styles.brandContainer}`}>
+            <img src={logo} alt="logo" height="50" />
+            <span className={styles.logoText}>
+              LoopIn
+            </span>
           </Navbar.Brand>
         </NavLink>
         {currentUser && addPostIcon}

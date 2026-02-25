@@ -1,16 +1,92 @@
-.NavBar {
-  background-color: #fcfcfc;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 15%);
+.NavLink {
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.NavLink:hover {
+  color: #007bff;
+}
+
+.usernameText {
+  margin-right: 8px;
+  font-size: 0.95rem;
+  text-transform: none;
   font-weight: 500;
+}
+
+.NavLink img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.NavBar {
+  background-color: #222429;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 15%);
+  font-weight: 400;
   text-transform: uppercase;
 }
 
 .NavLink {
-  padding: 5px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
+  color: white;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.NavLink:hover {
+  color: #007bff;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
 }
 
 .Active i {
-  color: #1486fe;
+  color: #007bff;
+}
+
+.Active {
+  color: #007bff;
+}
+
+.userProfileLink {
+  padding: 5px 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 5px;
+}
+
+.usernameDisplay {
+  margin-right: 8px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoText {
+  background: #fff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: none;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.brandContainer:hover .logoText {
+  transform: scale(1.05);
+  background: #007bff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

@@ -1,5 +1,5 @@
 .App {
-  background-color: #fefefe;
+  background-color: #0a0a0af8;
   min-height: 100vh;
 }
 
@@ -8,9 +8,9 @@
 }
 
 .Content {
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 8px;
+  background-color: #eee;
+  padding: 15px 10px;
+  border-radius: 10px;
 }
 
 .FillerImage {
@@ -39,7 +39,7 @@ a:hover {
 }
 
 a:hover i {
-  color: #1486fe;
+  color: #0e6ac1;
   transition: color ease-in-out 0.3s;
 }
 
@@ -57,7 +57,7 @@ i {
 i:hover {
   cursor: pointer;
   transition: color ease-in-out 0.3s;
-  color: #1486fe;
+  color: #0e6ac1;
 }
 
 figure {

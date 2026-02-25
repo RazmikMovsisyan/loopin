@@ -220,7 +220,7 @@ The main body font for the app was chosen to use the native font of the user's o
 
 ![color-scheme](src/assets/color-scheme.png)
 
-The core color scheme consists of three main colors: a light blue (#1486fe) for hover states, a neutral gray (#cfced3) for non-hover states, and black for certain buttons. I also included some minor exceptions for special elements, such as the sign-in and sign-up buttons, which use a brighter blue (#2ed9ff) and a dark blue (#2142b2) to help them stand out from the rest of the design.
+The core color scheme consists of three main colors: a light blue (#3b82f6) for hover states, a neutral gray (#cfced3) for non-hover states, and black for certain buttons. I also included some minor exceptions for special elements, such as the sign-in and sign-up buttons, which use a brighter blue (#2ed9ff) and a dark blue (#2142b2) to help them stand out from the rest of the design.
 
 ## **User Stories (prioritized using MoSCoW method)**
 

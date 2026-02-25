@@ -1,13 +1,13 @@
 .Newsletter {
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #fff;
+  background-color: #eee;
 }
 
 .Newsletter h5 {
   margin-top: 0;
   margin-bottom: 10px;
-  color: #1486fe;
+  color: #242a3d;
 }
 
 .Newsletter form {
@@ -24,12 +24,14 @@
 
 .Newsletter button {
   padding: 8px;
-  background-color: #1486fe;
+  background-color: #242a3d;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   margin-bottom: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
 .Newsletter button:hover {
